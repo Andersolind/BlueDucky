@@ -1,0 +1,6 @@
+unix_ts,iso_ts,mode,anomaly_score,threshold,is_anomaly,gesture,distance,ble_mac,ble_trend,ble_rssi_avg,audio_db,voice_ratio,new_sound,hf_appears,audio_burst,hr_bpm,hr_conf,hr_valid,audio_fp_hash
+1767855308.524311,2026-01-08 01:55:08.524,fallback,6.264811,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-70.0,-52.4,1.0,1,0,1,,0.0,0,d18c1faba42ae025
+1767855309.0242171,2026-01-08 01:55:09.024,fallback,5.928065,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-70.7,-55.4,0.95,0,0,1,,0.0,0,d18c1faba42ae025
+1767855309.5246494,2026-01-08 01:55:09.524,fallback,4.709196,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-70.3,-53.4,0.7,0,0,1,,0.0,0,4c3304615ddd914b
+1767855310.025139,2026-01-08 01:55:10.025,fallback,3.253085,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-69.5,-53.3,0.367,0,0,0,,0.0,0,4c3304615ddd914b
+1767855310.5251188,2026-01-08 01:55:10.525,fallback,3.211852,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-67.8,-52.6,0.033,0,0,1,,0.0,0,0418a986961ba87d

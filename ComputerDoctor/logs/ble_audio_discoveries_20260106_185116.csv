@@ -1,0 +1,1 @@
+timestamp,event,ble_mac,ble_rssi,ble_rssi_avg,ble_trend,ble_trend_delta,gesture,distance,audio_db,audio_burst,burst_id,burst_peak_db,burst_spike_count,burst_subtle_count,audio_spike,audio_subtle,audio_sub5hz,signature,signature_count,close_start_ts,close_end_ts,close_duration_s,close_start_avg,close_end_avg,close_net_delta,close_overall_trend,drop_reason

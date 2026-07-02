@@ -1,0 +1,18 @@
+{
+  "run_id": "run0001",
+  "run_ts": "20260108_002318",
+  "samples": 1,
+  "tick_s": 0.5,
+  "state_log_every_s": 1.0,
+  "baseline": {
+    "ready": false,
+    "warmup_s": 120.0,
+    "rf_motion_energy_thr": 1.2,
+    "sub5hz_ratio_thr": 0.35,
+    "audio_spike_db_thr": 6.0,
+    "audio_subtle_db_thr": 2.0,
+    "ready_at_rel_s": null
+  },
+  "fractions_true": {},
+  "note": "If any fraction is ~0.99+ or ~0.00, feature may be stuck (check calibration/thresholds)."
+}

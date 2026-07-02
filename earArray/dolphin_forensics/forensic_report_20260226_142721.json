@@ -1,0 +1,3911 @@
+{
+  "summary": {
+    "duration": 1902.8927953243256,
+    "total_detections": 36,
+    "timing_analysis": {
+      "total_detections": 36,
+      "duration_seconds": 1850.3654341697693,
+      "mean_interval": 52.86758383342198,
+      "std_interval": 101.62581090605224,
+      "min_interval": 0.8596205711364746,
+      "max_interval": 506.064293384552,
+      "pattern": "IRREGULAR",
+      "direction_bias": {
+        "left_percent": 83.33333333333334,
+        "right_percent": 16.666666666666664,
+        "dominant": "Left"
+      },
+      "burst_pattern": false
+    }
+  },
+  "detections": [
+    {
+      "id": 1,
+      "timestamp": "2026-02-26T13:56:30.947452",
+      "unix_time": 1772132190.9450114,
+      "direction": "Right",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15170.1416015625,
+        "dominant_ultrasonic_db": 13.613484090501977,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": 8.70229245845762
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -1.1754294268681786
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 9.549237517101908
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 11.867853986077401
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -12.000452550504638
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 13.613484090501977
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 1270.458984375,
+            "power_db": 39.27338545032284
+          },
+          {
+            "freq_hz": 721.3623046875,
+            "power_db": 35.76525140693752
+          },
+          {
+            "freq_hz": 11003.466796875,
+            "power_db": 32.226346215616594
+          },
+          {
+            "freq_hz": 9948.33984375,
+            "power_db": 28.828337080004506
+          },
+          {
+            "freq_hz": 11337.2314453125,
+            "power_db": 28.381491890407542
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.30328058018452436,
+            "peak": 2.2332115173339844,
+            "ultrasonic_power": 18.02977627087743
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 1.0217235136189171,
+            "peak": 4.753953456878662,
+            "ultrasonic_power": 25.195798428851433
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": -0.7184429334343927,
+          "ultrasonic_difference": -7.166022157974002,
+          "stronger_channel": "Right"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "timestamp": "2026-02-26T13:56:31.866206",
+      "unix_time": 1772132191.8638825,
+      "direction": "Right",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16785.1318359375,
+        "dominant_ultrasonic_db": 22.195306573062247,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": 17.110213799971632
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": 11.145814337084046
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 21.0300252936766
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 22.195306573062247
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -3.257971961534471
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 19.105847967074684
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 10228.271484375,
+            "power_db": 39.64999382846288
+          },
+          {
+            "freq_hz": 9646.875,
+            "power_db": 38.010769745830224
+          },
+          {
+            "freq_hz": 11423.3642578125,
+            "power_db": 35.11502453373907
+          },
+          {
+            "freq_hz": 11121.8994140625,
+            "power_db": 34.977670627937506
+          },
+          {
+            "freq_hz": 12058.59375,
+            "power_db": 32.907228159101095
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.37394463523742566,
+            "peak": 2.2332115173339844,
+            "ultrasonic_power": 22.77212386620704
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 1.3334996115965334,
+            "peak": 4.773438453674316,
+            "ultrasonic_power": 30.65363572449226
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": -0.9595549763591078,
+          "ultrasonic_difference": -7.881511858285222,
+          "stronger_channel": "Right"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "timestamp": "2026-02-26T13:56:32.783498",
+      "unix_time": 1772132192.7811618,
+      "direction": "Right",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15062.4755859375,
+        "dominant_ultrasonic_db": 28.87721689453012,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": 21.420486318182995
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": 20.440932927539876
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 27.372133061489503
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 26.55340443464006
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": 0.2824195887651147
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 28.87721689453012
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 10637.40234375,
+            "power_db": 44.30880326221079
+          },
+          {
+            "freq_hz": 9948.33984375,
+            "power_db": 43.40613798210916
+          },
+          {
+            "freq_hz": 10335.9375,
+            "power_db": 43.232085110436756
+          },
+          {
+            "freq_hz": 11531.0302734375,
+            "power_db": 40.89367745946021
+          },
+          {
+            "freq_hz": 11186.4990234375,
+            "power_db": 40.21290301867736
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.3654423285525042,
+            "peak": 3.5697269439697266,
+            "ultrasonic_power": 17.210564630632497
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.9755551550763698,
+            "peak": 4.773438453674316,
+            "ultrasonic_power": 20.16989273527996
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": -0.6101128265238656,
+          "ultrasonic_difference": -2.9593281046474615,
+          "stronger_channel": "Right"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "timestamp": "2026-02-26T14:04:58.847896",
+      "unix_time": 1772132698.8454552,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16795.8984375,
+        "dominant_ultrasonic_db": 18.354093579155325,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": 9.197602001033411
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -0.6795613454465509
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 17.15410039563787
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 18.354093579155325
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -16.89176049152804
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 17.80943012047008
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 452.197265625,
+            "power_db": 33.47233911259502
+          },
+          {
+            "freq_hz": 10928.1005859375,
+            "power_db": 30.173937413954054
+          },
+          {
+            "freq_hz": 1216.6259765625,
+            "power_db": 27.643513506312573
+          },
+          {
+            "freq_hz": 11574.0966796875,
+            "power_db": 26.239729735859747
+          },
+          {
+            "freq_hz": 9894.5068359375,
+            "power_db": 23.567775012765235
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.33486959617214757,
+            "peak": 3.233682870864868,
+            "ultrasonic_power": 4.886134738139412
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.21309434237956473,
+            "peak": 2.460963726043701,
+            "ultrasonic_power": 4.212008164740097
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.12177525379258283,
+          "ultrasonic_difference": 0.6741265733993149,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "timestamp": "2026-02-26T14:06:51.361485",
+      "unix_time": 1772132811.3577187,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15040.9423828125,
+        "dominant_ultrasonic_db": 0.37695886789637784,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -4.9864696120183485
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -9.377064151746534
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -2.9107275738840177
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -0.46672309196271106
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -20.444567426171428
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.37695886789637784
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 484.4970703125,
+            "power_db": 13.309996539018451
+          },
+          {
+            "freq_hz": 1195.0927734375,
+            "power_db": 10.710539557155505
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 9.602598876958353
+          },
+          {
+            "freq_hz": 3606.8115234375,
+            "power_db": 9.602503494721347
+          },
+          {
+            "freq_hz": 3025.4150390625,
+            "power_db": 9.500966369726559
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.05793891022472016,
+            "peak": 0.2754688262939453,
+            "ultrasonic_power": 1.034714677221486
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.03353481672490945,
+            "peak": 0.21952791512012482,
+            "ultrasonic_power": 1.0031713494101366
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.024404093499810715,
+          "ultrasonic_difference": 0.031543327811349275,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "timestamp": "2026-02-26T14:06:52.263266",
+      "unix_time": 1772132812.2609,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15105.5419921875,
+        "dominant_ultrasonic_db": 5.611306310877984,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -1.1921944776140654
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -11.029701066546352
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -0.17282592651218515
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 2.262247477252926
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.54364361660741
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 5.611306310877984
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 602.9296875,
+            "power_db": 22.811133652152805
+          },
+          {
+            "freq_hz": 1421.19140625,
+            "power_db": 18.878218448607626
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 14.231459035288719
+          },
+          {
+            "freq_hz": 11649.462890625,
+            "power_db": 12.258191930104749
+          },
+          {
+            "freq_hz": 11132.666015625,
+            "power_db": 11.93770454375622
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.05424137084735434,
+            "peak": 0.2754688262939453,
+            "ultrasonic_power": 1.0305135535511099
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.030262050571531356,
+            "peak": 0.13891343772411346,
+            "ultrasonic_power": 1.006097206025074
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.02397932027582298,
+          "ultrasonic_difference": 0.024416347526035942,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "timestamp": "2026-02-26T14:06:53.195308",
+      "unix_time": 1772132813.192829,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 17011.23046875,
+        "dominant_ultrasonic_db": -0.7973485665781403,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.2868401640774656
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -9.216214267499701
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -0.7973485665781403
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -2.4273044163372712
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.55915381040677
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -1.821786364988955
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 1108.9599609375,
+            "power_db": 13.018397238605475
+          },
+          {
+            "freq_hz": 613.6962890625,
+            "power_db": 8.759246058583228
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 7.83221640416934
+          },
+          {
+            "freq_hz": 1991.8212890625,
+            "power_db": 3.0482384862865386
+          },
+          {
+            "freq_hz": 10443.603515625,
+            "power_db": 1.6657327415821008
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.04006820709864614,
+            "peak": 0.1691521555185318,
+            "ultrasonic_power": 1.0225989738847867
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.026658614618402632,
+            "peak": 0.1199134886264801,
+            "ultrasonic_power": 0.9925413114602316
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.01340959248024351,
+          "ultrasonic_difference": 0.0300576624245551,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "timestamp": "2026-02-26T14:07:10.047279",
+      "unix_time": 1772132830.0448976,
+      "direction": "Right",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16440.6005859375,
+        "dominant_ultrasonic_db": -1.3892896516851583,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -4.816338110610967
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -7.799315197353403
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -3.2599414390898014
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -1.3892896516851583
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -23.785041560437868
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -2.9341716674064946
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 1733.4228515625,
+            "power_db": 17.44161778618953
+          },
+          {
+            "freq_hz": 495.263671875,
+            "power_db": 17.254413774204114
+          },
+          {
+            "freq_hz": 1119.7265625,
+            "power_db": 10.348290228003378
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 9.635755982856933
+          },
+          {
+            "freq_hz": 10648.1689453125,
+            "power_db": 4.567648070258393
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.04038581015760917,
+            "peak": 0.18467727303504944,
+            "ultrasonic_power": 0.991838371422918
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.02654289878874202,
+            "peak": 0.1593824177980423,
+            "ultrasonic_power": 0.9935517490854424
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.013842911368867152,
+          "ultrasonic_difference": -0.0017133776625244401,
+          "stronger_channel": "Right"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "timestamp": "2026-02-26T14:09:25.214521",
+      "unix_time": 1772132965.212216,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15988.4033203125,
+        "dominant_ultrasonic_db": -0.5519666236676886,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -5.076105254981764
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -6.74476450174911
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -1.511336338328265
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -0.7078692409919034
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -20.96523060117082
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -0.5519666236676886
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 861.328125,
+            "power_db": 15.391809276099039
+          },
+          {
+            "freq_hz": 506.0302734375,
+            "power_db": 14.66703572760343
+          },
+          {
+            "freq_hz": 1162.79296875,
+            "power_db": 13.547634190297721
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 9.232744844734928
+          },
+          {
+            "freq_hz": 1991.8212890625,
+            "power_db": 7.680098536697986
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.06943401927945325,
+            "peak": 0.9276151061058044,
+            "ultrasonic_power": 1.1304514749125307
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.04518742284308778,
+            "peak": 0.5935197472572327,
+            "ultrasonic_power": 1.1022270387216953
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.024246596436365474,
+          "ultrasonic_difference": 0.028224436190835478,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "timestamp": "2026-02-26T14:09:26.088655",
+      "unix_time": 1772132966.0863624,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15191.6748046875,
+        "dominant_ultrasonic_db": 0.19599036260236186,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -3.477769919296807
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -10.54607347357721
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -1.2216544944981391
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 0.08673087244185149
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.12585147196892
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.19599036260236186
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 990.52734375,
+            "power_db": 14.447170185610876
+          },
+          {
+            "freq_hz": 549.0966796875,
+            "power_db": 14.213022664060524
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 8.948173279590597
+          },
+          {
+            "freq_hz": 2002.587890625,
+            "power_db": 5.277343172644484
+          },
+          {
+            "freq_hz": 2465.5517578125,
+            "power_db": 3.521781520135855
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.051392162113771324,
+            "peak": 0.2651183009147644,
+            "ultrasonic_power": 1.0233653962491958
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.026636206114184373,
+            "peak": 0.12040267139673233,
+            "ultrasonic_power": 0.9721099023509401
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.02475595599958695,
+          "ultrasonic_difference": 0.05125549389825568,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 11,
+      "timestamp": "2026-02-26T14:10:32.798389",
+      "unix_time": 1772133032.7960393,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15127.0751953125,
+        "dominant_ultrasonic_db": 0.12620654977488727,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -4.265656348732437
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -8.042151678129159
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -1.634206815298618
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -2.4792955292775734
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -15.663115999394117
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.12620654977488727
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 312.2314453125,
+            "power_db": 18.535644586084068
+          },
+          {
+            "freq_hz": 1335.05859375,
+            "power_db": 11.301463908623335
+          },
+          {
+            "freq_hz": 915.1611328125,
+            "power_db": 10.25535916725355
+          },
+          {
+            "freq_hz": 1582.6904296875,
+            "power_db": 9.78643960423717
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 9.422621765497151
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.04243330192305945,
+            "peak": 0.19036981463432312,
+            "ultrasonic_power": 1.0103519710259055
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.027122343589943483,
+            "peak": 0.1250506192445755,
+            "ultrasonic_power": 0.9829591512458635
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.015310958333115965,
+          "ultrasonic_difference": 0.027392819780041933,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 12,
+      "timestamp": "2026-02-26T14:13:10.237477",
+      "unix_time": 1772133190.2351036,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15008.642578125,
+        "dominant_ultrasonic_db": 6.048228382493233,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": 1.1411213452047149
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -8.320618631432275
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 1.7350040160115183
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 4.482233582485435
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -20.237719223724547
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 6.048228382493233
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 11434.130859375,
+            "power_db": 32.09824745954509
+          },
+          {
+            "freq_hz": 11100.3662109375,
+            "power_db": 30.78098954664312
+          },
+          {
+            "freq_hz": 355.2978515625,
+            "power_db": 29.61440084361424
+          },
+          {
+            "freq_hz": 10077.5390625,
+            "power_db": 27.45287099338133
+          },
+          {
+            "freq_hz": 10562.0361328125,
+            "power_db": 25.62118959277717
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.2819492973868597,
+            "peak": 4.471497535705566,
+            "ultrasonic_power": 2.763778864462514
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.1688745609853502,
+            "peak": 2.873513698577881,
+            "ultrasonic_power": 1.348613986960603
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.1130747364015095,
+          "ultrasonic_difference": 1.4151648775019108,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Moderate directional bias toward Left"
+        ]
+      }
+    },
+    {
+      "id": 13,
+      "timestamp": "2026-02-26T14:13:49.789270",
+      "unix_time": 1772133229.786949,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16139.1357421875,
+        "dominant_ultrasonic_db": 0.6033130453233934,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.6967078241038163
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -8.126988720250393
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -0.12715937238838018
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 0.6033130453233934
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -23.605389927506586
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.2646374616190914
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 322.998046875,
+            "power_db": 17.305905439075502
+          },
+          {
+            "freq_hz": 592.1630859375,
+            "power_db": 11.379216696461436
+          },
+          {
+            "freq_hz": 3940.576171875,
+            "power_db": 8.758744884911762
+          },
+          {
+            "freq_hz": 6729.1259765625,
+            "power_db": 8.403063222639819
+          },
+          {
+            "freq_hz": 2002.587890625,
+            "power_db": 8.159572429101647
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.05331919969157774,
+            "peak": 0.26373374462127686,
+            "ultrasonic_power": 1.0251627566949757
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.03535689534060824,
+            "peak": 0.2507571280002594,
+            "ultrasonic_power": 1.0072453999841406
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.017962304350969495,
+          "ultrasonic_difference": 0.017917356710835053,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 14,
+      "timestamp": "2026-02-26T14:13:50.661384",
+      "unix_time": 1772133230.6587772,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16914.3310546875,
+        "dominant_ultrasonic_db": -0.5371198731765422,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.670588515373618
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -8.693032961559803
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -1.9488227514608085
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -0.5371198731765422
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -19.859167514749885
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -0.8069651183277747
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 430.6640625,
+            "power_db": 25.900132414516435
+          },
+          {
+            "freq_hz": 1528.857421875,
+            "power_db": 16.85184032991514
+          },
+          {
+            "freq_hz": 1808.7890625,
+            "power_db": 13.95207912679383
+          },
+          {
+            "freq_hz": 10949.6337890625,
+            "power_db": 12.15781877991397
+          },
+          {
+            "freq_hz": 829.0283203125,
+            "power_db": 10.737147654662468
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.0458033519658993,
+            "peak": 0.26373374462127686,
+            "ultrasonic_power": 1.0265651121354111
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.029200728715975798,
+            "peak": 0.13965889811515808,
+            "ultrasonic_power": 0.9881551656227581
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.0166026232499235,
+          "ultrasonic_difference": 0.03840994651265306,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 15,
+      "timestamp": "2026-02-26T14:14:33.181060",
+      "unix_time": 1772133273.178741,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 17667.9931640625,
+        "dominant_ultrasonic_db": -0.0562560951111045,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.9448576268840583
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -9.56454060402992
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -0.0562560951111045
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -2.4277361648381106
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.943392950859874
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -1.5890986021856934
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 1108.9599609375,
+            "power_db": 11.065154710904592
+          },
+          {
+            "freq_hz": 1410.4248046875,
+            "power_db": 8.00811809419898
+          },
+          {
+            "freq_hz": 645.99609375,
+            "power_db": 7.571543751625722
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 7.110997299230108
+          },
+          {
+            "freq_hz": 1744.189453125,
+            "power_db": 3.0137561988839408
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.0557168399637097,
+            "peak": 0.3505805730819702,
+            "ultrasonic_power": 1.02343130846239
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.033852568790562865,
+            "peak": 0.2998318076133728,
+            "ultrasonic_power": 1.0060545327565036
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.021864271173146835,
+          "ultrasonic_difference": 0.01737677570588647,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 16,
+      "timestamp": "2026-02-26T14:14:34.066396",
+      "unix_time": 1772133274.0641272,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16914.3310546875,
+        "dominant_ultrasonic_db": 0.48843815983340233,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -3.237675612523634
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -7.298371817844027
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -0.26018325291071304
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 0.48843815983340233
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -24.212123307838166
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -1.2117968426994923
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 602.9296875,
+            "power_db": 10.075166959396281
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 7.949777041442774
+          },
+          {
+            "freq_hz": 1119.7265625,
+            "power_db": 6.972194169891475
+          },
+          {
+            "freq_hz": 1507.32421875,
+            "power_db": 6.112591905687886
+          },
+          {
+            "freq_hz": 3003.8818359375,
+            "power_db": 1.663405419720607
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.06290084579292773,
+            "peak": 0.3505805730819702,
+            "ultrasonic_power": 1.0132085607803847
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.040272996081563685,
+            "peak": 0.2998318076133728,
+            "ultrasonic_power": 1.0098951808485543
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.02262784971136405,
+          "ultrasonic_difference": 0.0033133799318303403,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 17,
+      "timestamp": "2026-02-26T14:18:23.452041",
+      "unix_time": 1772133503.4496694,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16225.2685546875,
+        "dominant_ultrasonic_db": 0.30514110243291476,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.4197966926488195
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -10.225585369843316
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -0.25965224871245873
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 0.30514110243291476
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -20.27890716505741
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -1.5312086432628442
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 1173.5595703125,
+            "power_db": 10.430415825794924
+          },
+          {
+            "freq_hz": 462.9638671875,
+            "power_db": 10.037080407707823
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 7.757438731551462
+          },
+          {
+            "freq_hz": 3003.8818359375,
+            "power_db": 1.207303715120947
+          },
+          {
+            "freq_hz": 2002.587890625,
+            "power_db": 1.0314763532260744
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.0584336122994141,
+            "peak": 0.4028467535972595,
+            "ultrasonic_power": 1.0142362914058545
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.03793155950415241,
+            "peak": 0.3188171684741974,
+            "ultrasonic_power": 0.9878352972686176
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.02050205279526169,
+          "ultrasonic_difference": 0.026400994137236844,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 18,
+      "timestamp": "2026-02-26T14:19:32.956607",
+      "unix_time": 1772133572.9542723,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 18087.890625,
+        "dominant_ultrasonic_db": 0.08161390930439279,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": 0.08161390930439279
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -9.793658543051524
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -2.259589163104173
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -1.6984810781892974
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -17.635796703466895
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -0.6565668442044537
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 1130.4931640625,
+            "power_db": 14.967964992738114
+          },
+          {
+            "freq_hz": 1765.72265625,
+            "power_db": 9.009641822153116
+          },
+          {
+            "freq_hz": 10981.93359375,
+            "power_db": 8.764017159800781
+          },
+          {
+            "freq_hz": 2906.982421875,
+            "power_db": 8.315016599953154
+          },
+          {
+            "freq_hz": 2239.453125,
+            "power_db": 7.4818946220538285
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.06204779783930318,
+            "peak": 0.49962079524993896,
+            "ultrasonic_power": 1.1406103516234813
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.0392643490270198,
+            "peak": 0.38826948404312134,
+            "ultrasonic_power": 1.1248764254117825
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.022783448812283377,
+          "ultrasonic_difference": 0.01573392621169889,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 19,
+      "timestamp": "2026-02-26T14:22:53.786710",
+      "unix_time": 1772133773.7844155,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16537.5,
+        "dominant_ultrasonic_db": 2.3178366065842226,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -1.7249870940605359
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -11.158228114661346
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 0.5750309096904693
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 2.3178366065842226
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.879619557300604
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.6815646368175556
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 527.5634765625,
+            "power_db": 19.21692654376193
+          },
+          {
+            "freq_hz": 5738.5986328125,
+            "power_db": 18.70253275834526
+          },
+          {
+            "freq_hz": 1291.9921875,
+            "power_db": 18.30253514579414
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 14.1352594547673
+          },
+          {
+            "freq_hz": 11337.2314453125,
+            "power_db": 14.072264974238092
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.1146218482438115,
+            "peak": 0.8751451969146729,
+            "ultrasonic_power": 1.6114017971276473
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.07487521980566783,
+            "peak": 0.817352294921875,
+            "ultrasonic_power": 1.4532750352431676
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.039746628438143666,
+          "ultrasonic_difference": 0.15812676188447972,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 20,
+      "timestamp": "2026-02-26T14:22:56.348159",
+      "unix_time": 1772133776.3458383,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15094.775390625,
+        "dominant_ultrasonic_db": 0.4587931946529854,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -3.8498456198205795
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -6.708605912698239
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -1.0571105106217757
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -1.3408228784073615
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -23.586713790966428
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.4587931946529854
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 3057.71484375,
+            "power_db": 15.376846974648368
+          },
+          {
+            "freq_hz": 602.9296875,
+            "power_db": 9.934052821557886
+          },
+          {
+            "freq_hz": 1119.7265625,
+            "power_db": 9.11539111684034
+          },
+          {
+            "freq_hz": 2185.6201171875,
+            "power_db": 8.207901826763027
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 6.038062580258408
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.1031605463194906,
+            "peak": 1.1145105361938477,
+            "ultrasonic_power": 1.1344049766242612
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.06469671490841139,
+            "peak": 1.237248420715332,
+            "ultrasonic_power": 1.1153325326882548
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.038463831411079216,
+          "ultrasonic_difference": 0.019072443936006378,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 21,
+      "timestamp": "2026-02-26T14:22:57.374531",
+      "unix_time": 1772133777.3708951,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15654.638671875,
+        "dominant_ultrasonic_db": 0.3709610589956862,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -5.33642396679446
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -9.599582621498868
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -0.29779255019460044
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -2.22632353346961
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -20.67070206439994
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.3709610589956862
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 1184.326171875,
+            "power_db": 8.943590826078776
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 4.916398345341505
+          },
+          {
+            "freq_hz": 1496.5576171875,
+            "power_db": 4.101036423854799
+          },
+          {
+            "freq_hz": 9388.4765625,
+            "power_db": 3.470104133517355
+          },
+          {
+            "freq_hz": 10637.40234375,
+            "power_db": 1.8595653457544479
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.11411430278384821,
+            "peak": 1.1145105361938477,
+            "ultrasonic_power": 1.1253665348310584
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.06986190300113654,
+            "peak": 1.237248420715332,
+            "ultrasonic_power": 1.1183672491719938
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.04425239978271167,
+          "ultrasonic_difference": 0.006999285659064602,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 22,
+      "timestamp": "2026-02-26T14:22:58.373169",
+      "unix_time": 1772133778.3708737,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15116.30859375,
+        "dominant_ultrasonic_db": 0.05415759120811805,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -4.037836714647883
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -11.95897203399305
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -2.754904712896429
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -1.8447662853512445
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -23.54175320831121
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.05415759120811805
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 1205.859375,
+            "power_db": 16.527630022881468
+          },
+          {
+            "freq_hz": 2024.12109375,
+            "power_db": 10.506324416960808
+          },
+          {
+            "freq_hz": 8290.283203125,
+            "power_db": 7.838525677734262
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 6.9181292285571505
+          },
+          {
+            "freq_hz": 10260.5712890625,
+            "power_db": 4.870892891978867
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.06043997737798245,
+            "peak": 0.38889259099960327,
+            "ultrasonic_power": 1.0453626370694293
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.03613059775452764,
+            "peak": 0.25554051995277405,
+            "ultrasonic_power": 0.9957305548807523
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.024309379623454808,
+          "ultrasonic_difference": 0.049632082188676985,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 23,
+      "timestamp": "2026-02-26T14:22:59.337961",
+      "unix_time": 1772133779.335385,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15353.173828125,
+        "dominant_ultrasonic_db": 2.065297410613244,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.7261310095569176
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -9.090208094231304
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -3.535376038136138
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -1.0122784263891396
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -23.73923203900749
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 2.065297410613244
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 764.4287109375,
+            "power_db": 12.083194770131438
+          },
+          {
+            "freq_hz": 1022.8271484375,
+            "power_db": 10.226994169795825
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 7.075177555739733
+          },
+          {
+            "freq_hz": 1259.6923828125,
+            "power_db": 5.396986935558591
+          },
+          {
+            "freq_hz": 1991.8212890625,
+            "power_db": 4.493410419615039
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.060718030448264064,
+            "peak": 0.4737657308578491,
+            "ultrasonic_power": 1.0079582831643688
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.03912272293536318,
+            "peak": 0.4948248267173767,
+            "ultrasonic_power": 0.985974926831601
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.021595307512900883,
+          "ultrasonic_difference": 0.02198335633276771,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 24,
+      "timestamp": "2026-02-26T14:23:00.225892",
+      "unix_time": 1772133780.223565,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16106.8359375,
+        "dominant_ultrasonic_db": 1.6078637669213338,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.3191541116869665
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -12.180750307368875
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -0.7848429085162085
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 1.6078637669213338
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -24.238038124464275
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -1.1589781747790964
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 1098.193359375,
+            "power_db": 11.154196204649809
+          },
+          {
+            "freq_hz": 656.7626953125,
+            "power_db": 10.992704131344862
+          },
+          {
+            "freq_hz": 8301.0498046875,
+            "power_db": 7.000060000441567
+          },
+          {
+            "freq_hz": 2174.853515625,
+            "power_db": 6.780706542815713
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 6.660004126773174
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.06124882629744982,
+            "peak": 0.4737657308578491,
+            "ultrasonic_power": 1.0091431120351515
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.04000692794271674,
+            "peak": 0.4948248267173767,
+            "ultrasonic_power": 1.005767498847789
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.02124189835473308,
+          "ultrasonic_difference": 0.0033756131873625694,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 25,
+      "timestamp": "2026-02-26T14:23:22.970717",
+      "unix_time": 1772133802.9683573,
+      "direction": "Right",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 17388.0615234375,
+        "dominant_ultrasonic_db": 0.7059715731662615,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": 0.2651982067885934
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -12.020591127408267
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 0.7059715731662615
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -0.4845547050901474
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -24.805395500665934
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -2.207285615901412
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 527.5634765625,
+            "power_db": 15.182322525154607
+          },
+          {
+            "freq_hz": 818.26171875,
+            "power_db": 14.22823063170156
+          },
+          {
+            "freq_hz": 1141.259765625,
+            "power_db": 12.916351997096951
+          },
+          {
+            "freq_hz": 1475.0244140625,
+            "power_db": 11.282570807951235
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 6.1728078843257155
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.04516647769526619,
+            "peak": 0.2699848711490631,
+            "ultrasonic_power": 1.0287873824809737
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.030060520526627207,
+            "peak": 0.25763848423957825,
+            "ultrasonic_power": 1.0378007154588174
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.015105957168638981,
+          "ultrasonic_difference": -0.00901333297784368,
+          "stronger_channel": "Right"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 26,
+      "timestamp": "2026-02-26T14:26:44.441379",
+      "unix_time": 1772134004.439031,
+      "direction": "Right",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 17937.158203125,
+        "dominant_ultrasonic_db": -0.2399499799720053,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.3218965289090634
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -10.244842977640168
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -0.2399499799720053
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -0.40888993929557804
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -23.29083457932579
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -0.2616534264523551
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 538.330078125,
+            "power_db": 29.761386787722802
+          },
+          {
+            "freq_hz": 1367.3583984375,
+            "power_db": 17.314662297953106
+          },
+          {
+            "freq_hz": 1076.66015625,
+            "power_db": 16.899988748842695
+          },
+          {
+            "freq_hz": 796.728515625,
+            "power_db": 12.776373700473236
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 5.817174683799392
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.04325941314249274,
+            "peak": 0.2244715392589569,
+            "ultrasonic_power": 0.9975514470814594
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.028131133280536586,
+            "peak": 0.138947993516922,
+            "ultrasonic_power": 1.0177502030805192
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.015128279861956157,
+          "ultrasonic_difference": -0.020198755999059848,
+          "stronger_channel": "Right"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 27,
+      "timestamp": "2026-02-26T14:27:02.746050",
+      "unix_time": 1772134022.7437432,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16365.234375,
+        "dominant_ultrasonic_db": 1.392002609648394,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.7378363459933026
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -7.300063613298221
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -1.6699588678883284
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 1.392002609648394
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -19.799862357421457
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.22961825827080867
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 419.8974609375,
+            "power_db": 17.705390074977004
+          },
+          {
+            "freq_hz": 1205.859375,
+            "power_db": 12.812429431958012
+          },
+          {
+            "freq_hz": 10497.4365234375,
+            "power_db": 8.20624053212672
+          },
+          {
+            "freq_hz": 11617.1630859375,
+            "power_db": 7.977355176277534
+          },
+          {
+            "freq_hz": 11240.33203125,
+            "power_db": 7.620139781909556
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.05597005165589132,
+            "peak": 0.3710523545742035,
+            "ultrasonic_power": 1.1484357444211042
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.036458058769540794,
+            "peak": 0.28441110253334045,
+            "ultrasonic_power": 1.1141452919357187
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.019511992886350527,
+          "ultrasonic_difference": 0.034290452485385536,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 28,
+      "timestamp": "2026-02-26T14:27:14.009237",
+      "unix_time": 1772134034.0068417,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15611.572265625,
+        "dominant_ultrasonic_db": 4.3674494937888255,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -0.48576891362202146
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -8.660243581819426
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 0.6059623245144728
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 2.7417363600194564
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.664907335263187
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 4.3674494937888255
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 2993.115234375,
+            "power_db": 24.962064048490006
+          },
+          {
+            "freq_hz": 1195.0927734375,
+            "power_db": 20.39098145345896
+          },
+          {
+            "freq_hz": 764.4287109375,
+            "power_db": 19.563654132991047
+          },
+          {
+            "freq_hz": 11304.931640625,
+            "power_db": 17.47240379355501
+          },
+          {
+            "freq_hz": 1582.6904296875,
+            "power_db": 16.831540215454083
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.09059179859688161,
+            "peak": 0.46706074476242065,
+            "ultrasonic_power": 1.6079979796258361
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.058031295810176714,
+            "peak": 0.3789082169532776,
+            "ultrasonic_power": 1.5874986983572381
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.0325605027867049,
+          "ultrasonic_difference": 0.020499281268598013,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 29,
+      "timestamp": "2026-02-26T14:27:14.933048",
+      "unix_time": 1772134034.9306614,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15267.041015625,
+        "dominant_ultrasonic_db": 5.093926938372918,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -0.008706061666302006
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -6.413667032825606
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 3.5045590857119318
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 3.382863071340958
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -20.183123569542133
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 5.093926938372918
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 10852.734375,
+            "power_db": 14.75608257113447
+          },
+          {
+            "freq_hz": 1141.259765625,
+            "power_db": 14.122457247396362
+          },
+          {
+            "freq_hz": 10109.8388671875,
+            "power_db": 12.182371961706755
+          },
+          {
+            "freq_hz": 11681.7626953125,
+            "power_db": 11.832730049706196
+          },
+          {
+            "freq_hz": 1959.521484375,
+            "power_db": 11.815552746099751
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.06837837871790126,
+            "peak": 0.3951016664505005,
+            "ultrasonic_power": 1.3878355098364834
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.040136100245328994,
+            "peak": 0.2744758427143097,
+            "ultrasonic_power": 1.3456489843416433
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.02824227847257226,
+          "ultrasonic_difference": 0.042186525494840144,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 30,
+      "timestamp": "2026-02-26T14:27:15.895017",
+      "unix_time": 1772134035.8926635,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15342.4072265625,
+        "dominant_ultrasonic_db": 1.7778834703298965,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -3.9319949119978355
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -8.970752832212048
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -1.7694238680008043
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -1.7481248668410982
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -19.73753261291556
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 1.7778834703298965
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 678.2958984375,
+            "power_db": 12.246269619966244
+          },
+          {
+            "freq_hz": 1173.5595703125,
+            "power_db": 11.126862851485157
+          },
+          {
+            "freq_hz": 10949.6337890625,
+            "power_db": 8.324090095159523
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 8.177837718853963
+          },
+          {
+            "freq_hz": 10702.001953125,
+            "power_db": 7.03333977042271
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.07779930482546057,
+            "peak": 0.43110454082489014,
+            "ultrasonic_power": 1.2156337280402754
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.04324768605386601,
+            "peak": 0.3000662326812744,
+            "ultrasonic_power": 1.1199293961346346
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.034551618771594565,
+          "ultrasonic_difference": 0.09570433190564076,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 31,
+      "timestamp": "2026-02-26T14:27:16.776674",
+      "unix_time": 1772134036.7743683,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 17915.625,
+        "dominant_ultrasonic_db": -1.097470394012606,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -3.8758005142216376
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -11.291345657426362
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -1.097470394012606
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -1.2948620322022872
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.3144963943391
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -1.3466518994384644
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 398.3642578125,
+            "power_db": 14.6594253633704
+          },
+          {
+            "freq_hz": 1195.0927734375,
+            "power_db": 12.712056691665428
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 5.879434453842826
+          },
+          {
+            "freq_hz": 11337.2314453125,
+            "power_db": 2.4684900596434263
+          },
+          {
+            "freq_hz": 9011.6455078125,
+            "power_db": 2.364350522838964
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.09203439199821845,
+            "peak": 0.43110454082489014,
+            "ultrasonic_power": 1.25952314589974
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.045923990607341744,
+            "peak": 0.3000662326812744,
+            "ultrasonic_power": 1.1939276293054841
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.0461104013908767,
+          "ultrasonic_difference": 0.06559551659425589,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 32,
+      "timestamp": "2026-02-26T14:27:17.662462",
+      "unix_time": 1772134037.6601632,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16343.701171875,
+        "dominant_ultrasonic_db": 1.5389475039622338,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -4.889545214619508
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -7.162938396010582
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 0.06713363883361512
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 1.5389475039622338
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.787441636256283
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 1.2101647118923733
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 10885.0341796875,
+            "power_db": 13.644281430516198
+          },
+          {
+            "freq_hz": 1152.0263671875,
+            "power_db": 11.668071617053144
+          },
+          {
+            "freq_hz": 8301.0498046875,
+            "power_db": 11.051531233590573
+          },
+          {
+            "freq_hz": 12456.9580078125,
+            "power_db": 9.65873844680968
+          },
+          {
+            "freq_hz": 11563.330078125,
+            "power_db": 9.586601694081327
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.06791937069762838,
+            "peak": 0.40129536390304565,
+            "ultrasonic_power": 1.343767801787711
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.03636312783359655,
+            "peak": 0.2186564803123474,
+            "ultrasonic_power": 1.2785375981685858
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.03155624286403183,
+          "ultrasonic_difference": 0.06523020361912524,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 33,
+      "timestamp": "2026-02-26T14:27:18.576440",
+      "unix_time": 1772134038.5731049,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16763.5986328125,
+        "dominant_ultrasonic_db": 0.9851559844459513,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -1.9102062675449496
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -9.802373328154424
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -1.1931956442577718
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 0.9851559844459513
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -22.200232609082665
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 0.01015078341841116
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 398.3642578125,
+            "power_db": 28.93013812033464
+          },
+          {
+            "freq_hz": 8301.0498046875,
+            "power_db": 11.188602226824313
+          },
+          {
+            "freq_hz": 915.1611328125,
+            "power_db": 8.09010007258159
+          },
+          {
+            "freq_hz": 1991.8212890625,
+            "power_db": 7.435475448983022
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 4.620532671657505
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.0614191793322451,
+            "peak": 0.37449774146080017,
+            "ultrasonic_power": 1.2103831419642692
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.03879869774918722,
+            "peak": 0.2577783465385437,
+            "ultrasonic_power": 1.1110821355778313
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.022620481583057878,
+          "ultrasonic_difference": 0.0993010063864379,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 34,
+      "timestamp": "2026-02-26T14:27:19.557773",
+      "unix_time": 1772134039.5554383,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16978.9306640625,
+        "dominant_ultrasonic_db": 6.306978994696028,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": 3.314808716287864
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -8.440919948263037
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 1.7205495401236701
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 6.306978994696028
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -20.912020529053834
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 3.010536274308233
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 398.3642578125,
+            "power_db": 25.27804080578745
+          },
+          {
+            "freq_hz": 10766.6015625,
+            "power_db": 17.017045690948464
+          },
+          {
+            "freq_hz": 11767.8955078125,
+            "power_db": 16.41995088089558
+          },
+          {
+            "freq_hz": 11304.931640625,
+            "power_db": 14.86269498126152
+          },
+          {
+            "freq_hz": 9065.478515625,
+            "power_db": 13.581080343324128
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.06313928404770366,
+            "peak": 0.37449774146080017,
+            "ultrasonic_power": 1.2300000679255054
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.038697386284424845,
+            "peak": 0.2577783465385437,
+            "ultrasonic_power": 1.1565395125214244
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.02444189776327882,
+          "ultrasonic_difference": 0.07346055540408103,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 35,
+      "timestamp": "2026-02-26T14:27:20.453194",
+      "unix_time": 1772134040.450825,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 16817.431640625,
+        "dominant_ultrasonic_db": -0.15276272756622974,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -3.8274870600871442
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -9.167359975472413
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": -3.472765145726899
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": -0.15276272756622974
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.238082676680033
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": -1.3254312008075344
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 387.59765625,
+            "power_db": 21.687977022863997
+          },
+          {
+            "freq_hz": 1141.259765625,
+            "power_db": 11.908582041247858
+          },
+          {
+            "freq_hz": 8301.0498046875,
+            "power_db": 6.570423623592654
+          },
+          {
+            "freq_hz": 12360.05859375,
+            "power_db": 6.42839371240799
+          },
+          {
+            "freq_hz": 2670.1171875,
+            "power_db": 4.64073576893038
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.061012006351197336,
+            "peak": 0.367958664894104,
+            "ultrasonic_power": 1.2010859656971904
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.0348048422894335,
+            "peak": 0.24748072028160095,
+            "ultrasonic_power": 1.147920714255625
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.026207164061763835,
+          "ultrasonic_difference": 0.053165251441565475,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    },
+    {
+      "id": 36,
+      "timestamp": "2026-02-26T14:27:21.312781",
+      "unix_time": 1772134041.3104455,
+      "direction": "Left",
+      "frequency_analysis": {
+        "dominant_ultrasonic_hz": 15633.10546875,
+        "dominant_ultrasonic_db": 6.314517552664176,
+        "detected_beacons": [
+          {
+            "name": "SilverPush/Shopkick ultrasonic beacon",
+            "freq_range": [
+              18000,
+              19000
+            ],
+            "power_db": -2.1102320358126514
+          },
+          {
+            "name": "Google Nearby / Chromecast",
+            "freq_range": [
+              19000,
+              20000
+            ],
+            "power_db": -7.573192822305175
+          },
+          {
+            "name": "Lisnr ultrasonic data",
+            "freq_range": [
+              17000,
+              18000
+            ],
+            "power_db": 3.8205082151638865
+          },
+          {
+            "name": "Some TV ACR systems",
+            "freq_range": [
+              16000,
+              17000
+            ],
+            "power_db": 4.098816120396343
+          },
+          {
+            "name": "Generic ultrasonic communication",
+            "freq_range": [
+              20000,
+              22000
+            ],
+            "power_db": -21.711542232552205
+          },
+          {
+            "name": "CRT TV flyback (old TVs)",
+            "freq_range": [
+              15000,
+              16000
+            ],
+            "power_db": 6.314517552664176
+          }
+        ],
+        "top_peaks": [
+          {
+            "freq_hz": 11283.3984375,
+            "power_db": 18.2679729660051
+          },
+          {
+            "freq_hz": 12618.45703125,
+            "power_db": 15.918399649838474
+          },
+          {
+            "freq_hz": 12295.458984375,
+            "power_db": 15.542731979330464
+          },
+          {
+            "freq_hz": 387.59765625,
+            "power_db": 15.436251216123996
+          },
+          {
+            "freq_hz": 8936.279296875,
+            "power_db": 14.602694468098322
+          }
+        ]
+      },
+      "channel_analysis": {
+        "channels": [
+          {
+            "index": 0,
+            "name": "Left",
+            "rms": 0.061750827123145516,
+            "peak": 0.367958664894104,
+            "ultrasonic_power": 1.1835805320299224
+          },
+          {
+            "index": 1,
+            "name": "Right",
+            "rms": 0.03512357735116767,
+            "peak": 0.20791465044021606,
+            "ultrasonic_power": 1.1319474383090349
+          }
+        ],
+        "channel_difference": {
+          "rms_difference": 0.02662724977197785,
+          "ultrasonic_difference": 0.051633093720887535,
+          "stronger_channel": "Left"
+        },
+        "localization_hints": [
+          "Signal relatively balanced - source may be centered or distant"
+        ]
+      }
+    }
+  ]
+}

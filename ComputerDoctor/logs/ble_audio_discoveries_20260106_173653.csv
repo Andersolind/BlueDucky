@@ -1,0 +1,8 @@
+timestamp,event,ble_mac,ble_rssi,ble_approaching,gesture,distance,audio_db,audio_subtle,audio_spike,audio_sub5hz,signature,signature_count
+2026-01-06 17:47:22,ble_close,e3:82:42:8b:1a:48,-52,True,moving,stable,-40.9,False,False,True,mac..1a:48|dist:stable|subtle:0|spike:0|sub5:1|gesture:moving,1
+2026-01-06 17:47:45,ble_close,48:e0:ea:1b:80:9a,-51,True,moving,stable,-40.1,False,False,True,mac..80:9a|dist:stable|subtle:0|spike:0|sub5:1|gesture:moving,1
+2026-01-06 17:48:44,ble_close,e3:82:42:8b:1a:48,-44,True,unknown,stable,-40.8,False,False,True,mac..1a:48|dist:stable|subtle:0|spike:0|sub5:1|gesture:unknown,1
+2026-01-06 17:52:08,ble_close,e3:82:42:8b:1a:48,-52,True,listening,stable,-39.2,False,False,True,mac..1a:48|dist:stable|subtle:0|spike:0|sub5:1|gesture:listening,1
+2026-01-06 17:53:16,ble_close,e3:82:42:8b:1a:48,-54,False,unknown,stable,-42.0,False,False,True,mac..1a:48|dist:stable|subtle:0|spike:0|sub5:1|gesture:unknown,2
+2026-01-06 17:53:23,ble_close,48:e0:ea:1b:80:9a,-50,True,unknown,stable,-42.0,False,False,True,mac..80:9a|dist:stable|subtle:0|spike:0|sub5:1|gesture:unknown,1
+2026-01-06 18:01:05,ble_close,ed:38:8b:b1:8e:3b,-54,False,presence_nearby,stable,-40.3,False,False,True,mac..8e:3b|dist:stable|subtle:0|spike:0|sub5:1|gesture:presence_nearby,1

@@ -1,0 +1,10 @@
+iso_ts,t_rel_s,tick,event,value,details
+2026-01-08T00:26:24.524-05:00,1.466,1,new_sound_toggle,1,from=0
+2026-01-08T00:26:25.024-05:00,1.966,2,new_sound_toggle,0,from=1
+2026-01-08T00:26:25.525-05:00,2.467,3,audio_burst_toggle,1,from=0
+2026-01-08T00:26:26.524-05:00,3.466,5,audio_burst_toggle,0,from=1
+2026-01-08T00:26:27.524-05:00,4.466,7,new_sound_toggle,1,from=0
+2026-01-08T00:26:28.025-05:00,4.967,8,new_sound_toggle,0,from=1
+2026-01-08T00:26:30.025-05:00,6.967,12,voice_active_toggle,0,from=1
+2026-01-08T00:26:31.024-05:00,7.966,14,audio_burst_toggle,1,from=0
+2026-01-08T00:26:35.025-05:00,11.967,22,audio_burst_toggle,0,from=1

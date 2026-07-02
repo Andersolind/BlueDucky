@@ -1,0 +1,5 @@
+timestamp,wifi_std,ble_rate,digital_audio_score,beamformed_score,digital_audio_detected,beamformed_detected,top_ble_beacons
+2026-01-05 10:34:17,0.00,0,0.00,0.00,False,False,
+2026-01-05 10:34:18,0.00,0,0.00,0.00,False,False,
+2026-01-05 10:34:19,0.47,0,0.00,0.00,False,False,
+2026-01-05 10:34:20,0.50,0,0.00,0.00,False,False,

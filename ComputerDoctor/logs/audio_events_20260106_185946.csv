@@ -1,0 +1,4 @@
+timestamp,event_type,event_action,duration_ms,peak_db,peak_score,speech_ratio,novelty_hot_frac,hf_z,level_spike_db
+2026-01-06 18:59:46.944,speech_voice,END,384,-41.7,1.0,0.0,0.0,-0.2,0.42
+2026-01-06 19:00:14.079,speech_voice,END,1258,-30.3,1.0,0.0,0.0,-0.162,-1.07
+2026-01-06 19:00:16.469,speech_voice,END,384,-37.0,0.7,0.0,0.0,0.223,2.89

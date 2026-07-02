@@ -1,0 +1,108 @@
+{
+  "id": 77,
+  "timestamp": "2026-01-14T21:04:19.835656",
+  "unix_time": 1768442659.8326766,
+  "direction": "Left",
+  "frequency_analysis": {
+    "dominant_ultrasonic_hz": 16785.1318359375,
+    "dominant_ultrasonic_db": -0.4902044548426646,
+    "detected_beacons": [
+      {
+        "name": "SilverPush/Shopkick ultrasonic beacon",
+        "freq_range": [
+          18000,
+          19000
+        ],
+        "power_db": -5.159524886094332
+      },
+      {
+        "name": "Google Nearby / Chromecast",
+        "freq_range": [
+          19000,
+          20000
+        ],
+        "power_db": -8.719571746048087
+      },
+      {
+        "name": "Lisnr ultrasonic data",
+        "freq_range": [
+          17000,
+          18000
+        ],
+        "power_db": -2.557270292636656
+      },
+      {
+        "name": "Some TV ACR systems",
+        "freq_range": [
+          16000,
+          17000
+        ],
+        "power_db": -0.4902044548426646
+      },
+      {
+        "name": "Generic ultrasonic communication",
+        "freq_range": [
+          20000,
+          22000
+        ],
+        "power_db": -23.352924144132004
+      },
+      {
+        "name": "CRT TV flyback (old TVs)",
+        "freq_range": [
+          15000,
+          16000
+        ],
+        "power_db": -0.619785858446522
+      }
+    ],
+    "top_peaks": [
+      {
+        "freq_hz": 689.0625,
+        "power_db": 11.109533024282863
+      },
+      {
+        "freq_hz": 1593.45703125,
+        "power_db": 2.5600454630031915
+      },
+      {
+        "freq_hz": 1195.0927734375,
+        "power_db": 2.41899743440598
+      },
+      {
+        "freq_hz": 2045.654296875,
+        "power_db": 2.4120970795485217
+      },
+      {
+        "freq_hz": 10562.0361328125,
+        "power_db": 2.0067234178967004
+      }
+    ]
+  },
+  "channel_analysis": {
+    "channels": [
+      {
+        "index": 0,
+        "name": "Left",
+        "rms": 0.045802983260286756,
+        "peak": 0.27064067125320435,
+        "ultrasonic_power": 0.9266744922459896
+      },
+      {
+        "index": 1,
+        "name": "Right",
+        "rms": 0.028054524463101752,
+        "peak": 0.22606806457042694,
+        "ultrasonic_power": 0.9161101990430386
+      }
+    ],
+    "channel_difference": {
+      "rms_difference": 0.017748458797185004,
+      "ultrasonic_difference": 0.010564293202951047,
+      "stronger_channel": "Left"
+    },
+    "localization_hints": [
+      "Signal relatively balanced - source may be centered or distant"
+    ]
+  }
+}

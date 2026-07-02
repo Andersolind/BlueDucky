@@ -1,0 +1,14 @@
+unix_ts,iso_ts,mode,anomaly_score,threshold,is_anomaly,gesture,distance,ble_mac,ble_trend,ble_rssi_avg,audio_db,voice_ratio,new_sound,hf_appears,audio_burst,hr_bpm,hr_conf,hr_valid,audio_fp_hash
+1767858374.525085,2026-01-08 02:46:14.525,fallback,6.749206,3.000000,1,no-data,unknown,40:ca:63:e9:27:90,stable,-70.2,-64.1,0.267,0,0,1,,0.0,0,973738be14afebaa
+1767858375.024345,2026-01-08 02:46:15.024,fallback,4.776267,3.000000,1,no-data,unknown,e0:9d:13:ab:5c:51,stable,-66.2,-61.6,0.367,0,0,1,,0.0,0,973738be14afebaa
+1767858375.525187,2026-01-08 02:46:15.525,fallback,4.499798,3.000000,1,no-data,unknown,40:ca:63:e9:27:90,stable,-70.0,-64.4,0.35,0,0,1,,0.0,0,7f6b469fbecca06e
+1767858376.024916,2026-01-08 02:46:16.024,fallback,3.904399,3.000000,1,no-data,unknown,e0:9d:13:ab:5c:51,stable,-68.3,-63.7,0.233,0,0,1,,0.0,0,7f6b469fbecca06e
+1767858418.5247278,2026-01-08 02:46:58.524,fallback,4.981858,3.000000,1,moving,approaching,c3:2d:ea:d6:e6:78,stable,-68.2,-44.6,0.367,0,0,1,,0.0,0,fe09b5ae5c299b1c
+1767858419.0248518,2026-01-08 02:46:59.024,fallback,3.688695,3.000000,1,moving,stable,c3:2d:ea:d6:e6:78,stable,-68.2,-58.8,0.267,0,0,1,,0.0,0,fe09b5ae5c299b1c
+1767858419.5240526,2026-01-08 02:46:59.524,fallback,3.512996,3.000000,1,moving,stable,c3:2d:ea:d6:e6:78,stable,-68.2,-47.7,0.45,0,0,1,,0.0,0,3b8f56fca31a7f01
+1767858444.0247061,2026-01-08 02:47:24.024,fallback,4.253191,3.000000,1,presence_nearby,approaching,c3:2d:ea:d6:e6:78,stable,-61.0,-37.7,0.217,1,1,1,,0.0,0,e02477e3a35441e3
+1767858492.0245535,2026-01-08 02:48:12.024,fallback,3.097387,3.000000,1,talking,stable,c3:2d:ea:d6:e6:78,stable,-60.5,-34.1,0.7,1,0,1,,0.0,0,9f0d670dfa7309d3
+1767858552.5247598,2026-01-08 02:49:12.524,fallback,4.612919,3.000000,1,presence_nearby,stable,e0:9d:13:ab:5c:51,approaching,-63.3,-32.9,0.283,1,0,1,,0.0,0,c1ebb148744f365a
+1767858683.02391,2026-01-08 02:51:23.023,fallback,3.416930,3.000000,1,moving,stable,40:ca:63:e9:27:90,stable,-68.5,-42.7,0.167,0,0,1,,0.0,0,921d0468b8d09b55
+1767858692.5244253,2026-01-08 02:51:32.524,fallback,3.163136,3.000000,1,presence_nearby,stable,e0:9d:13:ab:5c:51,stable,-64.2,-61.3,0.067,0,0,0,,0.0,0,5cce3094cf53d721
+1767858693.5250013,2026-01-08 02:51:33.525,fallback,3.007763,3.000000,1,presence_nearby,stable,c3:2d:ea:d6:e6:78,stable,-68.5,-61.9,0.0,0,0,0,,0.0,0,97bb97abe9d78141

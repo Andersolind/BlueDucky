@@ -1,0 +1,25 @@
+{
+  "run_id": "run0004",
+  "run_ts": "20260108_002637",
+  "samples": 2894,
+  "tick_s": 0.5,
+  "state_log_every_s": 1.0,
+  "baseline": {
+    "ready": true,
+    "warmup_s": 120.0,
+    "rf_motion_energy_thr": 44.61986541748047,
+    "sub5hz_ratio_thr": 0.9910182952880859,
+    "audio_spike_db_thr": 4.5,
+    "audio_subtle_db_thr": 2.073556423187256,
+    "ready_at_rel_s": 120.19
+  },
+  "fractions_true": {
+    "new_sound": 0.0232,
+    "hf_appears": 0.0121,
+    "audio_burst": 0.5325,
+    "audio_sub5hz": 0.0753,
+    "voice_active": 0.0287,
+    "rf_motion": 0.1237
+  },
+  "note": "If any fraction is ~0.99+ or ~0.00, feature may be stuck (check calibration/thresholds)."
+}

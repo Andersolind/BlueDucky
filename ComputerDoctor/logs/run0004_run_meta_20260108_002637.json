@@ -1,0 +1,44 @@
+{
+  "run_id": "run0004",
+  "run_ts": "20260108_002637",
+  "started_iso": "2026-01-08T00:26:38.168-05:00",
+  "tick_s": 0.5,
+  "state_log_every_s": 1.0,
+  "baseline_warmup_s": 120.0,
+  "privacy": {
+    "log_raw_mac": false,
+    "mac_salt_set": true
+  },
+  "audio": {
+    "fs": 16000,
+    "window_s": 0.1,
+    "nfft": 1024,
+    "hf_band_hz": [
+      4000,
+      7000
+    ]
+  },
+  "ble": {
+    "close_rssi": -55,
+    "trend_window": 12,
+    "trend_db": 5,
+    "drop_timeout_s": 6.0
+  },
+  "sleep": {
+    "min_s": 480,
+    "wifi_std_max": 0.65,
+    "energy_max": 1.2,
+    "audio_db_max": -55.0
+  },
+  "platform": {
+    "python": "3.13.11",
+    "os": "Linux-6.17.10+kali-amd64-x86_64-with-glibc2.42",
+    "machine": "x86_64"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "sounddevice": "0.5.3",
+    "bleak": "unknown",
+    "PyQt5": "unknown"
+  }
+}

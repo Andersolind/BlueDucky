@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-01-09T00:10:33.050733",
+  "findings": [
+    "CSI replay confirmed: only 3 patterns in 20 samples"
+  ],
+  "recommendations": [
+    "Check router admin panel for unknown devices",
+    "Update router firmware",
+    "Change WiFi password"
+  ],
+  "your_network": {
+    "ssid": "Biru",
+    "bssid": "58:D9:D5:F8:70:22",
+    "frequency": "5.24"
+  },
+  "network_devices": [
+    {
+      "ip": "192.168.0.1",
+      "mac": "58:d9:d5:f8:70:00",
+      "vendor": "Tenda Technology Co.,Ltd.Dongg"
+    }
+  ],
+  "pattern_analysis": {
+    "total_samples": 20,
+    "unique_patterns": 3,
+    "pattern_counts": {
+      "-60_-256_50": 12,
+      "-61_-256_49": 5,
+      "-62_-256_48": 3
+    }
+  }
+}

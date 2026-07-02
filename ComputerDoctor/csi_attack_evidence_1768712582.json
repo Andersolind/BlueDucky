@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-01-18T00:02:52.024132",
+  "findings": [],
+  "recommendations": [
+    "Check router admin panel for unknown devices",
+    "Update router firmware",
+    "Change WiFi password"
+  ],
+  "your_network": {
+    "ssid": null,
+    "bssid": null,
+    "frequency": "2.437"
+  },
+  "network_devices": [],
+  "pattern_analysis": {
+    "total_samples": 0,
+    "unique_patterns": 0,
+    "pattern_counts": {}
+  }
+}

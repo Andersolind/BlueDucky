@@ -1,0 +1,10 @@
+{
+  "summary": {
+    "duration": 51.66191029548645,
+    "total_detections": 0,
+    "timing_analysis": {
+      "pattern": "insufficient_data"
+    }
+  },
+  "detections": []
+}

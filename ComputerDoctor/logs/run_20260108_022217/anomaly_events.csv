@@ -1,0 +1,8 @@
+unix_ts,iso_ts,mode,anomaly_score,threshold,is_anomaly,gesture,distance,ble_mac,ble_trend,ble_rssi_avg,audio_db,voice_ratio,new_sound,hf_appears,audio_burst,hr_bpm,hr_conf,hr_valid,audio_fp_hash
+1767856942.5246549,2026-01-08 02:22:22.524,fallback,6.395866,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-66.3,-63.8,0.0,0,0,0,,0.0,0,24ad8d16dafabd07
+1767856943.0245435,2026-01-08 02:22:23.024,fallback,6.266613,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-66.3,-62.0,0.1,0,0,1,,0.0,0,24ad8d16dafabd07
+1767856943.5246906,2026-01-08 02:22:23.524,fallback,5.010583,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-68.0,-59.3,0.1,0,0,1,,0.0,0,24ad8d16dafabd07
+1767856944.0243976,2026-01-08 02:22:24.024,fallback,3.777817,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-68.0,-59.8,0.1,0,0,1,,0.0,0,a733bd9604b5ec46
+1767856944.5246801,2026-01-08 02:22:24.524,fallback,3.296421,3.000000,1,no-data,unknown,ab:5c:51|e3d41201282b,stable,-69.5,-65.1,0.0,0,0,1,,0.0,0,a733bd9604b5ec46
+1767856981.5244417,2026-01-08 02:23:01.524,fallback,3.099033,3.000000,1,unknown,stable,d6:e6:78|f1c65dbe2ea1,stable,-61.3,-61.2,0.05,0,0,1,,0.0,0,eda3dacc0d4a4f82
+1767857085.0247452,2026-01-08 02:24:45.024,fallback,4.640545,3.000000,1,presence_nearby,stable,ab:5c:51|e3d41201282b,approaching,-67.2,-32.1,0.733,1,1,1,,0.0,0,2b6a31a321cec332

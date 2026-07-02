@@ -1,0 +1,6 @@
+iso_ts,t_rel_s,tick,gesture,energy,wifi_std,sleep_age_s,audio_db,audio_active,audio_spike,audio_subtle,audio_sub5hz,sub5hz_ratio,audio_burst,burst_id,burst_age_s,burst_peak_db,burst_spike_count,burst_subtle_count,voice_ratio,voice_active,novelty_hot_frac,new_sound,hf_z,hf_appears,rf_motion,rf_motion_thr,ble_rate,ble_close,ble_mac,ble_rssi_avg,ble_trend,ble_trend_delta,distance,audio_fp_hash,audio_peak_hash,cross_layers
+2026-01-08T00:24:48.524-05:00,0.912,0,no-data,0.0,0.0,0.0,-56.1,0,0,0,0,0.0,0,,,,,,0.7,1,0.0,0,0.0,0,0,1.2,0,0,,,stable,0.0,unknown,,,voice_present
+2026-01-08T00:24:49.024-05:00,1.412,1,no-data,0.0,0.0,0.0,-52.8,0,0,0,0,0.0,0,,,,,,0.85,1,0.103,1,0.0,0,0,1.2,0,0,,,stable,0.0,unknown,,,voice_present;new_sound_appears
+2026-01-08T00:24:49.524-05:00,1.912,2,no-data,0.0,0.0,0.0,-53.5,0,0,0,0,0.0,0,,,,,,0.891,1,0.135,1,0.0,0,0,1.2,0,0,,,stable,0.0,unknown,b91a71de31130d29,4493675ea20e19bc,voice_present;new_sound_appears
+2026-01-08T00:24:50.024-05:00,2.412,3,no-data,0.0,0.0,0.0,-54.9,0,0,0,0,0.0,0,,,,,,1.0,1,0.002,0,-0.34,0,0,1.2,0,0,,,stable,0.0,unknown,b91a71de31130d29,4493675ea20e19bc,voice_present
+2026-01-08T00:24:50.524-05:00,2.912,4,no-data,0.0,0.0,0.0,-53.1,0,0,0,0,0.0,0,,,,,,1.0,1,0.062,0,0.39,0,0,1.2,0,0,,,stable,0.0,unknown,b91a71de31130d29,4493675ea20e19bc,voice_present

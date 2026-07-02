@@ -1,0 +1,3 @@
+iso_ts,t_rel_s,tick,audio_db,fp_hash,peak_hash,fp_change,gesture,ble_mac,ble_trend,distance,voice_active,new_sound,hf_appears,audio_burst,burst_id,burst_peak_db,bands_16
+2026-01-08T00:24:49.283-05:00,1.537,9,-55.9,b91a71de31130d29,4493675ea20e19bc,0.0,no-data,,stable,unknown,1,1,0,0,,,220;173;119;107;61;55;36;42;69;61;32;26;0;0;0;0
+2026-01-08T00:24:50.580-05:00,2.832,19,-49.4,1f3777fcd5a4c1bb,ccc331304df7b63c,0.04,no-data,,stable,unknown,1,0,0,0,,,202;222;189;96;63;52;33;25;30;25;16;16;16;0;15;0

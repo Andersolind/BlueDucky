@@ -1,0 +1,22 @@
+timestamp,mode,anomaly_score,threshold,is_anomaly,gesture,gesture_raw,sleeping,sleep_age_s,sleep_reason,distance,ble_mac,ble_trend,ble_rssi_avg,audio_db,voice_ratio,new_sound,hf_appears,audio_burst,audio_fp_hash
+2026-01-08 13:03:36,fallback,6.302420,3.000000,1,no-data,no-data,0,0.0,not_calm,unknown,4c:06:42:71:cf:07,stable,-66.5,-56.5,0.117,0,0,1,51be6aea6a8d3bc2
+2026-01-08 13:03:36,fallback,5.909387,3.000000,1,no-data,no-data,0,0.0,not_calm,unknown,4c:06:42:71:cf:07,stable,-66.5,-51.0,0.267,0,0,1,51be6aea6a8d3bc2
+2026-01-08 13:03:37,fallback,3.793595,3.000000,1,no-data,no-data,0,0.0,not_calm,unknown,4c:06:42:71:cf:07,stable,-66.5,-49.6,0.6,0,0,1,51be6aea6a8d3bc2
+2026-01-08 13:03:37,fallback,3.463072,3.000000,1,no-data,no-data,0,0.0,not_calm,unknown,40:ca:63:e9:27:90,stable,-66.2,-49.8,0.817,0,0,1,b6b9a470f80f0392
+2026-01-08 13:03:38,fallback,3.468136,3.000000,1,no-data,no-data,0,0.0,not_calm,unknown,4c:06:42:71:cf:07,stable,-66.5,-37.9,1.0,1,0,1,55a561624f2ad15d
+2026-01-08 13:04:20,fallback,5.046284,3.000000,1,moving,moving,0,0.0,not_calm,stable,c3:2d:ea:d6:e6:78,stable,-50.8,-66.4,0.6,0,0,1,42383e64110c6b9d
+2026-01-08 13:04:20,fallback,3.869398,3.000000,1,moving,moving,0,0.0,not_calm,stable,c3:2d:ea:d6:e6:78,stable,-50.8,-66.6,0.583,0,0,1,e73daad0c45c3890
+2026-01-08 13:04:21,fallback,3.406898,3.000000,1,moving,moving,0,0.0,not_calm,approaching,c3:2d:ea:d6:e6:78,stable,-50.8,-51.3,0.5,0,0,1,e73daad0c45c3890
+2026-01-08 13:06:54,fallback,3.415623,3.000000,1,presence_nearby,presence_nearby,0,0.0,not_calm,receding,c3:2d:ea:d6:e6:78,stable,-46.3,-63.4,0.417,0,0,1,4a9e22602fc88532
+2026-01-08 13:06:55,fallback,3.437110,3.000000,1,presence_nearby,presence_nearby,0,0.0,sleep_candidate,stable,c3:2d:ea:d6:e6:78,stable,-46.3,-59.7,0.0,0,0,0,7c4622f96bcb9979
+2026-01-08 13:06:56,fallback,3.223267,3.000000,1,presence_nearby,presence_nearby,0,0.0,sleep_candidate,stable,c3:2d:ea:d6:e6:78,stable,-46.3,-63.6,0.0,0,0,0,7c4622f96bcb9979
+2026-01-08 13:08:12,fallback,3.055042,3.000000,1,talking,talking,0,0.0,not_calm,stable,c3:2d:ea:d6:e6:78,approaching,-46.3,-31.4,0.533,1,1,1,256f60e69cf69015
+2026-01-08 13:08:14,fallback,3.911003,3.000000,1,talking,talking,0,0.0,not_calm,stable,c3:2d:ea:d6:e6:78,approaching,-46.3,-19.1,0.317,1,1,1,361611d4821e4fa7
+2026-01-08 13:10:31,fallback,4.401969,3.000000,1,presence_nearby,presence_nearby,0,0.0,not_calm,stable,c3:2d:ea:d6:e6:78,approaching,-50.2,-39.1,0.233,1,0,1,e74fa453813e49cb
+2026-01-08 13:11:48,fallback,3.672371,3.000000,1,talking,talking,0,0.0,not_calm,approaching,c3:2d:ea:d6:e6:78,stable,-51.5,-27.8,0.8,1,0,1,aff2192927f59e4c
+2026-01-08 13:11:49,fallback,3.273685,3.000000,1,talking,talking,0,0.0,not_calm,approaching,c3:2d:ea:d6:e6:78,stable,-51.5,-24.2,0.833,1,0,1,baa0e13b45fc3c2f
+2026-01-08 13:13:12,fallback,5.239623,3.000000,1,presence_nearby,presence_nearby,0,0.0,not_calm,stable,c3:2d:ea:d6:e6:78,stable,-49.5,-15.7,1.0,1,0,1,b0edb1666e4cad62
+2026-01-08 13:13:13,fallback,3.697894,3.000000,1,presence_nearby,presence_nearby,0,0.0,not_calm,stable,c3:2d:ea:d6:e6:78,stable,-49.5,-19.1,0.9,1,0,1,ae4f6b4b22e13883
+2026-01-08 13:14:18,fallback,3.077521,3.000000,1,presence_nearby,presence_nearby,0,0.0,not_calm,stable,c3:2d:ea:d6:e6:78,stable,-50.7,-57.8,0.067,0,0,1,6ba1c99746c18c86
+2026-01-08 13:14:35,fallback,3.101246,3.000000,1,talking,talking,0,0.0,not_calm,approaching,c3:2d:ea:d6:e6:78,stable,-50.7,-37.6,0.75,0,0,1,73560e20b8f1f619
+2026-01-08 13:15:19,fallback,3.105637,3.000000,1,presence_nearby,presence_nearby,0,0.0,not_calm,approaching,c3:2d:ea:d6:e6:78,receding,-52.8,-36.6,0.35,0,0,1,d216703b9d7010e1
