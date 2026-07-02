@@ -1,6 +1,7 @@
 import {
   BotStage,
   Card,
+  ChallengeState,
   GameState,
   LogEntry,
   Notebook,
@@ -10,14 +11,47 @@ import {
 } from './types'
 import {
   ALL_CARDS,
+  BUS_FARE,
+  BUYABLE,
+  buildBoard,
   CARD_BY_ID,
+  CHALLENGE_TILES,
   DEVICES,
+  GOTOJAIL_POS,
+  JAIL_POS,
   LOCATIONS,
+  MIMICO_POI,
   PLAYER_COLORS,
-  ROOM_ADJACENCY,
-  ROOM_GRID,
+  Poi,
+  PoiSet,
+  RING_LEN,
+  STATION_POSITIONS,
   SUSPECTS,
+  Tile,
+  TOKENS,
 } from './data'
+import { generateChallenge } from './challenges'
+
+const START_MONEY = 1500
+const GO_SALARY = 200
+const INTEL_PRICE = 100
+const JAIL_BAIL = 50
+
+/**
+ * Per-game display names for the deduction location cards. Location labels are
+ * dynamic (Mimico by default, or geolocated), but the card IDs are stable — so
+ * we keep a tiny registry the display helpers consult, leaving all the
+ * ID-based game logic untouched.
+ */
+const LOCATION_NAMES: Record<string, { name: string; address?: string }> = {}
+function setLocationNames(board: Tile[]) {
+  for (const k of Object.keys(LOCATION_NAMES)) delete LOCATION_NAMES[k]
+  for (const t of board) {
+    if (t.type === 'location' && t.locationId) {
+      LOCATION_NAMES[t.locationId] = { name: t.label, address: t.address }
+    }
+  }
+}
 
 /* ------------------------------------------------------------------ *
  *  Small helpers
@@ -44,7 +78,15 @@ function log(state: GameState, kind: LogEntry['kind'], text: string, actor?: str
 }
 
 export function cardName(id: string): string {
-  return CARD_BY_ID[id]?.name ?? id
+  return LOCATION_NAMES[id]?.name ?? CARD_BY_ID[id]?.name ?? id
+}
+
+export function cardAddress(id: string): string | undefined {
+  return LOCATION_NAMES[id]?.address ?? CARD_BY_ID[id]?.address
+}
+
+export function money(n: number): string {
+  return `$${n.toLocaleString('en-US')}`
 }
 
 function cardsOf(suggestion: Suggestion): string[] {
@@ -60,13 +102,20 @@ export interface PlayerConfig {
   isBot: boolean
 }
 
-export function createGame(configs: PlayerConfig[]): GameState {
+export function createGame(configs: PlayerConfig[], clearance = 1, poi: PoiSet = MIMICO_POI): GameState {
+  // 0. Build the board from the POI set and register dynamic location names.
+  const board = buildBoard(poi)
+  setLocationNames(board)
+
   // 1. Draw the solution: one card from each category.
   const solution: Solution = {
     suspect: pick(SUSPECTS).id,
     device: pick(DEVICES).id,
     location: pick(LOCATIONS).id,
   }
+
+  // Deal a unique playing token to each agent.
+  const tokens = shuffle(TOKENS.map((t) => t.id))
 
   // 2. Deal the rest round-robin.
   const rest = shuffle(
@@ -75,15 +124,20 @@ export function createGame(configs: PlayerConfig[]): GameState {
     ).map((c) => c.id)
   )
 
-  const startRooms = shuffle(ROOM_GRID.flat())
   const players: Player[] = configs.map((cfg, i) => ({
     id: `p${i}`,
     name: cfg.name,
     isBot: cfg.isBot,
     hand: [],
-    room: startRooms[i % startRooms.length],
+    pos: 0, // everyone starts on Field HQ (GO)
+    room: '',
     out: false,
     color: PLAYER_COLORS[i % PLAYER_COLORS.length],
+    token: tokens[i % tokens.length],
+    money: START_MONEY,
+    properties: [],
+    inJail: false,
+    jailTurns: 0,
     seen: cfg.isBot ? [] : undefined,
     deduced: cfg.isBot ? {} : undefined,
   }))
@@ -104,7 +158,13 @@ export function createGame(configs: PlayerConfig[]): GameState {
     log: [],
     turn: 0,
     dice: 0,
-    reachable: [],
+    moveFrom: 0,
+    moveSteps: 0,
+    clearance,
+    board,
+    place: poi.place,
+    decisionPos: null,
+    challenge: null,
     pending: null,
     winner: null,
     revealed: false,
@@ -117,7 +177,7 @@ export function createGame(configs: PlayerConfig[]): GameState {
   const human = players.find((p) => !p.isBot)
   if (human) human.hand.forEach((id) => (state.notebook[id] = '✗'))
 
-  log(state, 'system', `Case opened. ${players.length} agents on the board. Find the eavesdropper.`)
+  log(state, 'system', `Case opened in ${poi.place}. ${players.length} agents on the board — find the eavesdropper.`)
   return state
 }
 
@@ -149,10 +209,12 @@ function nextActiveIndex(s: GameState, from: number): number {
 
 function startTurn(s: GameState) {
   s.dice = 0
-  s.reachable = []
+  s.moveSteps = 0
+  s.challenge = null
   s.pending = null
   s.sweepClue = null
   s.sweptThisTurn = false
+  s.decisionPos = null
 
   const p = s.players[s.currentPlayer]
   if (p.out) {
@@ -168,24 +230,161 @@ function startTurn(s: GameState) {
     s.phase = 'bot-turn'
     s.botStage = 'roll'
   } else {
-    s.phase = 'rolling'
+    // Detained humans get the jail prompt before rolling.
+    s.phase = p.inJail ? 'jail' : 'rolling'
     s.botStage = null
   }
 }
 
-export function endTurn(state: GameState): GameState {
-  const s = clone(state)
+/** Advance to the next active player (used by endTurn and bankruptcy). */
+function advanceTurn(s: GameState) {
+  if (s.phase === 'gameover') return
   const active = s.players.filter((p) => !p.out)
   if (active.length <= 1 && s.players.length > 1) {
-    // Everyone else accused wrong — last one standing wins by default.
-    const survivor = active[0]
-    if (survivor) declareWinner(s, survivor, true)
-    return s
+    if (active[0]) declareWinner(s, active[0], true)
+    return
   }
   const next = nextActiveIndex(s, s.currentPlayer)
-  if (next === -1) return s
+  if (next === -1) return
   s.currentPlayer = next
   startTurn(s)
+}
+
+export function endTurn(state: GameState): GameState {
+  const s = clone(state)
+  advanceTurn(s)
+  return s
+}
+
+/* ------------------------------------------------------------------ *
+ *  Monopoly economy: jail, rent, buying, bankruptcy
+ * ------------------------------------------------------------------ */
+
+function sendToJail(s: GameState, idx: number) {
+  const p = s.players[idx]
+  p.pos = JAIL_POS
+  p.room = ''
+  p.inJail = true
+  p.jailTurns = 0
+  s.moveSteps = 0 // jump, not a hop
+  log(s, 'money', `${p.name} was intercepted and sent to Detention.`, p.name)
+}
+
+function stationsOwnedBy(s: GameState, playerId: string): number {
+  return STATION_POSITIONS.filter((pos) => s.board[pos].owner === playerId).length
+}
+
+/** Charge rent to the visitor. Returns true if it bankrupted them. */
+function payRent(s: GameState, payerIdx: number, pos: number): boolean {
+  const tile = s.board[pos]
+  const ownerId = tile.owner!
+  const payer = s.players[payerIdx]
+  const ownerIdx = s.players.findIndex((pl) => pl.id === ownerId)
+  if (ownerIdx < 0) return false
+
+  let rent = tile.rent ?? 0
+  if (tile.type === 'station') rent = 25 * stationsOwnedBy(s, ownerId)
+
+  payer.money -= rent
+  s.players[ownerIdx].money += rent
+  log(
+    s,
+    'money',
+    `${payer.name} paid ${money(rent)} rent to ${s.players[ownerIdx].name} for ${tile.label}.`,
+    payer.name
+  )
+
+  if (payer.money < 0) {
+    bankrupt(s, payerIdx)
+    return true
+  }
+  return false
+}
+
+function bankrupt(s: GameState, idx: number) {
+  const p = s.players[idx]
+  p.out = true
+  // Properties revert to the bank (available again).
+  for (const pos of p.properties) if (s.board[pos]) s.board[pos].owner = undefined
+  p.properties = []
+  log(s, 'accuse', `${p.name} is bankrupt and out of the hunt.`, p.name)
+  advanceTurn(s)
+}
+
+/** Buyable price/label for the current player's tile (or null). */
+export function pendingPurchase(s: GameState): Tile | null {
+  if (s.decisionPos == null) return null
+  return s.board[s.decisionPos]
+}
+
+export function buyProperty(state: GameState): GameState {
+  const s = clone(state)
+  const idx = s.currentPlayer
+  const p = s.players[idx]
+  const pos = s.decisionPos
+  if (pos == null) return state
+  const tile = s.board[pos]
+  if (!tile.price || p.money < tile.price || tile.owner) {
+    s.decisionPos = null
+    s.phase = 'suggesting'
+    return s
+  }
+  p.money -= tile.price
+  tile.owner = p.id
+  p.properties.push(pos)
+  log(s, 'money', `${p.name} bought ${tile.label} for ${money(tile.price)}.`, p.name)
+  s.decisionPos = null
+  s.phase = 'suggesting'
+  return s
+}
+
+export function declineBuy(state: GameState): GameState {
+  const s = clone(state)
+  s.decisionPos = null
+  s.phase = 'suggesting'
+  return s
+}
+
+export function buyStoreIntel(state: GameState, buy: boolean): GameState {
+  const s = clone(state)
+  const idx = s.currentPlayer
+  const p = s.players[idx]
+  if (buy && p.money >= INTEL_PRICE) {
+    p.money -= INTEL_PRICE
+    log(s, 'money', `${p.name} paid ${money(INTEL_PRICE)} for a tip.`, p.name)
+    grantIntel(s, idx, 'a convenience-store tip')
+  }
+  s.decisionPos = null
+  s.phase = 'suggesting'
+  return s
+}
+
+/** Detained human pays bail to act, or serves their turn. */
+export function payBail(state: GameState): GameState {
+  const s = clone(state)
+  const p = s.players[s.currentPlayer]
+  if (p.money >= JAIL_BAIL) {
+    p.money -= JAIL_BAIL
+    p.inJail = false
+    p.jailTurns = 0
+    log(s, 'money', `${p.name} paid ${money(JAIL_BAIL)} bail and walks.`, p.name)
+    s.phase = 'rolling'
+  }
+  return s
+}
+
+export function serveJail(state: GameState): GameState {
+  const s = clone(state)
+  const p = s.players[s.currentPlayer]
+  p.jailTurns++
+  if (p.jailTurns >= 2) {
+    p.inJail = false
+    p.jailTurns = 0
+    log(s, 'money', `${p.name} is released from Detention.`, p.name)
+  } else {
+    log(s, 'money', `${p.name} sits in Detention.`, p.name)
+  }
+  advanceTurn(s)
   return s
 }
 
@@ -193,41 +392,138 @@ export function endTurn(state: GameState): GameState {
  *  Movement
  * ------------------------------------------------------------------ */
 
+/** The ring tile the current player is standing on. */
+export function currentTile(s: GameState): Tile {
+  return s.board[s.players[s.currentPlayer].pos]
+}
+
+export function tileAt(s: GameState, pos: number): Tile {
+  return s.board[((pos % RING_LEN) + RING_LEN) % RING_LEN]
+}
+
+/**
+ * Roll and hop clockwise around the ring (Monopoly-style — no route choice).
+ * Sets up the board hop animation, pays the GO salary when you pass Field HQ,
+ * and resolves what the landing tile does (buy / rent / challenge / …).
+ */
 export function rollDice(state: GameState): GameState {
   const s = clone(state)
   const p = s.players[s.currentPlayer]
-  s.dice = 1 + Math.floor(Math.random() * 6)
-  s.reachable = reachableRooms(p.room, s.dice)
-  s.phase = p.isBot ? 'bot-turn' : 'moving'
-  log(s, 'move', `${p.name} rolled a ${s.dice}.`, p.name)
+  const d = 1 + Math.floor(Math.random() * 6)
+  s.dice = d
+  s.moveFrom = p.pos
+  s.moveSteps = d
+
+  const from = p.pos
+  const passedGo = from + d >= RING_LEN
+  p.pos = (from + d) % RING_LEN
+  const tile = s.board[p.pos]
+  p.room = tile.type === 'location' ? tile.locationId! : ''
+
+  log(s, 'move', `${p.name} rolled a ${d} → ${tile.label}.`, p.name)
+  if (passedGo) {
+    p.money += GO_SALARY
+    log(s, 'money', `${p.name} passed Field HQ and collected ${money(GO_SALARY)}.`, p.name)
+    grantIntel(s, s.currentPlayer, 'reached Field HQ')
+  }
+
+  applyLanding(s)
   return s
 }
 
-/** BFS over the room graph: all rooms within `dist` steps (includes start). */
-export function reachableRooms(start: string, dist: number): string[] {
-  const seen = new Set<string>([start])
-  let frontier = [start]
-  for (let d = 0; d < dist; d++) {
-    const next: string[] = []
-    for (const room of frontier) {
-      for (const nb of ROOM_ADJACENCY[room] ?? []) {
-        if (!seen.has(nb)) {
-          seen.add(nb)
-          next.push(nb)
-        }
-      }
-    }
-    frontier = next
+/** Decide what a landing tile does for the current player. */
+function applyLanding(s: GameState) {
+  const idx = s.currentPlayer
+  const p = s.players[idx]
+  const tile = s.board[p.pos]
+
+  // Sent to detention.
+  if (tile.type === 'gotojail') {
+    sendToJail(s, idx)
+    concludeLanding(s, false)
+    return
   }
-  return Array.from(seen)
+
+  // Pay rent on someone else's property (may bankrupt).
+  if (BUYABLE.has(tile.type) && tile.owner && tile.owner !== p.id) {
+    const bankrupt = payRent(s, idx, p.pos)
+    if (bankrupt) return
+  }
+
+  if (p.isBot) {
+    // Bots resolve buy / store / challenge inside botStep('act').
+    s.phase = 'bot-turn'
+    return
+  }
+
+  // Human landing prompts.
+  if (BUYABLE.has(tile.type) && !tile.owner) {
+    s.decisionPos = p.pos
+    s.phase = 'buying'
+  } else if (tile.type === 'store') {
+    s.decisionPos = p.pos
+    s.phase = 'store'
+  } else if (CHALLENGE_TILES.has(tile.type)) {
+    s.challenge = generateChallenge(Math.random, s.clearance)
+    s.phase = 'challenge'
+  } else {
+    s.phase = 'suggesting'
+  }
 }
 
-export function moveTo(state: GameState, roomId: string): GameState {
+/** After a landing that isn't a prompt (jail, plain tile): resume or end. */
+function concludeLanding(s: GameState, _prompt: boolean) {
+  const p = s.players[s.currentPlayer]
+  if (p.isBot) {
+    s.phase = 'bot-turn'
+    s.botStage = 'decide'
+  } else {
+    s.phase = 'suggesting'
+  }
+}
+
+/**
+ * INTEL reward: rule one random innocent card off the notebook (human) or add
+ * it to the bot's known-innocent set. Never touches a real solution card, so it
+ * accelerates deduction without ever handing someone the win.
+ */
+export function grantIntel(s: GameState, playerIdx: number, reason: string): string | null {
+  const p = s.players[playerIdx]
+  const sol = s.solution!
+  const solutionCards = new Set([sol.suspect, sol.device, sol.location])
+
+  if (p.isBot) {
+    const options = ALL_CARDS.filter((c) => !solutionCards.has(c.id) && !p.seen!.includes(c.id))
+    if (!options.length) return null
+    const card = pick(options).id
+    p.seen!.push(card)
+    botDeduce(s, playerIdx)
+    return card
+  }
+
+  // Human: rule out a card not already marked off.
+  const options = ALL_CARDS.filter((c) => !solutionCards.has(c.id) && s.notebook[c.id] !== '✗')
+  if (!options.length) return null
+  const card = pick(options).id
+  s.notebook[card] = '✗'
+  log(s, 'intel', `Intel (${reason}): ${cardName(card)} is cleared — ruled off your notebook.`, p.name)
+  return card
+}
+
+/** Resolve the human's landing challenge. Success grants intel. */
+export function resolveChallenge(state: GameState, success: boolean): GameState {
   const s = clone(state)
   const p = s.players[s.currentPlayer]
-  if (!s.reachable.includes(roomId)) return state
-  p.room = roomId
-  log(s, 'move', `${p.name} moved to the ${cardName(roomId)}.`, p.name)
+  const ch = s.challenge
+  s.challenge = null
+  if (ch) {
+    if (success) {
+      log(s, 'intel', `${p.name} cracked the ${ch.title}.`, p.name)
+      grantIntel(s, s.currentPlayer, ch.title)
+    } else {
+      log(s, 'intel', `${p.name} failed the ${ch.title}. No intel this time.`, p.name)
+    }
+  }
   s.phase = 'suggesting'
   return s
 }
@@ -250,22 +546,26 @@ export function ultrasonicSweep(state: GameState, realContact: boolean): GameSta
   s.sweptThisTurn = true
 
   const sol = s.solution!
-  const inSolutionRoom = p.room === sol.location
+  const onLocation = p.room !== '' // sweep tiles have no room
+  const where = onLocation ? `the ${cardName(p.room)}` : `this sector`
+  const inSolutionRoom = onLocation && p.room === sol.location
   const trueDevice = CARD_BY_ID[sol.device]
 
   let clue: string
   const annotate = !p.isBot // only auto-fill a human's own notebook
   if (realContact) {
-    clue = `⚡ LIVE CONTACT — a device in the ${cardName(p.room)} is transmitting ultrasound right now.`
+    clue = `⚡ LIVE CONTACT — a device in ${where} is transmitting ultrasound right now.`
   } else if (inSolutionRoom && trueDevice.emits) {
-    clue = `Emission detected in the ${cardName(p.room)}: the bug here is an ACTIVE emitter.`
+    clue = `Emission detected in ${where}: the bug here is an ACTIVE emitter.`
     if (annotate) markCards(s, devicesMatchingEmission(false), '✗') // rule out passive devices
   } else if (inSolutionRoom && !trueDevice.emits) {
-    clue = `The bug in the ${cardName(p.room)} is silent on RF/ultrasound — a PASSIVE device.`
+    clue = `The bug in ${where} is silent on RF/ultrasound — a PASSIVE device.`
     if (annotate) markCards(s, devicesMatchingEmission(true), '✗') // rule out active devices
-  } else {
-    clue = `No emissions in the ${cardName(p.room)}. The active bug isn't planted here.`
+  } else if (onLocation) {
+    clue = `No emissions in ${where}. The active bug isn't planted here.`
     if (annotate) markCards(s, [p.room], '✗') // this location is ruled out
+  } else {
+    clue = `Faint hiss in ${where}, nothing locks. Sweep from inside a room for a clean read.`
   }
   s.sweepClue = clue
   log(s, 'sweep', `${p.name} ran an ultrasonic sweep: ${clue}`, p.name)
@@ -291,6 +591,7 @@ function markCards(s: GameState, ids: string[], mark: '✗' | '?' | '✓') {
 export function makeSuggestion(state: GameState, suspect: string, device: string): GameState {
   const s = clone(state)
   const p = s.players[s.currentPlayer]
+  if (p.room === '') return state // must be standing in a location tile
   const suggestion: Suggestion = { suspect, device, location: p.room }
 
   log(
@@ -582,33 +883,51 @@ export function botStep(state: GameState): GameState {
 
   switch (stage) {
     case 'roll': {
+      // Handle detention before rolling.
+      if (p.inJail) {
+        if (p.money >= JAIL_BAIL * 3) {
+          Object.assign(s, payBail(s))
+          // payBail set phase 'rolling'; fall through to a real roll next tick.
+          s.botStage = 'roll'
+          return s
+        }
+        Object.assign(s, serveJail(s)) // ends the bot's turn
+        return s
+      }
       const rolled = rollDice(s)
       Object.assign(s, rolled)
-      s.botStage = 'move'
+      // rollDice may have bankrupted the bot (rent) and advanced the turn.
+      if (s.currentPlayer !== state.currentPlayer || (s.phase as string) === 'gameover') return s
+      s.botStage = 'act'
       return s
     }
-    case 'move': {
-      const target = botChooseRoom(s, p)
-      const moved = moveTo(s, target)
-      Object.assign(s, moved)
-      s.botStage = 'sweep'
-      return s
-    }
-    case 'sweep': {
-      // Bots sweep occasionally for flavor + minor info; no real mic contact.
-      if (Math.random() < 0.4) {
-        const swept = ultrasonicSweep(s, false)
-        Object.assign(s, swept)
+    case 'act': {
+      const tile = s.board[p.pos]
+      // Economy: buy an unowned property the bot can afford.
+      if (BUYABLE.has(tile.type) && !tile.owner && tile.price && p.money >= tile.price + 200) {
+        p.money -= tile.price
+        tile.owner = p.id
+        p.properties.push(p.pos)
+        log(s, 'money', `${p.name} bought ${tile.label} for ${money(tile.price)}.`, p.name)
+      } else if (tile.type === 'store' && p.money >= INTEL_PRICE + 300) {
+        p.money -= INTEL_PRICE
+        grantIntel(s, s.currentPlayer, 'a store tip')
       }
-      s.botStage = 'suggest'
-      return s
-    }
-    case 'suggest': {
-      const suspect = pick(botCandidates(p, 'suspect').length ? botCandidates(p, 'suspect') : SUSPECTS.map((c) => c.id))
-      const device = pick(botCandidates(p, 'device').length ? botCandidates(p, 'device') : DEVICES.map((c) => c.id))
-      const sugg = makeSuggestion(s, suspect, device)
-      Object.assign(s, sugg)
-      // makeSuggestion set phase/botStage appropriately (or yielded to human).
+
+      if (tile.type === 'location') {
+        // In a room — investigate with a suggestion. makeSuggestion drives the
+        // disprove resolution and sets the next stage (or yields to a human).
+        const suspect = pick(botCandidates(p, 'suspect').length ? botCandidates(p, 'suspect') : SUSPECTS.map((c) => c.id))
+        const device = pick(botCandidates(p, 'device').length ? botCandidates(p, 'device') : DEVICES.map((c) => c.id))
+        const sugg = makeSuggestion(s, suspect, device)
+        Object.assign(s, sugg)
+        return s
+      }
+      if (CHALLENGE_TILES.has(tile.type)) {
+        // Bots auto-solve landing challenges and collect the intel.
+        grantIntel(s, s.currentPlayer, tile.label)
+      }
+      s.botStage = 'decide'
       return s
     }
     case 'decide': {
@@ -639,14 +958,6 @@ export function botStep(state: GameState): GameState {
       return s
     }
   }
-}
-
-function botChooseRoom(s: GameState, bot: Player): string {
-  // Prefer reachable rooms whose location is still an open candidate.
-  const openLocs = new Set(botCandidates(bot, 'location'))
-  const good = s.reachable.filter((r) => openLocs.has(r))
-  if (good.length) return pick(good)
-  return pick(s.reachable.length ? s.reachable : [bot.room])
 }
 
 /* ------------------------------------------------------------------ *

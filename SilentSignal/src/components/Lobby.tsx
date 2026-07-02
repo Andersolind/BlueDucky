@@ -2,19 +2,27 @@ import { useState } from 'react'
 import { PlayerConfig } from '../game/engine'
 
 interface Props {
-  onStart: (configs: PlayerConfig[]) => void
+  onStart: (configs: PlayerConfig[], clearance: number, useGeo: boolean) => void
   onOpenLab: () => void
 }
+
+const CLEARANCES = [
+  { level: 1, name: 'Rookie', desc: 'Gentle challenges. Short ciphers, simple patterns.' },
+  { level: 2, name: 'Field Agent', desc: 'Tougher — geometric patterns, longer ciphers.' },
+  { level: 3, name: 'Black-Ops', desc: 'Brutal — hidden shifts, square sequences.' },
+]
 
 export default function Lobby({ onStart, onOpenLab }: Props) {
   const [name, setName] = useState('Agent Nova')
   const [bots, setBots] = useState(3)
+  const [clearance, setClearance] = useState(2)
+  const [useGeo, setUseGeo] = useState(false)
 
   const begin = () => {
     const configs: PlayerConfig[] = [{ name: name.trim() || 'You', isBot: false }]
     const botNames = ['CIPHER', 'ECHO', 'RAVEN', 'HALO', 'DELTA']
     for (let i = 0; i < bots; i++) configs.push({ name: botNames[i], isBot: true })
-    onStart(configs)
+    onStart(configs, clearance, useGeo)
   }
 
   return (
@@ -48,6 +56,36 @@ export default function Lobby({ onStart, onOpenLab }: Props) {
           />
         </label>
 
+        <div className="field">
+          <span>Clearance level — sets challenge difficulty</span>
+          <div className="clearance-row">
+            {CLEARANCES.map((c) => (
+              <button
+                key={c.level}
+                className={`clearance-opt ${clearance === c.level ? 'sel' : ''}`}
+                onClick={() => setClearance(c.level)}
+                title={c.desc}
+              >
+                <span className="cl-pips">{'◆'.repeat(c.level)}{'◇'.repeat(3 - c.level)}</span>
+                <span className="cl-name">{c.name}</span>
+                <span className="cl-desc">{c.desc}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <button
+          className={`geo-toggle ${useGeo ? 'on' : ''}`}
+          onClick={() => setUseGeo((v) => !v)}
+        >
+          <span className="geo-check">{useGeo ? '◉' : '○'}</span>
+          <span className="geo-text">
+            <b>Use my location</b>
+            <span>Build the board from real streets & schools near you (asks for location; falls back to Mimico).</span>
+          </span>
+          <span className="geo-pin">📍</span>
+        </button>
+
         <div className="lobby-buttons">
           <button className="primary big" onClick={begin}>
             ▶ Open the case
@@ -62,12 +100,13 @@ export default function Lobby({ onStart, onOpenLab }: Props) {
         <h3>How the hunt works</h3>
         <ol>
           <li>
-            <b>Roll & move</b> through the building. You can only investigate the room your agent
-            stands in.
+            <b>Roll & hop</b> the Monopoly-style ring around Mimico's streets and schools. You can
+            only investigate the location you land on.
           </li>
           <li>
-            <b>Suggest</b> a suspect + device in your current room. Rivals must secretly reveal a
-            card that disproves you — narrowing the truth.
+            <b>Suggest</b> a suspect + device at your current address. Rivals must secretly reveal a
+            card that disproves you. Land on a <b>Dead Drop / Cipher Cache</b> tile and crack a clue
+            challenge for free intel.
           </li>
           <li>
             <b>Sweep</b> for ultrasound. If the true bug is an active emitter and it's planted in

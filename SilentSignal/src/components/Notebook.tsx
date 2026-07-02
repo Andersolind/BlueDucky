@@ -1,5 +1,6 @@
 import { Card, GameState } from '../game/types'
 import { SUSPECTS, DEVICES, LOCATIONS } from '../game/data'
+import { cardAddress, cardName } from '../game/engine'
 
 interface Props {
   state: GameState
@@ -33,8 +34,17 @@ export default function Notebook({ state, onToggle }: Props) {
             return (
               <div className={`nb-row ${mine ? 'mine' : ''}`} key={card.id}>
                 <div className="nb-card">
-                  <span className="nb-card-name">{card.name}</span>
-                  <span className="nb-card-hint">{mine ? 'in your hand' : card.hint}</span>
+                  <span className="nb-card-name">
+                    {cardName(card.id)}
+                    {card.tier != null && (
+                      <span className={`tier-badge tier-${card.tier}`} title={`Tier ${card.tier} hardware`}>
+                        {'◆'.repeat(card.tier)}
+                      </span>
+                    )}
+                  </span>
+                  <span className="nb-card-hint">
+                    {mine ? 'in your hand' : card.band ?? cardAddress(card.id) ?? card.hint}
+                  </span>
                 </div>
                 <button
                   className={`nb-mark m-${markClass(mark)}`}

@@ -9,6 +9,7 @@ const ICON: Record<string, string> = {
   sweep: '📡',
   system: '•',
   win: '★',
+  intel: '🔓',
 }
 
 export default function Feed({ state }: { state: GameState }) {

@@ -1,3 +1,5 @@
+import type { Tile } from './data'
+
 export type CardCategory = 'suspect' | 'device' | 'location'
 
 export interface Card {
@@ -6,11 +8,25 @@ export interface Card {
   category: CardCategory
   /** Short flavor line shown on the card face. */
   hint: string
+  /** Locations only: the real Mimico street address. */
+  address?: string
   /**
    * Devices only: does this bug actively emit RF / ultrasound (detectable by a
    * sweep) or is it passive? Used by the in-game Ultrasonic Sweep clue.
    */
   emits?: boolean
+  /** Devices only: acoustic-hardware complexity tier (1 basic … 3 black-ops). */
+  tier?: number
+  /** Devices only: the acoustic band / technique detail for that hardware. */
+  band?: string
+}
+
+/** A Monopoly-style playing token assigned to each agent. */
+export interface TokenDef {
+  id: string
+  icon: string
+  name: string
+  kind: 'car' | 'person' | 'item'
 }
 
 export interface Solution {
@@ -39,6 +55,16 @@ export interface Player {
   /** Eliminated after a wrong accusation (can still disprove). */
   out: boolean
   color: string
+  /** Assigned playing-token id (see TOKENS). */
+  token: string
+  /** Monopoly economy: cash on hand. */
+  money: number
+  /** Board positions of properties this player owns. */
+  properties: number[]
+  /** Currently detained. */
+  inJail: boolean
+  /** Turns spent in detention this stint. */
+  jailTurns: number
   /** Bots only: card ids known NOT to be in the solution (hand + cards seen). */
   seen?: string[]
   /** Bots only: cards this bot has deduced ARE the solution. */
@@ -59,6 +85,7 @@ export interface LogEntry {
     | 'system'
     | 'win'
     | 'intel'
+    | 'money'
   actor?: string
   text: string
   /** For suggestions/accusations, the cards involved. */
@@ -79,6 +106,9 @@ export type Phase =
   | 'suggesting'
   | 'disproving'
   | 'challenge'
+  | 'buying'
+  | 'store'
+  | 'jail'
   | 'accusing'
   | 'bot-turn'
   | 'gameover'
@@ -111,6 +141,14 @@ export interface GameState {
   moveFrom: number
   /** How many tiles the last move advanced (for the animation). */
   moveSteps: number
+  /** Clearance level (1 Rookie … 3 Black-Ops) — scales challenge difficulty. */
+  clearance: number
+  /** The 24 board tiles for this game (POI-driven, possibly from geolocation). */
+  board: Tile[]
+  /** Where the board is set — "Mimico" or a geolocated area name. */
+  place: string
+  /** Position of a pending buy/store decision for the human. */
+  decisionPos: number | null
   /** Active landing challenge for the human, if any. */
   challenge: ChallengeState | null
   /** Pending suggestion awaiting disproof resolution. */
@@ -126,7 +164,7 @@ export interface GameState {
   sweptThisTurn: boolean
 }
 
-export type BotStage = 'roll' | 'move' | 'sweep' | 'suggest' | 'decide' | 'end'
+export type BotStage = 'roll' | 'act' | 'decide' | 'end'
 
 export interface PendingSuggestion {
   suggestion: Suggestion

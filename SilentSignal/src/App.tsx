@@ -1,24 +1,41 @@
 import { useEffect, useRef, useState } from 'react'
 import { GameState } from './game/types'
 import { botStep, createGame, beginGame, PlayerConfig } from './game/engine'
+import { MIMICO_POI } from './game/data'
+import { getLocalPoi } from './game/geo'
 import { useUltrasonic } from './audio/useUltrasonic'
 import Lobby from './components/Lobby'
 import GameScreen from './components/GameScreen'
 import SignalLab from './components/SignalLab'
+import TokenDraw from './components/TokenDraw'
 
-type Screen = 'lobby' | 'game'
+type Screen = 'lobby' | 'locating' | 'assign' | 'game'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('lobby')
   const [state, setState] = useState<GameState | null>(null)
   const [showLab, setShowLab] = useState(false)
+  const [geoNote, setGeoNote] = useState('')
 
   // One shared ultrasonic engine for the whole app (Signal Lab + in-game sweep).
   const ultra = useUltrasonic()
 
-  const start = (configs: PlayerConfig[]) => {
-    setState(beginGame(createGame(configs)))
-    setScreen('game')
+  const start = async (configs: PlayerConfig[], clearance: number, useGeo: boolean) => {
+    let poi = MIMICO_POI
+    if (useGeo) {
+      setScreen('locating')
+      setGeoNote('Locating you…')
+      try {
+        poi = await getLocalPoi()
+        setGeoNote(`Board set to ${poi.place}.`)
+      } catch (e: any) {
+        poi = MIMICO_POI
+        setGeoNote('Could not use your location — playing Mimico.')
+      }
+    }
+    // Tokens are dealt in createGame; show the reveal animation before play.
+    setState(beginGame(createGame(configs, clearance, poi)))
+    setScreen('assign')
   }
 
   const quit = () => {
@@ -73,6 +90,16 @@ export default function App() {
 
       <main className="main">
         {screen === 'lobby' && <Lobby onStart={start} onOpenLab={() => setShowLab(true)} />}
+        {screen === 'locating' && (
+          <div className="locating">
+            <div className="locating-radar" />
+            <h2>{geoNote}</h2>
+            <p className="lede">Scanning OpenStreetMap for nearby streets, schools, stations and stores…</p>
+          </div>
+        )}
+        {screen === 'assign' && state && (
+          <TokenDraw players={state.players} onDone={() => setScreen('game')} />
+        )}
         {screen === 'game' && state && (
           <GameScreen state={state} setState={setState} ultra={ultra} onQuit={quit} />
         )}

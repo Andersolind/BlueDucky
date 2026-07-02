@@ -44,42 +44,56 @@ function caesar(word: string, shift: number): string {
     .join('')
 }
 
-function makeCipher(rng: Rng): ChallengeState {
-  const word = choice(CIPHER_WORDS, rng)
+function makeCipher(rng: Rng, difficulty: number): ChallengeState {
+  // Higher clearance → longer words and, at tier 3, the shift is withheld.
+  const pool = difficulty <= 1 ? CIPHER_WORDS.filter((w) => w.length <= 6) : CIPHER_WORDS
+  const word = choice(pool.length ? pool : CIPHER_WORDS, rng)
   const shift = 1 + Math.floor(rng() * 25)
+  const hint =
+    difficulty >= 3
+      ? 'Caesar cipher — the shift is unknown. Work it out and decode.'
+      : `Caesar cipher — every letter shifted forward by ${shift}. Decode it.`
   return {
     kind: 'cipher',
     title: 'Cipher Cache',
     prompt: caesar(word, shift).toUpperCase(),
     answer: word,
-    hint: `Caesar cipher — every letter shifted forward by ${shift}. Decode it.`,
+    hint,
     reward: REWARD,
   }
 }
 
 /* ---------------- Sequence: what comes next ---------------- */
 
-function makeSequence(rng: Rng): ChallengeState {
-  const geometric = rng() < 0.4
+function makeSequence(rng: Rng, difficulty: number): ChallengeState {
   let seq: number[]
   let next: number
-  if (geometric) {
+  let hint: string
+  if (difficulty >= 3 && rng() < 0.7) {
+    // Shifted perfect squares: c+1, c+4, c+9, c+16, → c+25.
+    const c = Math.floor(rng() * 5)
+    seq = [c + 1, c + 4, c + 9, c + 16]
+    next = c + 25
+    hint = 'Not a fixed step — think about the gaps between the gaps.'
+  } else if (difficulty >= 2 && rng() < 0.6) {
     const a = 1 + Math.floor(rng() * 4)
     const r = 2 + Math.floor(rng() * 2) // ×2 or ×3
     seq = [a, a * r, a * r * r, a * r * r * r]
     next = a * r * r * r * r
+    hint = 'Each intercept multiplies by the same factor. What is next?'
   } else {
     const a = 1 + Math.floor(rng() * 6)
     const d = 2 + Math.floor(rng() * 5)
     seq = [a, a + d, a + 2 * d, a + 3 * d]
     next = a + 4 * d
+    hint = 'A repeating step drives the intercepted counter. What is next?'
   }
   return {
     kind: 'sequence',
     title: 'Wiretap Pattern',
     prompt: `${seq.join('  ,  ')}  ,  ?`,
     answer: String(next),
-    hint: 'A repeating step drives the intercepted counter. What is the next value?',
+    hint,
     reward: REWARD,
   }
 }
@@ -110,7 +124,7 @@ function shuffleInPlace<T>(arr: T[], rng: Rng): T[] {
   return arr
 }
 
-function makeQuiz(rng: Rng): ChallengeState {
+function makeQuiz(rng: Rng, _difficulty: number): ChallengeState {
   const def = choice(QUIZZES, rng)
   const options = shuffleInPlace([def.correct, ...def.wrong], rng)
   return {
@@ -127,8 +141,9 @@ function makeQuiz(rng: Rng): ChallengeState {
 
 const GENERATORS = [makeCipher, makeSequence, makeQuiz]
 
-export function generateChallenge(rng: Rng = Math.random): ChallengeState {
-  return choice(GENERATORS, rng)(rng)
+/** Generate a challenge. `difficulty` (1..3) is the clearance sub-layer. */
+export function generateChallenge(rng: Rng = Math.random, difficulty = 1): ChallengeState {
+  return choice(GENERATORS, rng)(rng, difficulty)
 }
 
 /** Case-insensitive, whitespace-trimmed comparison. */

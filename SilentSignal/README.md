@@ -22,23 +22,51 @@ npm run dev          # http://localhost:5173
 ```
 
 ```bash
+npm run dev:https    # HTTPS dev server — needed to use the mic from ANOTHER device
 npm run build        # production build to dist/
 npm run preview      # serve the build
 npm run typecheck    # tsc --noEmit
+npm test             # vitest: modem loopback, challenges, 200-game sim
 ```
+
+### Using the microphone from another device
+
+`getUserMedia` only works in a **secure context**. `http://localhost` counts as
+secure, but `http://<your-LAN-ip>` does **not** — that's why the mic fails when
+you open the network URL on a phone. Run `npm run dev:https` and open the
+`https://<ip>:5173` network URL; the browser warns once about the self-signed
+cert (accept it) and the mic works.
 
 ## How to play
 
-1. **Roll & move** through the building's 3×3 of rooms (center room has secret
-   corridors). You can only investigate the room your agent stands in.
-2. **Suggest** a suspect + device in your current room. Rivals must secretly
-   reveal a card that disproves you — narrowing the truth. Cards shown to you are
-   auto-marked in your **Detective Notebook**.
-3. **Ultrasonic sweep** (once per turn): opens your mic and listens. If the true
-   bug is an *active emitter* and it's planted in your room, you'll hear it — and
-   the notebook auto-rules-out the impossible devices/locations. If a co-located
-   player broadcasts the beacon from the **Signal Lab**, you get a *live contact*.
-4. **Accuse** when sure. Right = case closed, you win. Wrong = you're burned and
+First, pick a **clearance level** (Rookie / Field Agent / Black-Ops) — it scales
+how hard the clue challenges are. Then each agent is dealt a **playing token**
+(a car, a person, or a gadget) with a slot-machine reveal.
+
+The board is a **Monopoly-style ring of 24 tiles** rendered in 3D (toggle
+2D/3D top-right), laid out over **real Mimico streets and schools** (Royal York
+Road, Lake Shore Blvd W, Bishop Allen Academy, David Hornell School, …). You hop
+clockwise around it, and the tile you land on decides what happens.
+
+The **devices** carry an acoustic-hardware **tier** (◆ basic … ◆◆◆ black-ops)
+and the band/technique they work on — shown in your notebook and on the cards.
+
+1. **Roll & hop.** Roll a die and move that many tiles clockwise. Tokens hop
+   tile-by-tile. Passing/landing on **Field HQ (GO)** earns you free intel.
+2. **Land on a LOCATION tile → suggest.** You can only investigate the room you
+   land on: name a suspect + device and rivals must secretly reveal a card that
+   disproves you. Cards shown to you are auto-marked in your **Detective
+   Notebook**.
+3. **Land on an INTEL / corner tile → clue challenge.** Solve a quick cipher,
+   number pattern, or signals-intel quiz. Crack it and the game rules a random
+   *innocent* card off your notebook (it never touches a real solution card, so
+   it speeds deduction without handing you the win).
+4. **Land on a SIGNAL NODE (or a room) → ultrasonic sweep.** Opens your mic and
+   listens. If the true bug is an *active emitter* planted in your room, you'll
+   hear it, and the notebook auto-rules-out the impossible devices/locations. If
+   a co-located player broadcasts the beacon from the **Signal Lab**, you get a
+   *live contact*.
+5. **Accuse** when sure. Right = case closed, you win. Wrong = you're burned and
    out of the hunt (but still must disprove others).
 
 Rival agents are bots with real deduction: they track cards shown to them, infer

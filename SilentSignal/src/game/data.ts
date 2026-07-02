@@ -1,4 +1,4 @@
-import { Card } from './types'
+import { Card, TokenDef } from './types'
 
 /**
  * The case file. Three categories, Clue-style:
@@ -16,26 +16,57 @@ export const SUSPECTS: Card[] = [
   { id: 'sus_marsh', name: 'Prof. Ivo Marsh', category: 'suspect', hint: 'Tenured. Suspiciously well-funded.' },
 ]
 
+/**
+ * DEVICES double as the "acoustic hardware" sub-layer: each carries a
+ * complexity `tier` (1 basic … 3 black-ops) and the `band` / technique it works
+ * on. Higher-tier hardware is rarer and harder to reason about.
+ */
 export const DEVICES: Card[] = [
-  { id: 'dev_ultra', name: 'Ultrasonic Implant', category: 'device', hint: 'Beams audio out above 18 kHz.', emits: true },
-  { id: 'dev_laser', name: 'Laser Microphone', category: 'device', hint: 'Reads glass vibration from afar.', emits: false },
-  { id: 'dev_gsm', name: 'GSM Bug', category: 'device', hint: 'Phones home over the cell network.', emits: true },
-  { id: 'dev_contact', name: 'Contact Mic', category: 'device', hint: 'Glued to a wall or pipe. Passive.', emits: false },
-  { id: 'dev_retro', name: 'RF Retroreflector', category: 'device', hint: 'Lights up under a radar flood.', emits: true },
-  { id: 'dev_parabolic', name: 'Parabolic Dish', category: 'device', hint: 'Aimed from across the room.', emits: false },
+  { id: 'dev_ultra', name: 'Ultrasonic Implant', category: 'device', hint: 'Beams audio out above 18 kHz.', emits: true, tier: 3, band: '18–22 kHz ultrasonic carrier' },
+  { id: 'dev_laser', name: 'Laser Microphone', category: 'device', hint: 'Reads glass vibration from afar.', emits: false, tier: 3, band: 'IR laser vibrometry' },
+  { id: 'dev_gsm', name: 'GSM Bug', category: 'device', hint: 'Phones home over the cell network.', emits: true, tier: 2, band: '900 / 1800 MHz GSM uplink' },
+  { id: 'dev_contact', name: 'Contact Mic', category: 'device', hint: 'Glued to a wall or pipe. Passive.', emits: false, tier: 1, band: 'structure-borne, wired' },
+  { id: 'dev_retro', name: 'RF Retroreflector', category: 'device', hint: 'Lights up under a radar flood.', emits: true, tier: 3, band: 'passive RF, radar-lit' },
+  { id: 'dev_parabolic', name: 'Parabolic Dish', category: 'device', hint: 'Aimed from across the street.', emits: false, tier: 1, band: 'line-of-sight acoustic' },
 ]
 
+/**
+ * LOCATIONS are the nine "where was the bug planted" cards — real Mimico
+ * (Etobicoke, Toronto) streets and schools by default. Their ids (loc_1..loc_9)
+ * are STABLE; the display names can be overridden per-game by geolocation (see
+ * buildBoard / setLocationNames), so the deduction logic never depends on the
+ * label. Six streets + three schools, matching the board's location slots.
+ */
 export const LOCATIONS: Card[] = [
-  { id: 'loc_vault', name: 'Server Vault', category: 'location', hint: 'Cold aisle, colder secrets.' },
-  { id: 'loc_exec', name: 'Executive Suite', category: 'location', hint: 'Corner office, thin walls.' },
-  { id: 'loc_boiler', name: 'Boiler Room', category: 'location', hint: 'Nobody looks twice down here.' },
-  { id: 'loc_roof', name: 'Rooftop Garden', category: 'location', hint: 'Line of sight to three buildings.' },
-  { id: 'loc_archive', name: 'Records Archive', category: 'location', hint: 'Paper trails and dead zones.' },
-  { id: 'loc_comms', name: 'Comms Closet', category: 'location', hint: 'Where every wire meets.' },
-  { id: 'loc_parking', name: 'Parking Level', category: 'location', hint: 'Echoes, exhaust, and blind spots.' },
-  { id: 'loc_atrium', name: 'The Atrium', category: 'location', hint: 'Open, bright, and always watched.' },
-  { id: 'loc_loft', name: 'Safehouse Loft', category: 'location', hint: 'Off-books. Should be empty.' },
+  { id: 'loc_1', name: 'Royal York Road', category: 'location', hint: "Mimico's arterial spine.", address: 'Royal York Rd @ Mimico Ave' },
+  { id: 'loc_2', name: 'Bishop Allen Academy', category: 'location', hint: 'Catholic high school.', address: '721 Royal York Rd' },
+  { id: 'loc_3', name: 'Lake Shore Blvd W', category: 'location', hint: 'Waterfront strip, lake wind.', address: 'Lake Shore Blvd W' },
+  { id: 'loc_4', name: 'David Hornell School', category: 'location', hint: 'Junior school by the Queensway.', address: '640 The Queensway' },
+  { id: 'loc_5', name: 'Mimico Avenue', category: 'location', hint: 'Old main street, tight sightlines.', address: 'Mimico Ave' },
+  { id: 'loc_6', name: 'Station Road', category: 'location', hint: 'By the Mimico GO tracks.', address: 'Station Rd @ Judson St' },
+  { id: 'loc_7', name: 'John English School', category: 'location', hint: 'Junior middle school.', address: '95 Ourland Ave' },
+  { id: 'loc_8', name: 'Superior Avenue', category: 'location', hint: 'Quiet residential run.', address: 'Superior Ave' },
+  { id: 'loc_9', name: 'Melrose Street', category: 'location', hint: 'Leafy side street.', address: 'Melrose St' },
 ]
+
+/**
+ * Monopoly-style playing tokens — a car, a person, or an item. Each agent is
+ * dealt a unique one at the start with a slot-machine reveal.
+ */
+export const TOKENS: TokenDef[] = [
+  { id: 'tok_roadster', icon: '🚗', name: 'The Roadster', kind: 'car' },
+  { id: 'tok_getaway', icon: '🏎️', name: 'Getaway Car', kind: 'car' },
+  { id: 'tok_speedboat', icon: '🛥️', name: 'The Speedboat', kind: 'car' },
+  { id: 'tok_operative', icon: '🕵️', name: 'The Operative', kind: 'person' },
+  { id: 'tok_fixer', icon: '🎩', name: 'The Fixer', kind: 'person' },
+  { id: 'tok_tail', icon: '🚶', name: 'The Tail', kind: 'person' },
+  { id: 'tok_scanner', icon: '📻', name: 'The Scanner', kind: 'item' },
+  { id: 'tok_headset', icon: '🎧', name: 'The Headset', kind: 'item' },
+  { id: 'tok_torch', icon: '🔦', name: 'The Torch', kind: 'item' },
+  { id: 'tok_key', icon: '🗝️', name: 'Skeleton Key', kind: 'item' },
+]
+
+export const TOKEN_BY_ID: Record<string, TokenDef> = Object.fromEntries(TOKENS.map((t) => [t.id, t]))
 
 export const ALL_CARDS: Card[] = [...SUSPECTS, ...DEVICES, ...LOCATIONS]
 
@@ -43,101 +74,210 @@ export const CARD_BY_ID: Record<string, Card> = Object.fromEntries(ALL_CARDS.map
 
 export const PLAYER_COLORS = ['#4fd1c5', '#f6ad55', '#fc8181', '#b794f4', '#68d391', '#63b3ed']
 
-/**
- * Board layout: rooms arranged on a 3×3 grid of location cards. Adjacency is
- * grid-neighbor plus a couple of "corridor" shortcuts. Movement cost between
- * adjacent rooms is 1; the die roll caps how far you can travel per turn.
- */
-export const ROOM_GRID: string[][] = [
-  ['loc_vault', 'loc_exec', 'loc_boiler'],
-  ['loc_roof', 'loc_archive', 'loc_comms'],
-  ['loc_parking', 'loc_atrium', 'loc_loft'],
-]
-
 /* ------------------------------------------------------------------ *
- *  Monopoly-style ring board
+ *  Monopoly-style ring board (POI-driven, geolocation-aware)
  * ------------------------------------------------------------------ */
 
-export type TileType = 'go' | 'location' | 'intel' | 'sweep' | 'corner'
+export type TileType =
+  | 'go'
+  | 'location' // a buyable street/school property + deduction "room"
+  | 'station' // GO / rail station — a buyable "railroad"
+  | 'store' // convenience store — pay for intel (service, not owned)
+  | 'busstop' // small utility tile
+  | 'intel' // draw a clue challenge
+  | 'sweep' // run an ultrasonic sweep
+  | 'jail' // detention cell (also "just visiting")
+  | 'gotojail' // sends you to jail
+  | 'corner' // Safehouse (free parking)
+
+export type PoiKind = 'street' | 'school' | 'station' | 'store' | 'busstop'
 
 export interface Tile {
   type: TileType
   label: string
-  /** For location tiles: which room this tile represents. */
-  locationId?: string
-  /** Short flavor / sublabel. */
   sub?: string
+  /** For location tiles: the deduction location id (loc_1..loc_9). */
+  locationId?: string
+  poiKind?: PoiKind
+  address?: string
+  /** Buyable tiles: purchase price and rent charged to visitors. */
+  price?: number
+  rent?: number
+  /** Player id who owns this tile (assigned during play). */
+  owner?: string
+}
+
+/** A point of interest used to name a tile. */
+export interface Poi {
+  name: string
+  address?: string
+}
+
+/** A full set of nearby POIs — from geolocation, or the Mimico default. */
+export interface PoiSet {
+  streets: Poi[]
+  schools: Poi[]
+  stations: Poi[]
+  stores: Poi[]
+  busstops: Poi[]
+  /** Human label for where this board is set (e.g. "Mimico" or "your area"). */
+  place: string
+}
+
+/** The base Mimico environment used by default and as the geolocation fallback. */
+export const MIMICO_POI: PoiSet = {
+  place: 'Mimico',
+  streets: [
+    { name: 'Royal York Road', address: 'Royal York Rd @ Mimico Ave' },
+    { name: 'Lake Shore Blvd W', address: 'Lake Shore Blvd W' },
+    { name: 'Mimico Avenue', address: 'Mimico Ave' },
+    { name: 'Station Road', address: 'Station Rd @ Judson St' },
+    { name: 'Superior Avenue', address: 'Superior Ave' },
+    { name: 'Melrose Street', address: 'Melrose St' },
+    { name: 'Cavell Avenue', address: 'Cavell Ave' },
+    { name: 'Hillside Avenue', address: 'Hillside Ave' },
+  ],
+  schools: [
+    { name: 'Bishop Allen Academy', address: '721 Royal York Rd' },
+    { name: 'David Hornell School', address: '640 The Queensway' },
+    { name: 'John English School', address: '95 Ourland Ave' },
+    { name: 'Second Street School', address: '121 Second St' },
+    { name: 'Norseman School', address: '105 Guthrie Ave' },
+  ],
+  stations: [
+    { name: 'Mimico GO Station', address: 'Royal York Rd' },
+    { name: 'Long Branch GO', address: 'Brown’s Line' },
+  ],
+  stores: [
+    { name: 'Mimico Variety', address: 'Mimico Ave' },
+    { name: 'Lakeshore Convenience', address: 'Lake Shore Blvd W' },
+    { name: 'Royal York Mini Mart', address: 'Royal York Rd' },
+  ],
+  busstops: [
+    { name: 'Royal York & Judson', address: 'TTC 76' },
+    { name: 'Lake Shore & Superior', address: 'TTC 501' },
+  ],
+}
+
+/** Nine stable deduction-location ids, in board-slot order. */
+export const LOCATION_IDS = LOCATIONS.map((c) => c.id)
+
+/**
+ * The fixed 24-slot template. Tile *types* and positions are constant (so the
+ * geometry and hop math never change); the POI *content* is filled per-game by
+ * buildBoard from either geolocation or the Mimico default.
+ */
+type Slot = { type: TileType; poiKind?: PoiKind; label?: string; sub?: string }
+const LAYOUT: Slot[] = [
+  { type: 'go', label: 'Field HQ', sub: 'collect $200' }, // 0
+  { type: 'location', poiKind: 'street' }, // 1
+  { type: 'store' }, // 2
+  { type: 'location', poiKind: 'school' }, // 3
+  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 4
+  { type: 'location', poiKind: 'street' }, // 5
+  { type: 'jail', label: 'Detention', sub: 'just visiting' }, // 6
+  { type: 'station' }, // 7
+  { type: 'intel', label: 'Dead Drop', sub: 'clue challenge' }, // 8
+  { type: 'location', poiKind: 'school' }, // 9
+  { type: 'busstop' }, // 10
+  { type: 'location', poiKind: 'street' }, // 11
+  { type: 'corner', label: 'Safehouse', sub: 'lie low (free)' }, // 12
+  { type: 'location', poiKind: 'street' }, // 13
+  { type: 'store' }, // 14
+  { type: 'location', poiKind: 'school' }, // 15
+  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 16
+  { type: 'location', poiKind: 'street' }, // 17
+  { type: 'gotojail', label: 'Interception', sub: 'go to detention' }, // 18
+  { type: 'station' }, // 19
+  { type: 'intel', label: 'Cipher Cache', sub: 'clue challenge' }, // 20
+  { type: 'location', poiKind: 'street' }, // 21
+  { type: 'busstop' }, // 22
+  { type: 'store' }, // 23
+]
+
+export const JAIL_POS = 6
+export const GOTOJAIL_POS = 18
+export const STATION_PRICE = 200
+export const BUS_FARE = 25
+
+/** Tiles that draw a clue challenge when landed on. */
+export const CHALLENGE_TILES = new Set<TileType>(['intel'])
+/** Buyable property tiles. */
+export const BUYABLE = new Set<TileType>(['location', 'station'])
+
+/** Pull items cyclically so a short POI list still fills every slot. */
+function cyc<T>(arr: T[], i: number, fallback: T): T {
+  return arr.length ? arr[i % arr.length] : fallback
 }
 
 /**
- * 24 tiles laid clockwise around a 7×7 perimeter. Four corners, all nine
- * location "rooms" on the edges, plus INTEL tiles (draw a clue challenge) and
- * SWEEP tiles (run an ultrasonic sweep). You roll a die and hop this many tiles
- * clockwise, then the tile you land on decides what happens.
+ * Build the 24-tile board from a POI set. Location slots (1..9 in encounter
+ * order) get the stable loc ids and are priced as properties; stations/stores/
+ * busstops draw their names from the POI pools.
  */
-export const RING: Tile[] = [
-  { type: 'go', label: 'Field HQ', sub: 'pass for intel' }, // 0  (top-left corner)
-  { type: 'location', label: 'Server Vault', locationId: 'loc_vault' }, // 1
-  { type: 'intel', label: 'Dead Drop', sub: 'clue challenge' }, // 2
-  { type: 'location', label: 'Executive Suite', locationId: 'loc_exec' }, // 3
-  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 4
-  { type: 'location', label: 'Boiler Room', locationId: 'loc_boiler' }, // 5
-  { type: 'corner', label: 'Interception', sub: 'clue challenge' }, // 6  (top-right)
-  { type: 'location', label: 'Rooftop Garden', locationId: 'loc_roof' }, // 7
-  { type: 'intel', label: 'Cipher Cache', sub: 'clue challenge' }, // 8
-  { type: 'location', label: 'Records Archive', locationId: 'loc_archive' }, // 9
-  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 10
-  { type: 'location', label: 'Comms Closet', locationId: 'loc_comms' }, // 11
-  { type: 'corner', label: 'Safehouse', sub: 'lie low' }, // 12 (bottom-right)
-  { type: 'location', label: 'Parking Level', locationId: 'loc_parking' }, // 13
-  { type: 'intel', label: 'Dead Drop', sub: 'clue challenge' }, // 14
-  { type: 'location', label: 'The Atrium', locationId: 'loc_atrium' }, // 15
-  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 16
-  { type: 'location', label: 'Safehouse Loft', locationId: 'loc_loft' }, // 17
-  { type: 'corner', label: 'Lockdown', sub: 'clue challenge' }, // 18 (bottom-left)
-  { type: 'intel', label: 'Wiretap', sub: 'clue challenge' }, // 19
-  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 20
-  { type: 'intel', label: 'Cipher Cache', sub: 'clue challenge' }, // 21
-  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 22
-  { type: 'intel', label: 'Wiretap', sub: 'clue challenge' }, // 23
-]
+export function buildBoard(poi: PoiSet): Tile[] {
+  let locN = 0
+  let stationN = 0
+  let storeN = 0
+  let busN = 0
+  let streetN = 0
+  let schoolN = 0
 
-/** Tiles that draw a clue challenge when landed on. */
-export const CHALLENGE_TILES = new Set<TileType>(['intel', 'corner'])
+  return LAYOUT.map((slot, i): Tile => {
+    switch (slot.type) {
+      case 'location': {
+        const locId = LOCATION_IDS[locN]
+        const p =
+          slot.poiKind === 'school'
+            ? cyc(poi.schools, schoolN++, { name: 'School' })
+            : cyc(poi.streets, streetN++, { name: 'Street' })
+        const price = 120 + locN * 18
+        locN++
+        return {
+          type: 'location',
+          label: p.name,
+          address: p.address,
+          locationId: locId,
+          poiKind: slot.poiKind,
+          price,
+          rent: Math.round(price * 0.2),
+        }
+      }
+      case 'station': {
+        const p = cyc(poi.stations, stationN++, { name: 'GO Station' })
+        return {
+          type: 'station',
+          label: p.name,
+          address: p.address,
+          poiKind: 'station',
+          price: STATION_PRICE,
+          rent: 50,
+        }
+      }
+      case 'store': {
+        const p = cyc(poi.stores, storeN++, { name: 'Convenience Store' })
+        return { type: 'store', label: p.name, address: p.address, poiKind: 'store', sub: 'buy intel $100' }
+      }
+      case 'busstop': {
+        const p = cyc(poi.busstops, busN++, { name: 'Bus Stop' })
+        return { type: 'busstop', label: p.name, address: p.address, poiKind: 'busstop', sub: `hop a bus $${BUS_FARE}` }
+      }
+      default:
+        return { type: slot.type, label: slot.label ?? '', sub: slot.sub }
+    }
+  })
+}
 
 export const BOARD_DIM = 7 // 7×7 grid; perimeter = 4*(7-1) = 24 tiles
+export const RING_LEN = 24
 
 /** Grid (row, col) for ring index, clockwise from the top-left corner. */
 export function ringCoord(index: number, dim = BOARD_DIM): { row: number; col: number } {
-  const n = index % (4 * (dim - 1))
+  const n = ((index % (4 * (dim - 1))) + 4 * (dim - 1)) % (4 * (dim - 1))
   if (n < dim) return { row: 0, col: n } // top row L→R
   if (n < 2 * dim - 1) return { row: n - (dim - 1), col: dim - 1 } // right col T→B
   if (n < 3 * dim - 2) return { row: dim - 1, col: dim - 1 - (n - (2 * dim - 2)) } // bottom R→L
   return { row: dim - 1 - (n - (3 * dim - 3)), col: 0 } // left col B→T
 }
 
-export const ROOM_ADJACENCY: Record<string, string[]> = buildAdjacency()
-
-function buildAdjacency(): Record<string, string[]> {
-  const adj: Record<string, string[]> = {}
-  const rows = ROOM_GRID.length
-  const cols = ROOM_GRID[0].length
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const id = ROOM_GRID[r][c]
-      const n: string[] = []
-      if (r > 0) n.push(ROOM_GRID[r - 1][c])
-      if (r < rows - 1) n.push(ROOM_GRID[r + 1][c])
-      if (c > 0) n.push(ROOM_GRID[r][c - 1])
-      if (c < cols - 1) n.push(ROOM_GRID[r][c + 1])
-      adj[id] = n
-    }
-  }
-  // Diagonal "service corridors" from the center room — classic Clue secret passages.
-  adj['loc_archive'].push('loc_vault', 'loc_boiler', 'loc_parking', 'loc_loft')
-  adj['loc_vault'].push('loc_archive')
-  adj['loc_boiler'].push('loc_archive')
-  adj['loc_parking'].push('loc_archive')
-  adj['loc_loft'].push('loc_archive')
-  return adj
-}
+export const STATION_POSITIONS = LAYOUT.map((s, i) => (s.type === 'station' ? i : -1)).filter((i) => i >= 0)

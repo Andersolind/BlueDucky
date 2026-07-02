@@ -1,23 +1,33 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { GameState } from '../game/types'
 import {
+  buyProperty,
+  buyStoreIntel,
   cardName,
+  currentTile,
   cycleNote,
+  declineBuy,
   endTurn,
   humanReveal,
   makeAccusation,
   makeSuggestion,
-  moveTo,
+  money,
+  payBail,
+  resolveChallenge,
   rollDice,
+  serveJail,
   ultrasonicSweep,
 } from '../game/engine'
 import { useUltrasonic } from '../audio/useUltrasonic'
-import Board from './Board'
+import Board3D from './Board3D'
 import Notebook from './Notebook'
 import Feed from './Feed'
 import SweepPanel from './SweepPanel'
-import { AccuseModal, DisproveModal, SuggestModal } from './Modals'
-import { CARD_BY_ID } from '../game/data'
+import ChallengeModal from './ChallengeModal'
+// Lazy — pulls in three.js only when someone actually gets detained.
+const JailScene = lazy(() => import('./JailScene'))
+import { AccuseModal, BuyModal, DisproveModal, JailModal, StoreModal, SuggestModal } from './Modals'
+import { CARD_BY_ID, TOKEN_BY_ID } from '../game/data'
 
 type Ultra = ReturnType<typeof useUltrasonic>
 
@@ -47,10 +57,18 @@ export default function GameScreen({ state, setState, ultra, onQuit }: Props) {
     setShowSweep(false)
   }, [state.turn, state.currentPlayer])
 
+  // Play the acoustic-array detention sequence the moment YOU get jailed.
+  const [jailFx, setJailFx] = useState(false)
+  const wasJailed = useRef(me.inJail)
+  useEffect(() => {
+    if (me.inJail && !wasJailed.current) setJailFx(true)
+    wasJailed.current = me.inJail
+  }, [me.inJail])
+
   const update = (next: GameState) => setState(next)
+  const tile = currentTile(state)
 
   const onRoll = () => update(rollDice(state))
-  const onMove = (room: string) => update(moveTo(state, room))
   const onSuggest = (suspect: string, device: string) => {
     setShowSuggest(false)
     setSuggestedThisTurn(true)
@@ -64,19 +82,28 @@ export default function GameScreen({ state, setState, ultra, onQuit }: Props) {
     setShowSweep(false)
     update(ultrasonicSweep(state, realContact))
   }
+  const onChallenge = (success: boolean) => update(resolveChallenge(state, success))
   const onReveal = (cardId: string) => update(humanReveal(state, cardId))
   const onNote = (cardId: string) => update(cycleNote(state, cardId))
   const onEnd = () => update(endTurn(state))
+  const onBuy = () => update(buyProperty(state))
+  const onDecline = () => update(declineBuy(state))
+  const onStoreBuy = () => update(buyStoreIntel(state, true))
+  const onStoreSkip = () => update(buyStoreIntel(state, false))
+  const onBail = () => update(payBail(state))
+  const onServe = () => update(serveJail(state))
 
   return (
     <div className="game">
       <section className="col-left">
         <TurnBanner state={state} myTurn={myTurn} />
-        <Board state={state} onMove={onMove} />
+        <Board3D state={state} />
 
         {myTurn && !gameover && (
           <ActionBar
             state={state}
+            onLocation={tile.type === 'location'}
+            canSweep={tile.type === 'location' || tile.type === 'sweep'}
             suggestedThisTurn={suggestedThisTurn}
             onRoll={onRoll}
             onOpenSuggest={() => setShowSuggest(true)}
@@ -108,7 +135,26 @@ export default function GameScreen({ state, setState, ultra, onQuit }: Props) {
       {showSweep && (
         <SweepPanel ultra={ultra} onResult={onSweepResult} onCancel={() => setShowSweep(false)} />
       )}
+      {myTurn && state.phase === 'challenge' && state.challenge && (
+        <ChallengeModal challenge={state.challenge} onResolve={onChallenge} />
+      )}
+      {myTurn && state.phase === 'buying' && <BuyModal state={state} onBuy={onBuy} onDecline={onDecline} />}
+      {myTurn && state.phase === 'store' && (
+        <StoreModal state={state} onBuy={onStoreBuy} onSkip={onStoreSkip} />
+      )}
+      {myTurn && state.phase === 'jail' && <JailModal state={state} onBail={onBail} onServe={onServe} />}
       {state.pending?.humanPick && <DisproveModal state={state} onReveal={onReveal} />}
+
+      {jailFx && (
+        <Suspense fallback={null}>
+          <JailScene
+            icon={TOKEN_BY_ID[me.token]?.icon ?? '★'}
+            color={me.color}
+            name={me.name}
+            onDone={() => setJailFx(false)}
+          />
+        </Suspense>
+      )}
 
       {gameover && <GameOver state={state} me={me} onQuit={onQuit} />}
     </div>
@@ -129,9 +175,12 @@ function TurnBanner({ state, myTurn }: { state: GameState; myTurn: boolean }) {
               p.out ? 'out' : ''
             }`}
             style={{ borderColor: p.color }}
+            title={TOKEN_BY_ID[p.token]?.name}
           >
-            <span className="pc-dot" style={{ background: p.color }} />
+            <span className="pc-token">{TOKEN_BY_ID[p.token]?.icon}</span>
             {p.name}
+            {p.inJail && ' 🚧'}
+            <span className="pc-money">{money(p.money)}</span>
             {p.out && ' ✗'}
           </span>
         ))}
@@ -142,8 +191,8 @@ function TurnBanner({ state, myTurn }: { state: GameState; myTurn: boolean }) {
             <span className="thinking" /> {current.name} is working the case…
           </span>
         )}
-        {myTurn && state.phase === 'rolling' && <span>Your move, {current.name}. Roll to begin.</span>}
-        {myTurn && state.phase === 'moving' && <span>Choose a room to investigate.</span>}
+        {myTurn && state.phase === 'rolling' && <span>Your move, {current.name}. Roll to hop the ring.</span>}
+        {myTurn && state.phase === 'challenge' && <span>A clue challenge blocks your path…</span>}
         {myTurn && state.phase === 'suggesting' && <span>Investigate, sweep, or accuse.</span>}
         {state.phase === 'disproving' && state.pending?.humanPick && (
           <span>You must reveal a card…</span>
@@ -157,6 +206,8 @@ function TurnBanner({ state, myTurn }: { state: GameState; myTurn: boolean }) {
 
 function ActionBar({
   state,
+  onLocation,
+  canSweep,
   suggestedThisTurn,
   onRoll,
   onOpenSuggest,
@@ -165,6 +216,8 @@ function ActionBar({
   onEnd,
 }: {
   state: GameState
+  onLocation: boolean
+  canSweep: boolean
   suggestedThisTurn: boolean
   onRoll: () => void
   onOpenSuggest: () => void
@@ -180,20 +233,25 @@ function ActionBar({
           🎲 Roll the dice
         </button>
       )}
-      {phase === 'moving' && <span className="ab-hint">Pick a highlighted room on the board ↑</span>}
       {phase === 'suggesting' && (
         <>
-          <button
-            className="secondary"
-            disabled={state.sweptThisTurn}
-            onClick={onOpenSweep}
-            title="Listen for an active bug in this room"
-          >
-            📡 Ultrasonic sweep{state.sweptThisTurn ? ' ✓' : ''}
-          </button>
-          <button className="primary" disabled={suggestedThisTurn} onClick={onOpenSuggest}>
-            ❓ Suggest{suggestedThisTurn ? ' ✓' : ''}
-          </button>
+          {canSweep && (
+            <button
+              className="secondary"
+              disabled={state.sweptThisTurn}
+              onClick={onOpenSweep}
+              title="Listen for an active bug here"
+            >
+              📡 Ultrasonic sweep{state.sweptThisTurn ? ' ✓' : ''}
+            </button>
+          )}
+          {onLocation ? (
+            <button className="primary" disabled={suggestedThisTurn} onClick={onOpenSuggest}>
+              ❓ Suggest{suggestedThisTurn ? ' ✓' : ''}
+            </button>
+          ) : (
+            <span className="ab-hint">Not in a room — roll onto a location to investigate.</span>
+          )}
           <button className="danger" onClick={onOpenAccuse}>
             ⚑ Accuse
           </button>
