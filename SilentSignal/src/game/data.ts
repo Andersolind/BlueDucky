@@ -54,16 +54,26 @@ export const LOCATIONS: Card[] = [
  * dealt a unique one at the start with a slot-machine reveal.
  */
 export const TOKENS: TokenDef[] = [
+  // cars / vehicles
   { id: 'tok_roadster', icon: '🚗', name: 'The Roadster', kind: 'car' },
   { id: 'tok_getaway', icon: '🏎️', name: 'Getaway Car', kind: 'car' },
   { id: 'tok_speedboat', icon: '🛥️', name: 'The Speedboat', kind: 'car' },
+  { id: 'tok_bus', icon: '🚌', name: 'The Night Bus', kind: 'car' },
+  { id: 'tok_taxi', icon: '🚕', name: 'The Cab', kind: 'car' },
+  { id: 'tok_scooter', icon: '🛵', name: 'The Scooter', kind: 'car' },
+  { id: 'tok_chopper', icon: '🚁', name: 'The Chopper', kind: 'car' },
+  // people
   { id: 'tok_operative', icon: '🕵️', name: 'The Operative', kind: 'person' },
   { id: 'tok_fixer', icon: '🎩', name: 'The Fixer', kind: 'person' },
   { id: 'tok_tail', icon: '🚶', name: 'The Tail', kind: 'person' },
+  { id: 'tok_k9', icon: '🐕', name: 'The K-9', kind: 'person' },
+  // gadgets / items
   { id: 'tok_scanner', icon: '📻', name: 'The Scanner', kind: 'item' },
   { id: 'tok_headset', icon: '🎧', name: 'The Headset', kind: 'item' },
   { id: 'tok_torch', icon: '🔦', name: 'The Torch', kind: 'item' },
   { id: 'tok_key', icon: '🗝️', name: 'Skeleton Key', kind: 'item' },
+  { id: 'tok_sat', icon: '🛰️', name: 'The Satellite', kind: 'item' },
+  { id: 'tok_shades', icon: '🕶️', name: 'The Shades', kind: 'item' },
 ]
 
 export const TOKEN_BY_ID: Record<string, TokenDef> = Object.fromEntries(TOKENS.map((t) => [t.id, t]))
@@ -81,6 +91,7 @@ export const PLAYER_COLORS = ['#4fd1c5', '#f6ad55', '#fc8181', '#b794f4', '#68d3
 export type TileType =
   | 'go'
   | 'location' // a buyable street/school property + deduction "room"
+  | 'estate' // a buyable street property that is NOT a deduction room
   | 'station' // GO / rail station — a buyable "railroad"
   | 'store' // convenience store — pay for intel (service, not owned)
   | 'busstop' // small utility tile
@@ -89,6 +100,9 @@ export type TileType =
   | 'jail' // detention cell (also "just visiting")
   | 'gotojail' // sends you to jail
   | 'corner' // Safehouse (free parking)
+  | 'dealer' // the Supplier — take product on consignment / repay your debt
+  | 'drophouse' // sell product for cash (raises heat, risk of a bust)
+  | 'police' // police checkpoint — busted if your heat is too high
 
 export type PoiKind = 'street' | 'school' | 'station' | 'store' | 'busstop'
 
@@ -136,6 +150,10 @@ export const MIMICO_POI: PoiSet = {
     { name: 'Melrose Street', address: 'Melrose St' },
     { name: 'Cavell Avenue', address: 'Cavell Ave' },
     { name: 'Hillside Avenue', address: 'Hillside Ave' },
+    { name: 'Manchester Street', address: 'Manchester St' },
+    { name: 'Wesley Street', address: 'Wesley St' },
+    { name: 'Portland Street', address: 'Portland St' },
+    { name: 'Drummond Street', address: 'Drummond St' },
   ],
   schools: [
     { name: 'Bishop Allen Academy', address: '721 Royal York Rd' },
@@ -143,19 +161,24 @@ export const MIMICO_POI: PoiSet = {
     { name: 'John English School', address: '95 Ourland Ave' },
     { name: 'Second Street School', address: '121 Second St' },
     { name: 'Norseman School', address: '105 Guthrie Ave' },
+    { name: 'St. Leo Catholic School', address: '165 Stanley Ave' },
   ],
+  // Royal York Station leads so it lands on the mid-board station slot.
   stations: [
     { name: 'Mimico GO Station', address: 'Royal York Rd' },
+    { name: 'Royal York Station', address: 'Bloor & Royal York · Line 2' },
     { name: 'Long Branch GO', address: 'Brown’s Line' },
   ],
   stores: [
     { name: 'Mimico Variety', address: 'Mimico Ave' },
     { name: 'Lakeshore Convenience', address: 'Lake Shore Blvd W' },
     { name: 'Royal York Mini Mart', address: 'Royal York Rd' },
+    { name: 'Superior Variety', address: 'Superior Ave' },
   ],
   busstops: [
     { name: 'Royal York & Judson', address: 'TTC 76' },
     { name: 'Lake Shore & Superior', address: 'TTC 501' },
+    { name: 'Mimico & Station', address: 'TTC 44' },
   ],
 }
 
@@ -168,42 +191,52 @@ export const LOCATION_IDS = LOCATIONS.map((c) => c.id)
  * buildBoard from either geolocation or the Mimico default.
  */
 type Slot = { type: TileType; poiKind?: PoiKind; label?: string; sub?: string }
+// A 32-tile ring on a 9×9 perimeter (corners at 0, 8, 16, 24).
 const LAYOUT: Slot[] = [
-  { type: 'go', label: 'Field HQ', sub: 'collect $200' }, // 0
+  { type: 'go', label: 'Field HQ', sub: 'collect $200' }, // 0  corner
   { type: 'location', poiKind: 'street' }, // 1
   { type: 'store' }, // 2
-  { type: 'location', poiKind: 'school' }, // 3
+  { type: 'estate', poiKind: 'street' }, // 3
   { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 4
-  { type: 'location', poiKind: 'street' }, // 5
-  { type: 'jail', label: 'Detention', sub: 'just visiting' }, // 6
-  { type: 'station' }, // 7
-  { type: 'intel', label: 'Dead Drop', sub: 'clue challenge' }, // 8
-  { type: 'location', poiKind: 'school' }, // 9
+  { type: 'location', poiKind: 'school' }, // 5
+  { type: 'intel', label: 'Dead Drop', sub: 'clue challenge' }, // 6
+  { type: 'station' }, // 7  (Mimico GO)
+  { type: 'jail', label: 'Detention', sub: 'just visiting' }, // 8  corner
+  { type: 'location', poiKind: 'street' }, // 9
   { type: 'busstop' }, // 10
-  { type: 'location', poiKind: 'street' }, // 11
-  { type: 'corner', label: 'Safehouse', sub: 'lie low (free)' }, // 12
-  { type: 'location', poiKind: 'street' }, // 13
-  { type: 'store' }, // 14
-  { type: 'location', poiKind: 'school' }, // 15
-  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 16
+  { type: 'estate', poiKind: 'street' }, // 11
+  { type: 'store' }, // 12
+  { type: 'location', poiKind: 'school' }, // 13
+  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 14
+  { type: 'station' }, // 15 (Royal York Station)
+  { type: 'corner', label: 'Safehouse', sub: 'free parking' }, // 16 corner
   { type: 'location', poiKind: 'street' }, // 17
-  { type: 'gotojail', label: 'Interception', sub: 'go to detention' }, // 18
-  { type: 'station' }, // 19
-  { type: 'intel', label: 'Cipher Cache', sub: 'clue challenge' }, // 20
-  { type: 'location', poiKind: 'street' }, // 21
-  { type: 'busstop' }, // 22
-  { type: 'store' }, // 23
+  { type: 'intel', label: 'Cipher Cache', sub: 'clue challenge' }, // 18
+  { type: 'dealer', label: 'The Supplier', sub: 'take product / repay' }, // 19
+  { type: 'station' }, // 20 (Long Branch GO)
+  { type: 'location', poiKind: 'school' }, // 21
+  { type: 'drophouse', label: 'Drop House', sub: 'sell product' }, // 22
+  { type: 'sweep', label: 'Signal Node', sub: 'ultrasonic sweep' }, // 23
+  { type: 'gotojail', label: 'Interception', sub: 'go to detention' }, // 24 corner
+  { type: 'location', poiKind: 'street' }, // 25
+  { type: 'drophouse', label: 'Drop House', sub: 'sell product' }, // 26
+  { type: 'police', label: 'Police Check', sub: 'busted if hot' }, // 27
+  { type: 'intel', label: 'Wiretap', sub: 'clue challenge' }, // 28
+  { type: 'location', poiKind: 'street' }, // 29
+  { type: 'store' }, // 30
+  { type: 'location', poiKind: 'school' }, // 31
 ]
 
-export const JAIL_POS = 6
-export const GOTOJAIL_POS = 18
+export const JAIL_POS = 8
+export const GOTOJAIL_POS = 24
+export const SAFEHOUSE_POS = 16
 export const STATION_PRICE = 200
 export const BUS_FARE = 25
 
 /** Tiles that draw a clue challenge when landed on. */
 export const CHALLENGE_TILES = new Set<TileType>(['intel'])
 /** Buyable property tiles. */
-export const BUYABLE = new Set<TileType>(['location', 'station'])
+export const BUYABLE = new Set<TileType>(['location', 'estate', 'station'])
 
 /** Pull items cyclically so a short POI list still fills every slot. */
 function cyc<T>(arr: T[], i: number, fallback: T): T {
@@ -217,6 +250,7 @@ function cyc<T>(arr: T[], i: number, fallback: T): T {
  */
 export function buildBoard(poi: PoiSet): Tile[] {
   let locN = 0
+  let estateN = 0
   let stationN = 0
   let storeN = 0
   let busN = 0
@@ -241,6 +275,19 @@ export function buildBoard(poi: PoiSet): Tile[] {
           poiKind: slot.poiKind,
           price,
           rent: Math.round(price * 0.2),
+        }
+      }
+      case 'estate': {
+        // Buyable street property, not a deduction room.
+        const p = cyc(poi.streets, streetN++, { name: 'Street' })
+        const price = 100 + estateN++ * 14
+        return {
+          type: 'estate',
+          label: p.name,
+          address: p.address,
+          poiKind: 'street',
+          price,
+          rent: Math.round(price * 0.18),
         }
       }
       case 'station': {
@@ -268,8 +315,8 @@ export function buildBoard(poi: PoiSet): Tile[] {
   })
 }
 
-export const BOARD_DIM = 7 // 7×7 grid; perimeter = 4*(7-1) = 24 tiles
-export const RING_LEN = 24
+export const BOARD_DIM = 9 // 9×9 grid; perimeter = 4*(9-1) = 32 tiles
+export const RING_LEN = 32
 
 /** Grid (row, col) for ring index, clockwise from the top-left corner. */
 export function ringCoord(index: number, dim = BOARD_DIM): { row: number; col: number } {

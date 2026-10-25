@@ -38,9 +38,35 @@ export interface ModemConfig {
   threshold: number
 }
 
+/**
+ * MEASURED IN A REAL ROOM, not chosen for roundness. 2026-09-03, laptop speaker
+ * -> room -> DMIC array at 48 kHz, swept across the whole tone grid, compared
+ * against a 9-day ultrasonic occupancy profile of the same room (32,745 captures).
+ *
+ * The previous grid (baseFreq 18000, step 100) put its top data tones at
+ * 20.8-21.1 kHz, where two independent things go wrong at once:
+ *
+ *   speaker roll-off   d28 21.3 dB -> d31 8.7 dB SNR. The last tone was below
+ *                      any usable detection margin; d30/d31 were the two worst
+ *                      of all 35 tones.
+ *   the room itself    20.0-21.5 kHz is occupied by persistent emitters ~5-6%
+ *                      of the time (repellers / sensors / SMPS harmonics).
+ *
+ * Both land on the SAME tones, and because tone index maps to nibble value, the
+ * failures were not random: nibbles 0xC-0xF at odd symbol positions (bank 1)
+ * were systematically the least reliable symbols in the alphabet.
+ *
+ * This grid spans 18150-19950 Hz instead. Every tone measured 0.0% room
+ * occupancy over 9 days and 35-55 dB SNR on the same hardware. Step is 50 Hz,
+ * which at symbolSec 0.06 (a 2880-sample Goertzel window, 16.7 Hz resolution)
+ * leaves adjacent tones 3 bins apart - tighter than the old 6, and the reason
+ * symbolSec must not be shortened without re-measuring.
+ *
+ * Both ends must share this config; it is the wire format.
+ */
 export const DEFAULT_CONFIG: ModemConfig = {
-  baseFreq: 18000,
-  step: 100,
+  baseFreq: 18400,
+  step: 50,
   symbolSec: 0.06,
   threshold: 0.18,
 }

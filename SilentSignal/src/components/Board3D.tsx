@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { GameState } from '../game/types'
-import { BOARD_DIM, ringCoord, TOKEN_BY_ID } from '../game/data'
+import { BOARD_DIM, RING_LEN, ringCoord, TOKEN_BY_ID } from '../game/data'
 
 interface Props {
   state: GameState
@@ -9,6 +9,7 @@ interface Props {
 const TILE_ICON: Record<string, string> = {
   go: '⌂',
   location: '',
+  estate: '🏘️',
   station: '🚉',
   store: '🏪',
   busstop: '🚌',
@@ -16,7 +17,10 @@ const TILE_ICON: Record<string, string> = {
   sweep: '📡',
   jail: '🚧',
   gotojail: '👮',
-  corner: '☕',
+  corner: '🅿️',
+  dealer: '🕴️',
+  drophouse: '🏚️',
+  police: '🚓',
 }
 
 const POI_ICON: Record<string, string> = { street: '🏙️', school: '🏫' }
@@ -62,11 +66,11 @@ export default function Board3D({ state }: Props) {
       for (const p of state.players) {
         if (p.out) continue
         let cur = animPos.current[p.id] ?? p.pos
-        const dist = ((p.pos - cur) % 24 + 24) % 24
+        const dist = (((p.pos - cur) % RING_LEN) + RING_LEN) % RING_LEN
         let moving = false
-        if (dist > 0.001 && dist < 23.999) {
+        if (dist > 0.001 && dist < RING_LEN - 0.001) {
           const advance = Math.min(SPEED * dt, dist)
-          cur = (cur + advance) % 24
+          cur = (cur + advance) % RING_LEN
           moving = advance > 0.0001
         } else {
           cur = p.pos
@@ -74,10 +78,10 @@ export default function Board3D({ state }: Props) {
         animPos.current[p.id] = cur
 
         // Interpolate between the two ring tiles we're between.
-        const i = Math.floor(cur) % 24
+        const i = Math.floor(cur) % RING_LEN
         const frac = cur - Math.floor(cur)
         const a = centerOf(i)
-        const b = centerOf((i + 1) % 24)
+        const b = centerOf((i + 1) % RING_LEN)
         const x = a.x + (b.x - a.x) * frac
         const y = a.y + (b.y - a.y) * frac
 
@@ -172,6 +176,9 @@ export default function Board3D({ state }: Props) {
             <div className="center-mark">◊</div>
             <div className="center-title">CASE FILE</div>
             <div className="center-sub">Who is the eavesdropper?</div>
+            {state.pot > 0 && (
+              <div className="center-pot">🅿️ Safehouse pot ${state.pot.toLocaleString('en-US')}</div>
+            )}
             <div className="center-legend">
               <span><i className="lg loc" /> property</span>
               <span><i className="lg intel" /> challenge</span>

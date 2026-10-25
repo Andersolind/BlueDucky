@@ -10,6 +10,8 @@ const ICON: Record<string, string> = {
   system: '•',
   win: '★',
   intel: '🔓',
+  money: '💵',
+  crime: '🚨',
 }
 
 export default function Feed({ state }: { state: GameState }) {

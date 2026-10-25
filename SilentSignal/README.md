@@ -29,6 +29,36 @@ npm run typecheck    # tsc --noEmit
 npm test             # vitest: modem loopback, challenges, 200-game sim
 ```
 
+## Online multiplayer (WebRTC)
+
+Real browser-to-browser play over WebRTC data channels, with a tiny WebSocket
+**signaling** server that only brokers the connection handshake (game traffic is
+peer-to-peer). The game is **host-authoritative**: the host runs the engine and
+drives the bots; guests send their actions and render the host's snapshots.
+
+**Run it (two terminals):**
+
+```bash
+npm run signal        # signaling server on ws://0.0.0.0:8080
+npm run dev:https     # the app over HTTPS (WebRTC + mic need a secure context)
+```
+
+1. **Host:** open the app → **🌐 Host online game** → a 4-letter **room code** appears.
+2. **Guests:** open the app → type the code → **Join**. They show up in the host's roster.
+3. **Host:** press **Start** — empty seats are filled with AI agents. Everyone plays
+   their own seat on their turn; the notebook is private per player.
+
+**Networking notes**
+- Same Wi-Fi / LAN works out of the box (guests reach the host's signaling server
+  by hostname).
+- Over the **internet**, deploy `server/signaling.mjs` somewhere public and set
+  `VITE_SIGNAL_URL=wss://your-server` when building. Restrictive/symmetric NATs
+  may also need a **TURN** server (public STUN alone isn't always enough) — add
+  its `urls`/credentials to the `ICE` list in `src/net/webrtc.ts`.
+- Privacy is honor-system: hands and per-seat notebooks live in the shared state
+  the host broadcasts, so a determined player could read them via devtools. Fine
+  for playing with friends; not hardened against cheating.
+
 ### Using the microphone from another device
 
 `getUserMedia` only works in a **secure context**. `http://localhost` counts as

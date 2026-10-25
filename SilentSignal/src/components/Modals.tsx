@@ -1,7 +1,16 @@
 import { useState } from 'react'
 import { Card, GameState } from '../game/types'
 import { SUSPECTS, DEVICES, LOCATIONS, CARD_BY_ID } from '../game/data'
-import { cardAddress, cardName, money, pendingPurchase } from '../game/engine'
+import {
+  cardAddress,
+  cardName,
+  money,
+  pendingPurchase,
+  PRODUCT_DEAL,
+  SNITCH_MOVES,
+  snitchBounty,
+  SnitchLevel,
+} from '../game/engine'
 
 function Overlay({ children, onClose }: { children: React.ReactNode; onClose?: () => void }) {
   return (
@@ -265,6 +274,167 @@ export function JailModal({
         </button>
         <button className="primary" disabled={!canBail} onClick={onBail}>
           {canBail ? `Pay ${money(50)} bail` : 'Not enough cash'}
+        </button>
+      </div>
+    </Overlay>
+  )
+}
+
+/* ---------------- The Supplier (drug dealer) ---------------- */
+
+export function DealerModal({
+  state,
+  onTake,
+  onRepay,
+  onLeave,
+}: {
+  state: GameState
+  onTake: () => void
+  onRepay: () => void
+  onLeave: () => void
+}) {
+  const me = state.players[state.currentPlayer]
+  const deal = PRODUCT_DEAL
+  return (
+    <Overlay>
+      <div className="ch-tag crime">THE SUPPLIER</div>
+      <h2>Back-room meet</h2>
+      {me.debt > 0 ? (
+        <p className="modal-sub warn">
+          You owe the Supplier <b>{money(me.debt)}</b>, due by turn <b>{me.debtDue}</b>. Miss it and
+          you get busted — cash seized, product gone.
+        </p>
+      ) : (
+        <p className="modal-sub">
+          Take <b>{deal.batch} product</b> on consignment. You'll owe <b>{money(deal.debt)}</b> within{' '}
+          <b>{deal.turns} turns</b> — sell it at a drop house for {money(deal.price)} a unit before
+          then.
+        </p>
+      )}
+      <div className="crime-row">
+        <span>💊 product: <b>{me.product}</b></span>
+        <span>🔥 heat: <b>{me.heat}</b></span>
+        <span>💵 cash: <b>{money(me.money)}</b></span>
+      </div>
+      <div className="modal-actions">
+        <button className="ghost" onClick={onLeave}>
+          Walk away
+        </button>
+        {me.debt > 0 && (
+          <button className="secondary" disabled={me.money <= 0} onClick={onRepay}>
+            Repay {money(Math.min(me.money, me.debt))}
+          </button>
+        )}
+        <button className="danger" onClick={onTake}>
+          Take {deal.batch} product
+        </button>
+      </div>
+    </Overlay>
+  )
+}
+
+/* ---------------- Drop house ---------------- */
+
+export function DropHouseModal({
+  state,
+  onSell,
+  onLeave,
+}: {
+  state: GameState
+  onSell: () => void
+  onLeave: () => void
+}) {
+  const me = state.players[state.currentPlayer]
+  const gross = me.product * PRODUCT_DEAL.price
+  const risk = Math.round(me.heat * 12)
+  return (
+    <Overlay>
+      <div className="ch-tag crime">DROP HOUSE</div>
+      <h2>Move the product</h2>
+      {me.product > 0 ? (
+        <p className="modal-sub">
+          Sell your <b>{me.product} product</b> for <b>{money(gross)}</b>. The hotter you are, the
+          riskier it gets — <b>{risk}%</b> chance of a raid that busts you.
+        </p>
+      ) : (
+        <p className="modal-sub">You're holding nothing to sell. Pick up product from the Supplier first.</p>
+      )}
+      <div className="crime-row">
+        <span>💊 product: <b>{me.product}</b></span>
+        <span>🔥 heat: <b>{me.heat}</b></span>
+      </div>
+      <div className="modal-actions">
+        <button className="ghost" onClick={onLeave}>
+          Not now
+        </button>
+        <button className="danger" disabled={me.product <= 0} onClick={onSell}>
+          Sell for {money(gross)}
+        </button>
+      </div>
+    </Overlay>
+  )
+}
+
+/* ---------------- Snitch ---------------- */
+
+export function SnitchModal({
+  state,
+  targets,
+  onSnitch,
+  onClose,
+}: {
+  state: GameState
+  targets: number[]
+  onSnitch: (idx: number, level: SnitchLevel) => void
+  onClose: () => void
+}) {
+  const [target, setTarget] = useState<number | null>(targets.length === 1 ? targets[0] : null)
+  return (
+    <Overlay onClose={onClose}>
+      <div className="ch-tag crime">TURN INFORMANT</div>
+      <h2>Snitch for a bounty</h2>
+      <p className="modal-sub">
+        Pick who to inform on, then choose how hard you burn them. Bigger moves pay more but raise
+        your own heat — and a wire can bust them, or blow up in your face.
+      </p>
+
+      <h4>Who's the rat's target?</h4>
+      <div className="choice-grid">
+        {targets.map((i) => {
+          const p = state.players[i]
+          return (
+            <button
+              key={p.id}
+              className={`choice ${target === i ? 'sel' : ''}`}
+              onClick={() => setTarget(i)}
+            >
+              <span className="choice-name">{p.name}</span>
+              <span className="choice-hint">🔥 heat {p.heat} · 💊 product {p.product}</span>
+            </button>
+          )
+        })}
+      </div>
+
+      {target != null && (
+        <>
+          <h4>The move</h4>
+          <div className="snitch-moves">
+            {SNITCH_MOVES.map((mv) => (
+              <button key={mv.level} className="snitch-move" onClick={() => onSnitch(target, mv.level)}>
+                <span className="sm-top">
+                  <b>{mv.name}</b>
+                  <span className="sm-bounty">+{money(snitchBounty(state, target, mv.level))}</span>
+                </span>
+                <span className="sm-blurb">{mv.blurb}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      <div className="modal-actions">
+        <button className="ghost" onClick={onClose}>
+          Cancel
         </button>
       </div>
     </Overlay>

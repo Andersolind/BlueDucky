@@ -4,6 +4,7 @@ import { cardAddress, cardName } from '../game/engine'
 
 interface Props {
   state: GameState
+  seat: number
   onToggle: (cardId: string) => void
 }
 
@@ -13,9 +14,9 @@ const SECTIONS: { title: string; icon: string; cards: Card[] }[] = [
   { title: 'Locations', icon: '📍', cards: LOCATIONS },
 ]
 
-export default function Notebook({ state, onToggle }: Props) {
-  const human = state.players.find((p) => !p.isBot)
-  const hand = new Set(human?.hand ?? [])
+export default function Notebook({ state, seat, onToggle }: Props) {
+  const hand = new Set(state.players[seat]?.hand ?? [])
+  const notebook = state.notebooks[seat] ?? {}
 
   return (
     <div className="notebook">
@@ -29,7 +30,7 @@ export default function Notebook({ state, onToggle }: Props) {
             <span>{sec.icon}</span> {sec.title}
           </div>
           {sec.cards.map((card) => {
-            const mark = state.notebook[card.id] ?? ''
+            const mark = notebook[card.id] ?? ''
             const mine = hand.has(card.id)
             return (
               <div className={`nb-row ${mine ? 'mine' : ''}`} key={card.id}>

@@ -65,6 +65,14 @@ export interface Player {
   inJail: boolean
   /** Turns spent in detention this stint. */
   jailTurns: number
+  /** Underworld: wanted level 0..5 (police bust you when it's high). */
+  heat: number
+  /** Units of product held, sellable at a drop house. */
+  product: number
+  /** Money owed to the Supplier. */
+  debt: number
+  /** Turn by which the debt must be repaid, else you get busted. */
+  debtDue: number | null
   /** Bots only: card ids known NOT to be in the solution (hand + cards seen). */
   seen?: string[]
   /** Bots only: cards this bot has deduced ARE the solution. */
@@ -86,6 +94,7 @@ export interface LogEntry {
     | 'win'
     | 'intel'
     | 'money'
+    | 'crime'
   actor?: string
   text: string
   /** For suggestions/accusations, the cards involved. */
@@ -109,6 +118,8 @@ export type Phase =
   | 'buying'
   | 'store'
   | 'jail'
+  | 'dealer'
+  | 'drophouse'
   | 'accusing'
   | 'bot-turn'
   | 'gameover'
@@ -132,8 +143,8 @@ export interface GameState {
   players: Player[]
   currentPlayer: number
   solution: Solution | null
-  /** Human player's own notebook (bots track state internally). */
-  notebook: Notebook
+  /** One detective notebook per player index (humans use theirs; bots ignore). */
+  notebooks: Notebook[]
   log: LogEntry[]
   turn: number
   dice: number
@@ -147,6 +158,8 @@ export interface GameState {
   board: Tile[]
   /** Where the board is set — "Mimico" or a geolocated area name. */
   place: string
+  /** Free-parking jackpot (fed by bail fines, collected on the Safehouse). */
+  pot: number
   /** Position of a pending buy/store decision for the human. */
   decisionPos: number | null
   /** Active landing challenge for the human, if any. */
@@ -162,6 +175,10 @@ export interface GameState {
   botStage: BotStage | null
   /** Whether the human has already used their sweep this turn. */
   sweptThisTurn: boolean
+  /** Whether the current player has already snitched this turn. */
+  snitchedThisTurn: boolean
+  /** Monotonic roll counter, so clients can react to a new dice roll. */
+  rollSeq: number
 }
 
 export type BotStage = 'roll' | 'act' | 'decide' | 'end'

@@ -12,11 +12,17 @@ import {
   buyStoreIntel,
   serveJail,
   payBail,
+  takeProduct,
+  repayDebt,
+  sellProduct,
+  leaveDecision,
+  snitch,
+  snitchTargets,
   endTurn,
   humanReveal,
 } from './engine'
 import { GameState } from './types'
-import { buildBoard, MIMICO_POI } from './data'
+import { buildBoard, MIMICO_POI, RING_LEN } from './data'
 
 const SUSPECTS = ['sus_vesper', 'sus_finch', 'sus_mir', 'sus_hollis', 'sus_volkov', 'sus_marsh']
 const DEVICES = ['dev_ultra', 'dev_laser', 'dev_gsm', 'dev_contact', 'dev_retro', 'dev_parabolic']
@@ -32,7 +38,16 @@ function humanAct(s: GameState): GameState {
   if (st.phase === 'challenge') st = resolveChallenge(st, Math.random() < 0.5)
   else if (st.phase === 'buying') st = Math.random() < 0.6 ? buyProperty(st) : declineBuy(st)
   else if (st.phase === 'store') st = buyStoreIntel(st, Math.random() < 0.5)
+  else if (st.phase === 'dealer')
+    st = st.players[idx].debt > 0 ? repayDebt(st) : Math.random() < 0.6 ? takeProduct(st) : leaveDecision(st)
+  else if (st.phase === 'drophouse') st = Math.random() < 0.7 ? sellProduct(st) : leaveDecision(st)
   if (st.currentPlayer !== idx || st.phase === 'gameover') return st
+
+  // occasionally snitch on a rival for cash
+  if (Math.random() < 0.15 && !st.snitchedThisTurn) {
+    const targets = snitchTargets(st)
+    if (targets.length) st = snitch(st, targets[Math.floor(Math.random() * targets.length)])
+  }
 
   if (currentTile(st).type === 'location') {
     st = makeSuggestion(
@@ -98,11 +113,11 @@ describe('ring movement', () => {
       )
       const before = s.players[0].pos
       s = rollDice(s)
-      const delta = (s.players[0].pos - before + 24) % 24
+      const delta = (s.players[0].pos - before + RING_LEN) % RING_LEN
       expect(delta).toBeGreaterThanOrEqual(1)
       expect(delta).toBeLessThanOrEqual(6)
       const tile = currentTile(s)
-      // room is set iff standing on a location tile
+      // room is set iff standing on a deduction location tile
       expect(s.players[0].room !== '').toBe(tile.type === 'location')
     }
   })
@@ -129,9 +144,10 @@ describe('full game simulation', () => {
 })
 
 describe('board generation (POI-driven)', () => {
-  it('builds 24 tiles with 9 priced locations, 2 stations, 3 stores, 2 bus stops', () => {
+  it('builds a 32-tile ring with 9 deduction locations, estates, 3 stations incl. Royal York', () => {
     const b = buildBoard(MIMICO_POI)
-    expect(b.length).toBe(24)
+    expect(b.length).toBe(32)
+    expect(b.length).toBe(RING_LEN)
 
     const locs = b.filter((t) => t.type === 'location')
     expect(locs.length).toBe(9)
@@ -142,14 +158,54 @@ describe('board generation (POI-driven)', () => {
     }
     expect(new Set(locs.map((t) => t.locationId)).size).toBe(9)
 
+    // estates are buyable street props but NOT deduction rooms.
+    const estates = b.filter((t) => t.type === 'estate')
+    expect(estates.length).toBe(2)
+    for (const t of estates) expect(t.locationId).toBeUndefined()
+
     const stations = b.filter((t) => t.type === 'station')
-    expect(stations.length).toBe(2)
+    expect(stations.length).toBe(3)
     for (const t of stations) expect(t.price).toBe(200)
+    expect(stations.some((t) => t.label === 'Royal York Station')).toBe(true)
 
     expect(b.filter((t) => t.type === 'store').length).toBe(3)
-    expect(b.filter((t) => t.type === 'busstop').length).toBe(2)
+    expect(b.filter((t) => t.type === 'busstop').length).toBe(1)
     expect(b.filter((t) => t.type === 'go').length).toBe(1)
     expect(b.filter((t) => t.type === 'gotojail').length).toBe(1)
+
+    // underworld tiles
+    expect(b.filter((t) => t.type === 'dealer').length).toBe(1)
+    expect(b.filter((t) => t.type === 'drophouse').length).toBe(2)
+    expect(b.filter((t) => t.type === 'police').length).toBe(1)
+  })
+})
+
+describe('underworld — the Supplier and drop houses', () => {
+  it('take product creates debt with a due turn; repay clears it', () => {
+    let s = beginGame(createGame([{ name: 'You', isBot: false }, { name: 'A', isBot: true }]))
+    s = takeProduct(s)
+    const me = s.players[0]
+    expect(me.product).toBe(4)
+    expect(me.debt).toBeGreaterThan(0)
+    expect(me.debtDue).not.toBeNull()
+
+    s = { ...s, decisionPos: null }
+    s = repayDebt(s)
+    expect(s.players[0].debt).toBe(0)
+    expect(s.players[0].debtDue).toBeNull()
+  })
+
+  it('snitching pays a bounty and heats up the target, once per turn', () => {
+    let s = beginGame(createGame([{ name: 'You', isBot: false }, { name: 'A', isBot: true }]))
+    const cashBefore = s.players[0].money
+    s = snitch(s, 1)
+    expect(s.players[0].money).toBeGreaterThan(cashBefore)
+    expect(s.players[1].heat).toBe(2)
+    expect(s.snitchedThisTurn).toBe(true)
+    // second snitch in the same turn is a no-op
+    const cash2 = s.players[0].money
+    s = snitch(s, 1)
+    expect(s.players[0].money).toBe(cash2)
   })
 })
 

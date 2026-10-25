@@ -4,6 +4,8 @@ import { PlayerConfig } from '../game/engine'
 interface Props {
   onStart: (configs: PlayerConfig[], clearance: number, useGeo: boolean) => void
   onOpenLab: () => void
+  onHostOnline: (name: string, clearance: number, bots: number, useGeo: boolean) => void
+  onJoinOnline: (code: string, name: string) => void
 }
 
 const CLEARANCES = [
@@ -12,11 +14,12 @@ const CLEARANCES = [
   { level: 3, name: 'Black-Ops', desc: 'Brutal — hidden shifts, square sequences.' },
 ]
 
-export default function Lobby({ onStart, onOpenLab }: Props) {
+export default function Lobby({ onStart, onOpenLab, onHostOnline, onJoinOnline }: Props) {
   const [name, setName] = useState('Agent Nova')
   const [bots, setBots] = useState(3)
   const [clearance, setClearance] = useState(2)
   const [useGeo, setUseGeo] = useState(false)
+  const [joinCode, setJoinCode] = useState('')
 
   const begin = () => {
     const configs: PlayerConfig[] = [{ name: name.trim() || 'You', isBot: false }]
@@ -46,7 +49,7 @@ export default function Lobby({ onStart, onOpenLab }: Props) {
         </label>
 
         <label className="field">
-          <span>Rival agents (bots): {bots}</span>
+          <span>Rival AI agents: {bots}</span>
           <input
             type="range"
             min={1}
@@ -88,12 +91,40 @@ export default function Lobby({ onStart, onOpenLab }: Props) {
 
         <div className="lobby-buttons">
           <button className="primary big" onClick={begin}>
-            ▶ Open the case
+            ▶ Play vs AI
           </button>
           <button className="ghost big" onClick={onOpenLab}>
             ⚡ Try the Signal Lab
           </button>
         </div>
+
+        <div className="online-row">
+          <button
+            className="secondary"
+            onClick={() => onHostOnline(name.trim() || 'Host', clearance, bots, useGeo)}
+          >
+            🌐 Host online game
+          </button>
+          <div className="join-inline">
+            <input
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value.toUpperCase().slice(0, 4))}
+              placeholder="ROOM"
+              maxLength={4}
+            />
+            <button
+              className="secondary"
+              disabled={joinCode.length < 4}
+              onClick={() => onJoinOnline(joinCode, name.trim() || 'Agent')}
+            >
+              Join
+            </button>
+          </div>
+        </div>
+        <p className="tiny">
+          Online play needs the signaling server running (<code>npm run signal</code>) and the HTTPS app
+          (<code>npm run dev:https</code>). Same Wi-Fi works out of the box.
+        </p>
       </div>
 
       <div className="how">

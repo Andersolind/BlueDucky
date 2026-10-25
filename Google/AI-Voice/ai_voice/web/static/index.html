@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Voice Tactical Multi-Sensor SIGINT Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <!-- Top Navigation -->
+  <header>
+    <div class="logo-group">
+      <span class="logo-badge">SIGINT TACTICAL</span>
+      <h1>AI-Voice Multi-Sensor & Neural Acoustic Triangulator</h1>
+    </div>
+    <div class="header-status">
+      <div class="status-pill" id="ws-status">
+        <span class="pulse-dot active" id="ws-status-dot"></span>
+        <span id="ws-status-text">INITIALIZING...</span>
+      </div>
+      <div class="status-pill" id="vad-indicator">
+        <span class="pulse-dot"></span> QUIET / IDLE
+      </div>
+      <div class="status-pill">
+        <span>MODEL:</span>
+        <strong id="ollama-model-badge" style="color:var(--accent-cyan);">nightsweep-signalintelligence</strong>
+      </div>
+    </div>
+  </header>
+
+  <!-- Action Bar -->
+  <div class="control-bar">
+    <button class="btn-success" id="btn-start">
+      <span>▶</span> Start Live Multi-Sensor Stream
+    </button>
+    <button class="btn-danger" id="btn-stop" style="display:none;">
+      <span>⏹</span> Stop Live Stream
+    </button>
+    <button class="btn-tactical" id="btn-batch">
+      <span>⚡</span> Synchronized 3s Batch Capture
+    </button>
+    <button class="btn-primary" id="btn-ollama-analyze">
+      <span>🧠</span> Query Ollama Tactical Advisor
+    </button>
+  </div>
+
+  <!-- Main Dashboard Grid -->
+  <main>
+    <!-- Left Column: Waveforms & Acoustic Beam Classifier -->
+    <div class="card col-8">
+      <div class="card-header">
+        <div>
+          <div class="card-title"><span>📡</span> Multi-Sensor Audio Oscilloscope & Demodulator</div>
+          <div class="card-subtitle">Audible Mic (48kHz) + Dodotronic Ultrasonic Wideband (192kHz)</div>
+        </div>
+      </div>
+      
+      <!-- Waveform Canvas -->
+      <canvas id="canvas-waveform" height="180" width="800"></canvas>
+
+      <!-- Neural Beam Detector Banner -->
+      <div class="detection-banner" id="panns-banner">
+        <div>
+          <div class="detection-title" id="panns-label">Passive / Quiet Environment</div>
+          <div class="card-subtitle" id="panns-confidence">99% Confidence (PANNs CNN14 Backbone)</div>
+          <div class="confidence-bar-bg">
+            <div class="confidence-bar-fill" id="panns-conf-bar" style="width: 99%;"></div>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <span class="status-pill" style="border-color: rgba(255,255,255,0.2);">CNN14 MULTI-BAND</span>
+        </div>
+      </div>
+
+      <!-- Real-Time Metrics -->
+      <div class="metric-grid">
+        <div class="metric-box">
+          <div class="metric-label">Vocal Energy (RMS)</div>
+          <div class="metric-value" id="metric-energy">0.0000</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">Ultrasound Peak Amp (192kHz)</div>
+          <div class="metric-value" id="metric-ultrasound">0.0000</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">RTL-SDR EMI Power (150kHz)</div>
+          <div class="metric-value" id="metric-emi">0.00e+0</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">StyleTTS2 Manifest Count</div>
+          <div class="metric-value" id="metric-dataset-count">0 / 1000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Spatial Radar & Trajectory Interceptor -->
+    <div class="card col-4">
+      <div class="card-header">
+        <div>
+          <div class="card-title"><span>🎯</span> 2D Spatial Multipath Radar</div>
+          <div class="card-subtitle">HackRF T0 Sync & Dodotronic ToF Tracking</div>
+        </div>
+      </div>
+
+      <!-- Radar Canvas -->
+      <canvas id="canvas-radar" height="200" width="300"></canvas>
+
+      <!-- Trajectory Interception Controls -->
+      <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Target Distance</span>
+            <span id="slider-dist-val">5.0 m</span>
+          </div>
+          <input type="range" id="slider-dist" min="1.0" max="15.0" step="0.1" value="5.0">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Target Velocity</span>
+            <span id="slider-vel-val">-0.5 m/s</span>
+          </div>
+          <input type="range" id="slider-vel" min="-3.0" max="3.0" step="0.1" value="-0.5">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Spoof Injection Range</span>
+            <span id="slider-spoof-val">3.5 m</span>
+          </div>
+          <input type="range" id="slider-spoof" min="0.5" max="10.0" step="0.1" value="3.5">
+        </div>
+      </div>
+
+      <!-- Trajectory Readouts -->
+      <div class="metric-grid" style="margin-top: 0.3rem;">
+        <div class="metric-box">
+          <div class="metric-label">Real ToF</div>
+          <div class="metric-value" id="traj-real-tof" style="font-size: 1.05rem;">14.58 ms</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">Tx Injection Delay</div>
+          <div class="metric-value" id="traj-inj-delay" style="font-size: 1.05rem;">10.20 ms</div>
+        </div>
+      </div>
+      <div class="status-pill" style="justify-content: center; width: 100%;">
+        <span id="traj-state">INJECTION_VECTOR_VALID</span>
+      </div>
+    </div>
+
+    <!-- Bottom Full Width: Ollama SIGINT Tactical Cognitive Briefing -->
+    <div class="card col-12">
+      <div class="card-header">
+        <div>
+          <div class="card-title"><span>🧠</span> Ollama SIGINT Tactical Intelligence Briefing</div>
+          <div class="card-subtitle">Real-Time Cognitive Threat Attribution & Multi-Sensor Reasoning</div>
+        </div>
+        <div class="status-pill">
+          <span>GPU VRAM:</span>
+          <span id="metric-vram" style="color:var(--accent-cyan);">0 MB</span>
+          <span style="margin-left:0.5rem;">CPU:</span>
+          <span id="metric-cpu" style="color:var(--accent-amber);">0%</span>
+        </div>
+      </div>
+
+      <div class="terminal-window" id="ollama-output">Click "Query Ollama Tactical Advisor" above or start the live stream to receive automated forensic cognitive briefings from the local neural model.</div>
+    </div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

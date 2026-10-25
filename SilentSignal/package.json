@@ -1,9 +1,9 @@
 {
-  "name": "silent-signal",
+  "name": "snitchesareamongus",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "A Clue-style deduction game where players hunt an eavesdropper transmitting real ultrasonic audio in the browser.",
+  "description": "A Clue-meets-Monopoly deduction game with an underworld economy — hunt the eavesdropper, run product, dodge the cops, and snitch on your rivals. Real ultrasonic audio in the browser.",
   "scripts": {
     "dev": "vite",
     "dev:https": "HTTPS=1 vite",
@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "signal": "node server/signaling.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -22,10 +23,12 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/three": "^0.171.0",
+    "@types/ws": "^8.18.1",
     "@vitejs/plugin-basic-ssl": "^1.1.0",
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5.6.3",
     "vite": "^5.4.11",
-    "vitest": "^2.1.9"
+    "vitest": "^2.1.9",
+    "ws": "^8.21.0"
   }
 }
