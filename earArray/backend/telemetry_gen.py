@@ -38,6 +38,9 @@ def build_unified_frame(
     pilot_snap: Dict[str, Any],
     beam_snap: Dict[str, Any],
     pluto_snap: Dict[str, Any] = None,
+    tof_snap: Dict[str, Any] = None,
+    subvocal_snap: Dict[str, Any] = None,
+    enclave_snap: Dict[str, Any] = None,
 ) -> Dict[str, Any]:
     t = time.time()
     rng = np.random.default_rng((tick + int(t * 10)) % 1_000_000)
@@ -152,4 +155,7 @@ def build_unified_frame(
         "pilot_sensing": pilot_snap,
         "beamforming_hrtf": beam_snap,
         "pluto_bridge": pluto_snap or {},
+        "spatial_tof": tof_snap or {},
+        "subvocal_learner": subvocal_snap or {},
+        "audible_enclave": enclave_snap or {},
     }

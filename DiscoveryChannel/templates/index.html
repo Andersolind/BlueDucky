@@ -1,0 +1,2041 @@
+{% raw %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DiscoveryChannel — Vue + Python IoT Scanner, TDOA Calibrator &amp; Text-to-Audio Beamformer</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --panel: #131a2a;
+      --panel-hover: #192236;
+      --border: #243049;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --cast: #f97316;
+      --ssdp: #a855f7;
+      --mdns: #10b981;
+      --arp: #3b82f6;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--ssdp));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 19px;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.25);
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .net-pill {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.83rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .net-pill strong {
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .tab-btn {
+      background: var(--panel);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .tab-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 1px 8px;
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 22px;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .method-checks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .method-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      user-select: none;
+    }
+
+    .method-label:hover {
+      border-color: var(--accent);
+    }
+
+    .method-label input {
+      accent-color: var(--accent);
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #090d16;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: #7dd3fc;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .btn-cast {
+      background: var(--cast);
+      color: #fff;
+    }
+
+    .btn-cast:hover:not(:disabled) {
+      background: #fb923c;
+    }
+
+    .btn-green {
+      background: var(--mdns);
+      color: #051b11;
+    }
+
+    .btn-green:hover:not(:disabled) {
+      background: #34d399;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      font-size: 0.82rem;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--panel-hover);
+      border-color: var(--muted);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .stat-title {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-top: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .input-field {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: var(--text);
+      font-size: 0.86rem;
+      width: 100%;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea.input-field {
+      resize: vertical;
+      min-height: 76px;
+      font-family: inherit;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      max-width: 400px;
+    }
+
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill-btn {
+      background: var(--panel);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .pill-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .pill-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .table-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    th {
+      background: rgba(0, 0, 0, 0.25);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(36, 48, 73, 0.6);
+      vertical-align: middle;
+    }
+
+    tr.device-row {
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    tr.device-row:hover {
+      background: var(--panel-hover);
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.83rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-right: 4px;
+      margin-bottom: 2px;
+    }
+
+    .badge-cast { background: rgba(249, 115, 22, 0.18); color: #fdba74; border: 1px solid rgba(249, 115, 22, 0.4); }
+    .badge-ssdp { background: rgba(168, 85, 247, 0.18); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .badge-mdns { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-arp  { background: rgba(59, 130, 246, 0.18); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
+
+    .details-box {
+      background: #0d1322;
+      padding: 14px 18px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .details-pre {
+      background: #070a12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      overflow-x: auto;
+      color: #cbd5e1;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.79rem;
+      margin-top: 8px;
+    }
+
+    .console-card {
+      background: #070a12;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .console-out {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.83rem;
+      color: #38bdf8;
+      white-space: pre-wrap;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    @media (max-width: 960px) {
+      .cal-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .radar-wrap {
+      background: #080c15;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-group label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .spinner {
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(9, 13, 22, 0.3);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      padding: 36px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="container" v-cloak>
+    <header>
+      <div class="brand">
+        <div class="brand-icon">DC</div>
+        <div>
+          <h1>DiscoveryChannel</h1>
+          <div class="subtitle">Vue 3 + Python Wi-Fi IoT Scanner, TDOA Calibrator &amp; Text-to-Audio Beamformer</div>
+        </div>
+      </div>
+      <div class="net-pill">
+        <span>Host IP: <strong>{{ localIp }}</strong></span>
+        <span>Subnet: <strong>{{ subnet }}</strong></span>
+        <span v-if="lastScanTime">Last Scan: <strong>{{ lastScanTime }}</strong></span>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+      <button class="tab-btn" :class="{ active: activeTab === 'discovery' }" @click="activeTab = 'discovery'">
+        Wi-Fi &amp; IoT Discovery
+        <span class="tab-badge">{{ devices.length }}</span>
+      </button>
+      <button class="tab-btn" :class="{ active: activeTab === 'calibration' }" @click="activeTab = 'calibration'">
+        Acoustic Room Calibration (TDOA)
+        <span class="tab-badge">{{ Object.keys(roomMap).length }} nodes</span>
+      </button>
+      <button class="tab-btn" :class="{ active: activeTab === 'beamformer' }" @click="activeTab = 'beamformer'">
+        Text-to-Audio Beamformer (Sum/Diff)
+        <span class="tab-badge" style="background: rgba(16, 185, 129, 0.25); color: #6ee7b7;">TTS Live</span>
+      </button>
+    </div>
+
+    <!-- ==================== TAB 1: DISCOVERY ==================== -->
+    <div v-if="activeTab === 'discovery'">
+      <section class="panel controls-row">
+        <div class="method-checks">
+          <label class="method-label" v-for="m in availableMethods" :key="m.id">
+            <input type="checkbox" :value="m.id" v-model="selectedMethods" />
+            {{ m.label }}
+          </label>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--muted);">
+            <label>Timeout (s):</label>
+            <input type="number" class="input-field" style="width: 68px; text-align: center;" min="2" max="15" step="0.5" v-model.number="scanTimeout" />
+          </div>
+          <button class="btn" :disabled="isScanning" @click="runScan">
+            <span v-if="isScanning" class="spinner"></span>
+            <span>{{ isScanning ? 'Scanning Network...' : 'Scan Wi-Fi Network' }}</span>
+          </button>
+          <button class="btn btn-green" :disabled="isMappingAll" @click="mapAllDevicesInTdoa(true)">
+            <span v-if="isMappingAll" class="spinner"></span>
+            <span>{{ isMappingAll ? 'Mapping All in TDOA...' : `Map All in TDOA (${devices.length || 'Auto-Scan'})` }}</span>
+          </button>
+          <button class="btn btn-cast" :disabled="isSpeakingPackets" @click="speakIotPacketWords(null, true)">
+            <span v-if="isSpeakingPackets" class="spinner"></span>
+            <span>{{ isSpeakingPackets ? 'Speaking Packet Words + Mic...' : 'Speak MACs & Packet Words + Mic' }}</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Unique Devices</div>
+          <div class="stat-value">{{ devices.length }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Google Cast</div>
+          <div class="stat-value" style="color: #fdba74;">{{ methodCounts.chromecast || 0 }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">UPnP / SSDP</div>
+          <div class="stat-value" style="color: #d8b4fe;">{{ methodCounts.ssdp || 0 }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">mDNS Services</div>
+          <div class="stat-value" style="color: #6ee7b7;">{{ methodCounts.mdns || 0 }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">LAN / ARP Hosts</div>
+          <div class="stat-value" style="color: #93c5fd;">{{ methodCounts.arp || 0 }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">UDP / Nmap (-sU)</div>
+          <div class="stat-value" style="color: #38bdf8;">{{ methodCounts.udp_nmap || 0 }}</div>
+        </div>
+      </section>
+
+      <div class="toolbar">
+        <input
+          class="input-field search-box"
+          type="text"
+          v-model="searchQuery"
+          placeholder="Filter by device name, IP, model, MAC, or vendor..."
+        />
+        <div class="filter-pills">
+          <button
+            v-for="p in protoFilters"
+            :key="p.value"
+            class="pill-btn"
+            :class="{ active: protoFilter === p.value }"
+            @click="protoFilter = p.value"
+          >
+            {{ p.label }}
+          </button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" @click="exportJson">Export JSON</button>
+          <button class="btn btn-secondary" @click="exportCsv">Export CSV</button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Device Name</th>
+              <th>IP Address</th>
+              <th>Model / Type</th>
+              <th>Vendor / MAC</th>
+              <th>Protocols</th>
+              <th>TCP / Active UDP Ports</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-if="filteredDevices.length === 0">
+              <td colspan="7" class="empty-state">
+                <span v-if="isScanning">Scanning Wi-Fi for smart speakers, TVs, and IoT devices...</span>
+                <span v-else>No devices shown. Click <strong>Scan Wi-Fi Network</strong> to discover devices.</span>
+              </td>
+            </tr>
+            <template v-for="dev in filteredDevices" :key="dev.ip">
+              <tr class="device-row" @click="toggleExpand(dev.ip)">
+                <td>
+                  <strong>{{ dev.name }}</strong>
+                  <div v-if="dev.packet_words && dev.packet_words.length" style="font-size: 0.76rem; color: #38bdf8; margin-top: 2px;">
+                    Words: {{ dev.packet_words.join(' • ') }}
+                  </div>
+                </td>
+                <td class="mono">{{ dev.ip }}</td>
+                <td>{{ dev.model }}</td>
+                <td class="mono">{{ formatVendorMac(dev) }}</td>
+                <td>
+                  <span
+                    v-for="p in dev.protocols"
+                    :key="p"
+                    class="badge"
+                    :class="badgeClass(p)"
+                  >
+                    {{ p }}
+                  </span>
+                </td>
+                <td class="mono">
+                  <div v-if="dev.ports && dev.ports.length">TCP: {{ dev.ports.join(', ') }}</div>
+                  <div v-if="dev.confirmed_udp_ports && dev.confirmed_udp_ports.length" style="color: #6ee7b7;">
+                    UDP Replied: {{ dev.confirmed_udp_ports.join(', ') }}
+                  </div>
+                  <div v-else-if="dev.udp_ports && dev.udp_ports.length" style="color: #38bdf8;">
+                    UDP Active: {{ dev.udp_ports.slice(0, 5).join(', ') }}
+                  </div>
+                  <span v-if="(!dev.ports || !dev.ports.length) && (!dev.udp_ports || !dev.udp_ports.length)">—</span>
+                </td>
+                <td @click.stop style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <button
+                    class="btn btn-green"
+                    style="padding: 5px 10px; font-size: 0.76rem;"
+                    :disabled="isSpeakingPackets"
+                    @click="speakIotPacketWords(dev.ip, true)"
+                  >
+                    Speak Packet + Mic
+                  </button>
+                  <button
+                    v-if="dev.protocols.includes('Chromecast') || (dev.ports && (dev.ports.includes(8008) || dev.ports.includes(8009)))"
+                    class="btn btn-cast"
+                    style="padding: 5px 10px; font-size: 0.76rem;"
+                    :disabled="isCalibrating"
+                    @click="calibrateSingleDevice(dev)"
+                  >
+                    Calibrate Speaker
+                  </button>
+                  <button
+                    v-else
+                    class="btn btn-secondary"
+                    style="padding: 5px 10px; font-size: 0.76rem;"
+                    @click="prefillSimulator(dev)"
+                  >
+                    Map in TDOA
+                  </button>
+                </td>
+              </tr>
+              <tr v-if="expandedIps.includes(dev.ip)">
+                <td colspan="7" style="padding: 0;">
+                  <div class="details-box">
+                    <div><strong>Raw Discovery Records for {{ dev.name }} ({{ dev.ip }})</strong></div>
+                    <pre class="details-pre">{{ JSON.stringify(dev.sources, null, 2) }}</pre>
+                  </div>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="console-card">
+        <div class="console-header">
+          <span>Discovery Console Output</span>
+          <button class="btn btn-secondary" @click="copyText(consoleOutput)">Copy Output</button>
+        </div>
+        <div class="console-out">{{ consoleOutput }}</div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: ACOUSTIC CALIBRATION ==================== -->
+    <div v-if="activeTab === 'calibration'">
+      <div class="cal-grid">
+        <div class="radar-wrap">
+          <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div>
+              <strong>2D Room Spatial Layout (TDOA Cross-Correlation)</strong>
+              <div class="subtitle">Origin (0, 0) = Laptop Dual-Mic Array ({{ calConfig.mic_spacing }}m spacing)</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" @click="playChirpPreview">Preview Chirp WAV</button>
+              <button class="btn btn-secondary" @click="downloadRoomMap">Download room_map.json</button>
+              <button class="btn btn-secondary" @click="resetRoomMap">Reset</button>
+            </div>
+          </div>
+
+          <svg viewBox="-260 -240 520 300" style="width: 100%; max-width: 600px; height: auto; background: #060911; border-radius: 10px; border: 1px solid #1e293b;">
+            <g stroke="#1e293b" stroke-width="1" fill="none">
+              <circle cx="0" cy="0" r="45" stroke-dasharray="3,3" />
+              <circle cx="0" cy="0" r="90" stroke-dasharray="3,3" />
+              <circle cx="0" cy="0" r="135" stroke-dasharray="3,3" />
+              <circle cx="0" cy="0" r="180" />
+              <circle cx="0" cy="0" r="225" stroke-dasharray="2,4" />
+              <line x1="0" y1="0" x2="0" y2="-230" />
+              <line x1="0" y1="0" x2="-115" y2="-199" />
+              <line x1="0" y1="0" x2="115" y2="-199" />
+              <line x1="0" y1="0" x2="-199" y2="-115" />
+              <line x1="0" y1="0" x2="199" y2="-115" />
+              <line x1="-245" y1="0" x2="245" y2="0" stroke="#334155" />
+            </g>
+
+            <g fill="#64748b" font-size="9" font-family="monospace">
+              <text x="4" y="-47">0.5m</text>
+              <text x="4" y="-92">1.0m</text>
+              <text x="4" y="-137">1.5m</text>
+              <text x="4" y="-182">2.0m</text>
+              <text x="-12" y="-228">0°</text>
+              <text x="-128" y="-203">-30°</text>
+              <text x="112" y="-203">+30°</text>
+              <text x="-218" y="-118">-60°</text>
+              <text x="202" y="-118">+60°</text>
+            </g>
+
+            <g v-for="(node, name) in roomMap" :key="name">
+              <line
+                v-if="node.type !== 'local'"
+                x1="0"
+                y1="0"
+                :x2="coordToSvgX(node.x)"
+                :y2="coordToSvgY(node.y)"
+                stroke="rgba(249, 115, 22, 0.45)"
+                stroke-width="2"
+                stroke-dasharray="4,3"
+              />
+              <circle
+                :cx="coordToSvgX(node.x)"
+                :cy="coordToSvgY(node.y)"
+                :r="node.type === 'local' ? 8 : 9"
+                :fill="node.type === 'local' ? '#38bdf8' : '#f97316'"
+                stroke="#0b0f19"
+                stroke-width="2"
+              />
+              <text
+                :x="coordToSvgX(node.x)"
+                :y="coordToSvgY(node.y) + (node.type === 'local' ? 20 : -13)"
+                text-anchor="middle"
+                fill="#e2e8f0"
+                font-size="11"
+                font-weight="600"
+              >
+                {{ name }}
+              </text>
+              <text
+                v-if="node.type !== 'local'"
+                :x="coordToSvgX(node.x)"
+                :y="coordToSvgY(node.y) + 20"
+                text-anchor="middle"
+                fill="#94a3b8"
+                font-size="9.5"
+                font-family="monospace"
+              >
+                ({{ node.x }}m, {{ node.y }}m) • {{ node.angle_deg }}° • {{ node.base_latency_sec }}s
+              </text>
+            </g>
+          </svg>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <div class="panel" style="margin-bottom: 0;">
+            <h3 style="font-size: 1rem; margin-bottom: 6px;">Live Chromecast Acoustic Calibration</h3>
+            <p class="subtitle" style="margin-bottom: 14px;">
+              Broadcasts a 0.5s linear frequency sweep (1kHz–6kHz) over HTTP (`:{{ calConfig.http_port }}/cal_chirp.wav`), records stereo mic input via `sounddevice`, and computes speaker angle (TDOA) and latency.
+            </p>
+
+            <div class="form-grid">
+              <div class="field-group">
+                <label>Mic Spacing (meters)</label>
+                <input type="number" step="0.01" min="0.03" max="1.0" class="input-field" v-model.number="calConfig.mic_spacing" />
+              </div>
+              <div class="field-group">
+                <label>Speed of Sound (m/s)</label>
+                <input type="number" step="1" min="300" max="400" class="input-field" v-model.number="calConfig.speed_of_sound" />
+              </div>
+              <div class="field-group">
+                <label>Room Radius Estimate (m)</label>
+                <input type="number" step="0.1" min="0.5" max="5.0" class="input-field" v-model.number="calConfig.room_radius" />
+              </div>
+              <div class="field-group">
+                <label>Record Window (sec)</label>
+                <input type="number" step="0.5" min="2.0" max="10.0" class="input-field" v-model.number="calConfig.rec_duration" />
+              </div>
+            </div>
+
+            <div class="field-group" style="margin-bottom: 14px;">
+              <label>Stereo Audio Input Device (sounddevice)</label>
+              <select class="input-field" v-model="calConfig.input_device">
+                <option value="">System Default Input Microphone</option>
+                <option v-for="ad in audioDevices" :key="ad.index" :value="ad.index">
+                  [#{{ ad.index }}] {{ ad.name }} ({{ ad.channels }} ch @ {{ ad.default_samplerate }}Hz)
+                </option>
+              </select>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <button class="btn btn-green" style="width: 100%; justify-content: center;" :disabled="isMappingAll" @click="mapAllDevicesInTdoa(false)">
+                <span v-if="isMappingAll" class="spinner"></span>
+                <span>{{ isMappingAll ? 'Mapping All Discovered Devices in TDOA...' : `Map All Discovered Devices in TDOA (${devices.length || 'Scan & Map All'})` }}</span>
+              </button>
+              <button class="btn btn-cast" style="width: 100%; justify-content: center;" :disabled="isCalibrating" @click="runFullCalibration">
+                <span v-if="isCalibrating" class="spinner"></span>
+                <span>{{ isCalibrating ? 'Calibrating Room Speakers (Keep Room Quiet)...' : 'Run Live Acoustic Chirp on Chromecasts' }}</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-bottom: 0;">
+            <h3 style="font-size: 1rem; margin-bottom: 6px;">TDOA Cross-Correlation Simulator</h3>
+            <p class="subtitle" style="margin-bottom: 12px;">
+              Synthesizes a stereo 1–6kHz chirp recording with exact inter-channel sample delay and runs `locate_speaker_from_recording()` to add/test nodes in `room_map.json`.
+            </p>
+            <div class="form-grid">
+              <div class="field-group">
+                <label>Speaker Label</label>
+                <input type="text" class="input-field" v-model="simForm.speaker_name" />
+              </div>
+              <div class="field-group">
+                <label>Speaker IP</label>
+                <input type="text" class="input-field" v-model="simForm.speaker_ip" />
+              </div>
+              <div class="field-group">
+                <label>Simulated Angle (°): {{ simForm.angle_deg }}°</label>
+                <input type="range" min="-75" max="75" step="1" v-model.number="simForm.angle_deg" />
+              </div>
+              <div class="field-group">
+                <label>Latency (sec)</label>
+                <input type="number" step="0.01" min="0.02" max="1.0" class="input-field" v-model.number="simForm.latency_sec" />
+              </div>
+            </div>
+            <button class="btn btn-secondary" style="width: 100%; justify-content: center;" @click="runSimulation">
+              Run TDOA Localization &amp; Plot Speaker
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Speaker / Node Name</th>
+              <th>Type</th>
+              <th>IP Address</th>
+              <th>X (m)</th>
+              <th>Y (m)</th>
+              <th>Angle (θ)</th>
+              <th>Base Latency</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(node, name) in roomMap" :key="name">
+              <td><strong>{{ name }}</strong></td>
+              <td>
+                <span class="badge" :class="node.type === 'local' ? 'badge-arp' : 'badge-cast'">
+                  {{ node.type }}
+                </span>
+              </td>
+              <td class="mono">{{ node.ip }}</td>
+              <td class="mono">{{ node.x }}m</td>
+              <td class="mono">{{ node.y }}m</td>
+              <td class="mono">{{ node.angle_deg }}°</td>
+              <td class="mono">{{ node.base_latency_sec }}s</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: TEXT-TO-AUDIO BEAMFORMER ==================== -->
+    <div v-if="activeTab === 'beamformer'">
+      <div class="cal-grid">
+        <!-- Left: Interactive Beamforming Radar Map -->
+        <div class="radar-wrap">
+          <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap;">
+            <div>
+              <strong>Interactive Sum / Difference Acoustic Beam Map ({{ Object.keys(roomMap).length }} Mapped Devices)</strong>
+              <div class="subtitle">Click anywhere on the map to steer the audio focus target (X={{ ttsForm.listener_x }}m, Y={{ ttsForm.listener_y }}m)</div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn btn-secondary" :disabled="isMappingAll" @click="mapAllDevicesInTdoa(false)">
+                {{ isMappingAll ? 'Mapping...' : 'Map All Devices in TDOA' }}
+              </button>
+              <span class="badge badge-mdns">SUM (+) = Green • DIFF (-) = Purple</span>
+            </div>
+          </div>
+
+          <svg
+            ref="beamSvg"
+            viewBox="-260 -240 520 300"
+            @click="onRadarClick"
+            style="width: 100%; max-width: 600px; height: auto; background: #060911; border-radius: 10px; border: 1px solid #1e293b; cursor: crosshair;"
+          >
+            <!-- Range rings -->
+            <g stroke="#1e293b" stroke-width="1" fill="none">
+              <circle cx="0" cy="0" r="45" stroke-dasharray="3,3" />
+              <circle cx="0" cy="0" r="90" stroke-dasharray="3,3" />
+              <circle cx="0" cy="0" r="135" stroke-dasharray="3,3" />
+              <circle cx="0" cy="0" r="180" />
+              <circle cx="0" cy="0" r="225" stroke-dasharray="2,4" />
+              <line x1="0" y1="0" x2="0" y2="-230" />
+              <line x1="-245" y1="0" x2="245" y2="0" stroke="#334155" />
+            </g>
+
+            <!-- Wavefront paths from each speaker to target listener -->
+            <g v-for="b in beamResult.speaker_beams" :key="'ray-' + b.name">
+              <line
+                :x1="coordToSvgX(b.x)"
+                :y1="coordToSvgY(b.y)"
+                :x2="coordToSvgX(ttsForm.listener_x)"
+                :y2="coordToSvgY(ttsForm.listener_y)"
+                :stroke="b.mode.startsWith('SUM') ? '#10b981' : '#a855f7'"
+                :stroke-width="b.mode.startsWith('SUM') ? 2.5 : 1.8"
+                :stroke-dasharray="b.mode.startsWith('SUM') ? 'none' : '5,4'"
+              />
+            </g>
+
+            <!-- Speakers -->
+            <g v-for="(node, name) in roomMap" :key="'spk-' + name">
+              <circle
+                :cx="coordToSvgX(node.x)"
+                :cy="coordToSvgY(node.y)"
+                r="8"
+                :fill="node.type === 'local' ? '#38bdf8' : '#f97316'"
+                stroke="#0b0f19"
+                stroke-width="2"
+              />
+              <text
+                :x="coordToSvgX(node.x)"
+                :y="coordToSvgY(node.y) + (node.type === 'local' ? 18 : -11)"
+                text-anchor="middle"
+                fill="#e2e8f0"
+                font-size="10.5"
+                font-weight="600"
+              >
+                {{ name }}
+              </text>
+            </g>
+
+            <!-- Listener Target Crosshair -->
+            <g :transform="`translate(${coordToSvgX(ttsForm.listener_x)}, ${coordToSvgY(ttsForm.listener_y)})`">
+              <circle cx="0" cy="0" r="14" fill="rgba(16, 185, 129, 0.16)" stroke="#10b981" stroke-width="1.5" />
+              <circle cx="0" cy="0" r="4" fill="#10b981" />
+              <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" stroke-width="1.2" />
+              <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" stroke-width="1.2" />
+              <text x="0" y="-20" text-anchor="middle" fill="#6ee7b7" font-size="10.5" font-weight="700" font-family="monospace">
+                Listener ({{ ttsForm.listener_x }}m, {{ ttsForm.listener_y }}m)
+              </text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Right: Any Text-to-Speech & Beamforming Controls -->
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <div class="panel" style="margin-bottom: 0;">
+            <h3 style="font-size: 1rem; margin-bottom: 6px;">Synthesize &amp; Beam Any Text to Audio</h3>
+            <p class="subtitle" style="margin-bottom: 12px;">
+              Converts any text to 44.1kHz float32 audio via `espeak-ng`, calculates per-speaker acoustic travel time + latency padding, and dispatches constructive <strong>SUM (+)</strong> and phase-inverted <strong>DIFF (-)</strong> waves.
+            </p>
+
+            <div class="field-group" style="margin-bottom: 10px;">
+              <label>Text to Speak</label>
+              <textarea
+                class="input-field"
+                v-model="ttsForm.text"
+                placeholder="Type any message to synthesize and steer across your speakers..."
+              ></textarea>
+            </div>
+
+            <!-- Preset phrase pills -->
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;">
+              <button
+                v-for="phrase in presetPhrases"
+                :key="phrase"
+                class="pill-btn"
+                @click="ttsForm.text = phrase"
+              >
+                "{{ phrase }}"
+              </button>
+            </div>
+
+            <div class="form-grid">
+              <div class="field-group">
+                <label>Voice</label>
+                <select class="input-field" v-model="ttsForm.voice">
+                  <option v-for="v in voices" :key="v.id" :value="v.id">{{ v.label }} ({{ v.id }})</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label>Dispatch Mode</label>
+                <select class="input-field" v-model="ttsForm.beam_mode">
+                  <option value="all_sum">All Devices In-Phase (ALL SUM +)</option>
+                  <option value="sum_diff">Sum / Difference Array (Closest 2 SUM + / Others DIFF -)</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label>Speed (WPM): {{ ttsForm.speed }}</label>
+                <input type="range" min="80" max="260" step="5" v-model.number="ttsForm.speed" />
+              </div>
+              <div class="field-group">
+                <label>Pitch (0-99): {{ ttsForm.pitch }}</label>
+                <input type="range" min="10" max="90" step="2" v-model.number="ttsForm.pitch" />
+              </div>
+              <div class="field-group">
+                <label>Listener X (m): {{ ttsForm.listener_x }}m</label>
+                <input type="range" min="-2.0" max="2.0" step="0.05" v-model.number="ttsForm.listener_x" />
+              </div>
+              <div class="field-group">
+                <label>Listener Y (m): {{ ttsForm.listener_y }}m</label>
+                <input type="range" min="0.3" max="2.4" step="0.05" v-model.number="ttsForm.listener_y" />
+              </div>
+            </div>
+
+            <div class="method-checks" style="margin-bottom: 14px;">
+              <label class="method-label">
+                <input type="checkbox" v-model="ttsForm.play_local" />
+                Laptop Speaker (`sounddevice`)
+              </label>
+              <label class="method-label" style="border-color: var(--mdns);">
+                <input type="checkbox" v-model="ttsForm.listen_with_mic" />
+                Mic Listen Per Device (Hear Packet Words)
+              </label>
+              <label class="method-label">
+                <input type="checkbox" v-model="ttsForm.cast_enabled" />
+                Cast + UPnP All Devices
+              </label>
+              <label class="method-label">
+                <input type="checkbox" v-model="ttsForm.udp_enabled" />
+                UDP Unicast All Active Ports + Multicast
+              </label>
+              <label class="method-label">
+                <input type="checkbox" v-model="ttsForm.scan_active_udp" />
+                Nmap (`-sU`) Active UDP After Multicast
+              </label>
+              <label class="method-label">
+                <input type="checkbox" v-model="ttsForm.return_to_origin" />
+                Return Reply to Original Position
+              </label>
+              <label class="method-label">
+                <input type="checkbox" v-model="ttsForm.browser_preview" />
+                Play in Browser
+              </label>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+              <button class="btn btn-green" style="flex: 1; justify-content: center;" :disabled="isBeaming || isMappingAll || isSpeakingPackets" @click="beamTextToRoom(false)">
+                <span v-if="isBeaming" class="spinner"></span>
+                <span>{{ isBeaming ? 'Sending to All Devices...' : `Send to All Mapped Devices at Once (${Object.keys(roomMap).length})` }}</span>
+              </button>
+              <button class="btn btn-cast" style="flex: 1; justify-content: center;" :disabled="isBeaming || isMappingAll || isSpeakingPackets" @click="beamTextToRoom(true)">
+                <span v-if="isMappingAll || isBeaming" class="spinner"></span>
+                <span>Map All Devices in TDOA &amp; Send All at Once</span>
+              </button>
+              <button class="btn btn-secondary" @click="playGeneratedFile('tts_speech_raw.wav')">
+                Replay Raw TTS
+              </button>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
+              <button class="btn" style="flex: 1; justify-content: center;" :disabled="isSpeakingPackets || isBeaming" @click="speakIotPacketWords(null, false)">
+                <span v-if="isSpeakingPackets" class="spinner"></span>
+                <span>{{ isSpeakingPackets ? 'Speaking MACs & Packet Words + Recording Mic...' : 'Speak All MACs & IoT Packet Words + Mic Listen' }}</span>
+              </button>
+              <button
+                v-if="beamResult.combined_pkt_wav"
+                class="btn btn-secondary"
+                @click="playGeneratedFile(beamResult.combined_pkt_wav)"
+              >
+                Play All Packet Words WAV
+              </button>
+              <button
+                v-if="beamResult.combined_mic_wav"
+                class="btn btn-secondary"
+                @click="playGeneratedFile(beamResult.combined_mic_wav)"
+              >
+                Play Full Mic Capture WAV
+              </button>
+            </div>
+          </div>
+
+          <!-- Local Ollama AI (EarArray-SIGINT / NightSweep-SIGINT) Panel -->
+          <div class="panel" style="margin-bottom: 0; border-color: rgba(168, 85, 247, 0.5);">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+              <div>
+                <h3 style="font-size: 0.98rem; color: #d8b4fe;">
+                  Local Ollama AI Copilot ({{ ollamaConfig.model || 'eararray-sigint:latest' }})
+                </h3>
+                <div class="subtitle">
+                  Translates MAC addresses, active UDP packets, TDOA coordinates &amp; 10m&times;10m room quadrants into spoken audio + mic verification
+                </div>
+              </div>
+              <label class="method-label" style="border-color: var(--ssdp);">
+                <input type="checkbox" v-model="ollamaConfig.use_ollama" />
+                Enhance Packet Speech with Ollama
+              </label>
+            </div>
+
+            <div class="form-grid" style="margin-bottom: 10px;">
+              <div class="field-group" style="grid-column: span 2;">
+                <label>Installed Local Ollama Model (`127.0.0.1:11434`)</label>
+                <select class="input-field" v-model="ollamaConfig.model">
+                  <option v-for="m in ollamaModels" :key="m.name" :value="m.name">
+                    {{ m.name }} ({{ m.size_gb }} GB{{ m.parameter_size ? ' • ' + m.parameter_size : '' }})
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-group" style="margin-bottom: 8px;">
+              <label>Ask Ollama About Discovered MACs, IoT Packets &amp; Room Acoustics (Spoken + Beamed to Devices)</label>
+              <input
+                type="text"
+                class="input-field"
+                v-model="ollamaConfig.prompt"
+                placeholder="e.g. Translate the digital words from the MAC addresses and UDP packets around me into a spoken briefing..."
+              />
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;">
+              <button
+                v-for="qp in ollamaQuickPrompts"
+                :key="qp"
+                class="pill-btn"
+                @click="ollamaConfig.prompt = qp"
+              >
+                {{ qp }}
+              </button>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button
+                class="btn btn-cast"
+                style="flex: 1; justify-content: center; background: var(--ssdp);"
+                :disabled="isRunningOllama || isSpeakingPackets"
+                @click="runOllamaBeam"
+              >
+                <span v-if="isRunningOllama" class="spinner"></span>
+                <span>{{ isRunningOllama ? `Querying ${ollamaConfig.model} & Beaming...` : 'Ask Ollama & Beam Spoken Response + Mic Listen' }}</span>
+              </button>
+              <button
+                class="btn btn-secondary"
+                :disabled="isSpeakingPackets || isRunningOllama"
+                @click="speakIotPacketWords(null, false)"
+              >
+                Ollama Interpret All MACs + Mic
+              </button>
+            </div>
+
+            <div
+              v-if="beamResult.ollama && beamResult.ollama.response"
+              class="details-pre"
+              style="margin-top: 10px; border-color: rgba(168, 85, 247, 0.45); color: #e9d5ff;"
+            >
+              <div style="font-size: 0.74rem; color: #c084fc; margin-bottom: 4px;">
+                <strong>[{{ beamResult.ollama.model }} • {{ beamResult.ollama.elapsed_sec }}s]</strong>
+              </div>
+              {{ beamResult.ollama.response }}
+            </div>
+          </div>
+
+          <!-- Multicast -> Active UDP (nmap -sU) & Return-to-Original-Position Panel -->
+          <div class="panel" style="margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px;">
+              <div>
+                <h3 style="font-size: 0.96rem;">Multicast &rarr; Active UDP Ports (`nmap -sU`) &amp; Return to Original Position</h3>
+                <div class="subtitle">
+                  Sends multicast (`239.0.0.1:5005`, SSDP `1900`, mDNS `5353`), scans active UDP ports via `nmap -sU`, and echoes replies back to `(X={{ ttsForm.listener_x }}m, Y={{ ttsForm.listener_y }}m)`
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button
+                  class="btn btn-secondary"
+                  :disabled="isUdpScanning"
+                  @click="runUdpMulticastScan"
+                >
+                  <span v-if="isUdpScanning" class="spinner"></span>
+                  <span>{{ isUdpScanning ? 'Running nmap -sU...' : 'Probe Multicast & Scan UDP (nmap -sU)' }}</span>
+                </button>
+                <button
+                  class="btn"
+                  :class="udpReflector.running ? 'btn-danger' : 'btn-secondary'"
+                  @click="toggleUdpReflector"
+                >
+                  {{ udpReflector.running ? 'Stop Return Reflector' : 'Start Return Reflector' }}
+                </button>
+              </div>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--muted);">
+              Reflector (`{{ udpReflector.multicast_group || '239.0.0.1:5005' }}`):
+              <strong :style="{ color: udpReflector.running ? '#6ee7b7' : '#94a3b8' }">
+                {{ udpReflector.running ? 'LIVE (Echoing to Original Position)' : 'Stopped' }}
+              </strong>
+              • Packets Returned to Origin: <strong class="mono">{{ udpReflector.packets_returned || 0 }}</strong>
+            </div>
+            <div v-if="udpReflector.recent_events && udpReflector.recent_events.length" class="details-pre" style="max-height: 110px; overflow-y: auto; margin-top: 8px;">
+              <div v-for="(ev, idx) in udpReflector.recent_events.slice().reverse()" :key="idx">
+                [{{ ev.time }}] {{ ev.sender_ip }}:{{ ev.sender_udp_port }} ({{ ev.service }}) &rarr; {{ ev.action }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Voice-Activated TDOA Auto-Steering Panel -->
+          <div class="panel" style="margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div>
+                <h3 style="font-size: 0.96rem;">Live Voice-Activated TDOA Auto-Steer</h3>
+                <div class="subtitle">Listens on stereo mic (VAD + TDOA) and beams the text above to whoever speaks</div>
+              </div>
+              <button
+                class="btn"
+                :class="voiceListener.running ? 'btn-danger' : 'btn-secondary'"
+                @click="toggleVoiceListener"
+              >
+                {{ voiceListener.running ? 'Stop Voice Listener' : 'Start Voice Listener' }}
+              </button>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--muted);">
+              Status: <strong :style="{ color: voiceListener.running ? '#6ee7b7' : '#94a3b8' }">{{ voiceListener.running ? 'LIVE (Listening for speech)' : 'Stopped' }}</strong>
+              • Tracked Speaker X: <strong class="mono">{{ voiceListener.smooth_x || 0 }}m</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaker Beam Timing, Decoded Packet Words & Microphone Reception Table -->
+      <div class="table-card" v-if="beamResult.speaker_beams && beamResult.speaker_beams.length">
+        <table>
+          <thead>
+            <tr>
+              <th>Device Name &amp; Coords</th>
+              <th>IP / MAC / Vendor</th>
+              <th>Decoded Packet Words</th>
+              <th>Mic Heard From Packet</th>
+              <th>Distance &amp; Delay</th>
+              <th>Transports Sent</th>
+              <th>Audio &amp; Mic Tracks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="b in beamResult.speaker_beams" :key="b.name">
+              <td>
+                <strong>{{ b.name }}</strong>
+                <div class="mono" style="color: var(--muted); font-size: 0.78rem;">
+                  ({{ b.x }}m, {{ b.y }}m) • {{ b.angle_deg || 0 }}°
+                </div>
+                <div v-if="b.quadrant" style="color: #c084fc; font-size: 0.72rem; margin-bottom: 2px;">
+                  {{ b.quadrant }}
+                </div>
+                <span class="badge" :class="b.mode.startsWith('SUM') || b.mode.includes('MIC') ? 'badge-mdns' : 'badge-ssdp'">
+                  {{ b.mode }}
+                </span>
+              </td>
+              <td class="mono">
+                <div>{{ b.ip }} <span class="badge badge-arp">{{ b.type }}</span></div>
+                <div v-if="b.mac" style="color: #fdba74; font-size: 0.78rem;">MAC: {{ b.mac }}</div>
+                <div v-if="b.vendor" style="color: var(--muted); font-size: 0.76rem;">{{ b.vendor }}</div>
+              </td>
+              <td>
+                <div v-if="b.packet_words && b.packet_words.length" style="display: flex; flex-wrap: wrap; gap: 4px;">
+                  <span v-for="pw in b.packet_words" :key="pw" class="badge badge-arp">{{ pw }}</span>
+                </div>
+                <div v-if="b.spoken_packet_text" style="font-size: 0.75rem; color: var(--muted); margin-top: 4px;">
+                  "{{ b.spoken_packet_text }}"
+                </div>
+              </td>
+              <td>
+                <div v-if="b.mic_heard_words" style="color: #6ee7b7; font-size: 0.8rem; font-weight: 600;">
+                  Mic Heard: "{{ b.mic_heard_words }}"
+                </div>
+                <div v-if="b.mic_rms !== undefined" class="mono" style="font-size: 0.75rem; color: var(--muted); margin-top: 3px;">
+                  RMS: {{ b.mic_rms }} • Match: {{ b.mic_match_pct }}% • TDOA: {{ b.mic_detected_angle_deg }}° ({{ b.mic_detected_x }}m)
+                </div>
+                <span v-if="!b.mic_heard_words" style="color: var(--muted);">—</span>
+              </td>
+              <td class="mono">
+                <div>{{ b.distance_m }}m ({{ b.acoustic_ms }}ms)</div>
+                <div style="color: #38bdf8;"><strong>+{{ b.delay_pad_ms }} ms</strong></div>
+              </td>
+              <td>
+                <span v-for="tr in (b.transports || [])" :key="tr" class="badge badge-cast">
+                  {{ tr }}
+                </span>
+              </td>
+              <td>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" @click="playGeneratedFile(b.wav_file)">
+                    Play Packet WAV
+                  </button>
+                  <button
+                    v-if="b.mic_wav_file"
+                    class="btn btn-green"
+                    style="padding: 4px 10px; font-size: 0.75rem;"
+                    @click="playGeneratedFile(b.mic_wav_file)"
+                  >
+                    Play Mic Heard WAV
+                  </button>
+                  <button
+                    class="btn btn-cast"
+                    style="padding: 4px 10px; font-size: 0.75rem;"
+                    :disabled="isSpeakingPackets"
+                    @click="speakIotPacketWords(b.name, false)"
+                  >
+                    Speak Packet + Mic
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="console-card">
+        <div class="console-header">
+          <span>Beamformer Dispatch Log</span>
+          <button class="btn btn-secondary" @click="copyText(beamResult.logs)">Copy Log</button>
+        </div>
+        <div class="console-out">{{ beamResult.logs || 'Enter any text above and click "Send to All Mapped Devices at Once"...' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref, computed, onMounted } = Vue;
+
+    createApp({
+      setup() {
+        const activeTab = ref('beamformer');
+        const localIp = ref('127.0.0.1');
+        const subnet = ref('127.0.0.0/24');
+        const lastScanTime = ref('');
+
+        const availableMethods = [
+          { id: 'chromecast', label: 'Google Cast (pychromecast)' },
+          { id: 'ssdp', label: 'UPnP / SSDP (Smart TVs, Roku, DLNA)' },
+          { id: 'mdns', label: 'mDNS / Zeroconf (AirPlay, HomeKit, IoT)' },
+          { id: 'arp', label: 'LAN ARP & IoT Port Scan' },
+          { id: 'udp_nmap', label: 'Nmap UDP (-sU) & Multicast Return' }
+        ];
+        const selectedMethods = ref(['chromecast', 'ssdp', 'mdns', 'arp', 'udp_nmap']);
+        const scanTimeout = ref(4.5);
+        const isScanning = ref(false);
+        const isMappingAll = ref(false);
+        const isUdpScanning = ref(false);
+
+        const devices = ref([]);
+        const methodCounts = ref({});
+        const consoleOutput = ref('Ready. Click "Scan Wi-Fi Network" to discover smart speakers and TVs...');
+        const searchQuery = ref('');
+        const protoFilter = ref('ALL');
+        const expandedIps = ref([]);
+
+        const protoFilters = [
+          { label: 'All', value: 'ALL' },
+          { label: 'Chromecast', value: 'Chromecast' },
+          { label: 'SSDP / UPnP', value: 'SSDP / UPnP' },
+          { label: 'mDNS', value: 'mDNS / Zeroconf' },
+          { label: 'UDP / Nmap', value: 'UDP / Nmap' },
+          { label: 'LAN / ARP', value: 'LAN / ARP' }
+        ];
+
+        // Calibration state
+        const roomMap = ref({});
+        const audioDevices = ref([]);
+        const isCalibrating = ref(false);
+        const calibrationLog = ref('');
+        const calConfig = ref({
+          mic_spacing: 0.15,
+          speed_of_sound: 343.0,
+          room_radius: 2.0,
+          rec_duration: 4.0,
+          input_device: '',
+          http_port: 8080
+        });
+
+        const simForm = ref({
+          speaker_name: 'Living Room Cast',
+          speaker_ip: '192.168.1.50',
+          angle_deg: 30,
+          latency_sec: 0.16
+        });
+
+        // Text-to-Audio Beamformer state
+        const voices = ref([
+          { id: 'en-us', label: 'English (US)' },
+          { id: 'en-gb', label: 'English (UK)' },
+          { id: 'en-sc', label: 'English (Scottish)' },
+          { id: 'es', label: 'Spanish' },
+          { id: 'fr', label: 'French' },
+          { id: 'de', label: 'German' },
+          { id: 'it', label: 'Italian' }
+        ]);
+
+        const presetPhrases = [
+          'Hello World',
+          'Acoustic beam steering is locked on your position.',
+          'Smart speaker discovery and calibration complete.',
+          'Warning: unauthorized device detected on local Wi-Fi.'
+        ];
+
+        const ttsForm = ref({
+          text: 'Hello World! Welcome to Discovery Channel acoustic beamforming.',
+          voice: 'en-us',
+          beam_mode: 'all_sum',
+          speed: 150,
+          pitch: 50,
+          diff_gain: -0.6,
+          listener_x: 0.0,
+          listener_y: 1.5,
+          play_local: true,
+          listen_with_mic: true,
+          cast_enabled: true,
+          udp_enabled: true,
+          scan_active_udp: true,
+          return_to_origin: true,
+          browser_preview: true
+        });
+
+        const isBeaming = ref(false);
+        const isSpeakingPackets = ref(false);
+        const isRunningOllama = ref(false);
+
+        const ollamaModels = ref([
+          { name: 'eararray-sigint:latest', size_gb: 4.7, parameter_size: '8B' },
+          { name: 'andersolind/nightsweep-sigint:latest', size_gb: 4.7, parameter_size: '8B' },
+          { name: 'nightsweep-sigint:latest', size_gb: 4.7, parameter_size: '8B' },
+          { name: 'nightsweep-signalintelligence:latest', size_gb: 4.7, parameter_size: '8B' },
+          { name: 'strategic-relay:latest', size_gb: 4.7, parameter_size: '8B' },
+          { name: 'ALIENTELLIGENCE/radiofrequencyengineer:latest', size_gb: 4.7, parameter_size: '8B' },
+          { name: 'llama3.2:latest', size_gb: 2.0, parameter_size: '3B' }
+        ]);
+        const ollamaConfig = ref({
+          use_ollama: true,
+          model: 'eararray-sigint:latest',
+          prompt: 'Interpret the digital words from the MAC addresses and UDP packets of the IoT devices around me and announce their spatial room quadrants.'
+        });
+        const ollamaQuickPrompts = [
+          'Interpret all MAC addresses and UDP packet words and announce their spatial quadrants.',
+          'Analyze TDOA delay, binaural ITD/ILD beamforming, and active UDP responders in the room.',
+          'Identify which IoT devices replied on UDP 5353/1900/5005 and speak their digital signatures.'
+        ];
+        const beamResult = ref({
+          speaker_beams: [],
+          logs: ''
+        });
+        const voiceListener = ref({
+          running: false,
+          smooth_x: 0.0
+        });
+        const udpReflector = ref({
+          running: true,
+          multicast_group: '239.0.0.1:5005',
+          packets_returned: 0,
+          recent_events: []
+        });
+        const beamSvg = ref(null);
+
+        const filteredDevices = computed(() => {
+          const q = searchQuery.value.toLowerCase().trim();
+          return devices.value.filter(d => {
+            if (protoFilter.value !== 'ALL' && !(d.protocols || []).includes(protoFilter.value)) {
+              return false;
+            }
+            if (!q) return true;
+            const hay = [
+              d.name,
+              d.ip,
+              d.model,
+              d.manufacturer,
+              d.mac,
+              ...(d.protocols || []),
+              ...(d.ports || [])
+            ].join(' ').toLowerCase();
+            return hay.includes(q);
+          });
+        });
+
+        function badgeClass(proto) {
+          if (proto === 'Chromecast') return 'badge-cast';
+          if (proto === 'SSDP / UPnP') return 'badge-ssdp';
+          if (proto === 'mDNS / Zeroconf') return 'badge-mdns';
+          return 'badge-arp';
+        }
+
+        function formatVendorMac(dev) {
+          return [dev.manufacturer, dev.mac].filter(Boolean).join(' • ') || '—';
+        }
+
+        function toggleExpand(ip) {
+          const idx = expandedIps.value.indexOf(ip);
+          if (idx >= 0) expandedIps.value.splice(idx, 1);
+          else expandedIps.value.push(ip);
+        }
+
+        async function runScan() {
+          if (selectedMethods.value.length === 0) {
+            alert('Select at least one discovery protocol.');
+            return;
+          }
+          isScanning.value = true;
+          consoleOutput.value = 'Scanning Wi-Fi for smart speakers and TVs...';
+          try {
+            const res = await fetch('/api/scan', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                methods: selectedMethods.value,
+                timeout: scanTimeout.value
+              })
+            });
+            const data = await res.json();
+            devices.value = data.devices || [];
+            methodCounts.value = data.counts_by_method || {};
+            localIp.value = data.local_ip || localIp.value;
+            subnet.value = data.subnet || subnet.value;
+            lastScanTime.value = `${data.timestamp} (${data.elapsed_seconds}s)`;
+            consoleOutput.value = data.console_output || 'Scan complete.';
+          } catch (err) {
+            consoleOutput.value = 'Error during scan: ' + err;
+          } finally {
+            isScanning.value = false;
+          }
+        }
+
+        async function mapAllDevicesInTdoa(switchToBeamformer = false) {
+          isMappingAll.value = true;
+          calibrationLog.value = 'Mapping all discovered devices in TDOA spatial layout...';
+          try {
+            const res = await fetch('/api/calibrate/map-all', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                devices: devices.value,
+                mic_spacing: calConfig.value.mic_spacing,
+                speed_of_sound: calConfig.value.speed_of_sound,
+                room_radius: calConfig.value.room_radius
+              })
+            });
+            const data = await res.json();
+            roomMap.value = data.room_map || roomMap.value;
+            calibrationLog.value = data.logs || JSON.stringify(data.room_map, null, 2);
+            beamResult.value.logs = data.logs || '';
+            if (switchToBeamformer) {
+              activeTab.value = 'beamformer';
+            }
+          } catch (err) {
+            calibrationLog.value = 'Error mapping all devices: ' + err;
+          } finally {
+            isMappingAll.value = false;
+          }
+        }
+
+        function coordToSvgX(x) {
+          return Math.max(-240, Math.min(240, (x || 0) * 90));
+        }
+
+        function coordToSvgY(y) {
+          return Math.max(-225, Math.min(40, -(y || 0) * 90));
+        }
+
+        function onRadarClick(evt) {
+          const svg = beamSvg.value;
+          if (!svg) return;
+          const pt = svg.createSVGPoint();
+          pt.x = evt.clientX;
+          pt.y = evt.clientY;
+          const cursor = pt.matrixTransform(svg.getScreenCTM().inverse());
+          const xm = Math.round((cursor.x / 90) * 20) / 20;
+          const ym = Math.round((-cursor.y / 90) * 20) / 20;
+          ttsForm.value.listener_x = Math.max(-2.0, Math.min(2.0, xm));
+          ttsForm.value.listener_y = Math.max(0.2, Math.min(2.4, ym));
+        }
+
+        async function beamTextToRoom(autoMapAll = false) {
+          isBeaming.value = true;
+          try {
+            if (autoMapAll) {
+              await mapAllDevicesInTdoa(false);
+            }
+            const res = await fetch('/api/tts/beam', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                ...ttsForm.value,
+                auto_map_all: autoMapAll
+              })
+            });
+            const data = await res.json();
+            beamResult.value = data;
+            if (data.room_map) {
+              roomMap.value = data.room_map;
+            }
+            if (data.udp_reflector) {
+              udpReflector.value = data.udp_reflector;
+            }
+            if (ttsForm.value.browser_preview && data.base_wav) {
+              playGeneratedFile(data.base_wav);
+            }
+          } catch (err) {
+            beamResult.value.logs = 'Error dispatching TTS beam: ' + err;
+          } finally {
+            isBeaming.value = false;
+          }
+        }
+
+        async function speakIotPacketWords(targetDevice = null, switchToBeamformer = false) {
+          isSpeakingPackets.value = true;
+          if (switchToBeamformer) {
+            activeTab.value = 'beamformer';
+          }
+          try {
+            const res = await fetch('/api/tts/speak-packets', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                target_device: targetDevice,
+                listener_x: ttsForm.value.listener_x,
+                listener_y: ttsForm.value.listener_y,
+                voice: ttsForm.value.voice,
+                speed: ttsForm.value.speed,
+                pitch: ttsForm.value.pitch,
+                play_local: ttsForm.value.play_local,
+                listen_with_mic: ttsForm.value.listen_with_mic,
+                udp_enabled: ttsForm.value.udp_enabled,
+                return_to_origin: ttsForm.value.return_to_origin,
+                use_ollama: ollamaConfig.value.use_ollama,
+                ollama_model: ollamaConfig.value.model,
+                input_device: calConfig.value.input_device
+              })
+            });
+            const data = await res.json();
+            if (data.error) {
+              beamResult.value.logs = 'Packet speech error: ' + data.error;
+              return;
+            }
+            beamResult.value = data;
+            if (data.room_map) {
+              roomMap.value = data.room_map;
+            }
+            if (data.udp_reflector) {
+              udpReflector.value = data.udp_reflector;
+            }
+            if (ttsForm.value.browser_preview && data.base_wav) {
+              playGeneratedFile(data.base_wav);
+            }
+          } catch (err) {
+            beamResult.value.logs = 'Error speaking IoT packet words: ' + err;
+          } finally {
+            isSpeakingPackets.value = false;
+          }
+        }
+
+        async function runOllamaBeam() {
+          isRunningOllama.value = true;
+          try {
+            const res = await fetch('/api/ollama/beam', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                prompt: ollamaConfig.value.prompt,
+                ollama_model: ollamaConfig.value.model,
+                listener_x: ttsForm.value.listener_x,
+                listener_y: ttsForm.value.listener_y,
+                voice: ttsForm.value.voice,
+                speed: ttsForm.value.speed,
+                pitch: ttsForm.value.pitch,
+                play_local: ttsForm.value.play_local,
+                cast_enabled: ttsForm.value.cast_enabled,
+                udp_enabled: ttsForm.value.udp_enabled,
+                beam_mode: ttsForm.value.beam_mode,
+                listen_with_mic: ttsForm.value.listen_with_mic,
+                input_device: calConfig.value.input_device
+              })
+            });
+            const data = await res.json();
+            if (data.error) {
+              beamResult.value.logs = 'Ollama beam error: ' + data.error;
+              return;
+            }
+            beamResult.value = data;
+            if (data.ollama && data.ollama.spoken_text) {
+              ttsForm.value.text = data.ollama.spoken_text;
+            }
+            if (data.room_map) {
+              roomMap.value = data.room_map;
+            }
+            if (data.udp_reflector) {
+              udpReflector.value = data.udp_reflector;
+            }
+            if (ttsForm.value.browser_preview && data.base_wav) {
+              playGeneratedFile(data.base_wav);
+            }
+          } catch (err) {
+            beamResult.value.logs = 'Error querying local Ollama model: ' + err;
+          } finally {
+            isRunningOllama.value = false;
+          }
+        }
+
+        async function runUdpMulticastScan() {
+          isUdpScanning.value = true;
+          try {
+            const res = await fetch('/api/udp/scan', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                listener_x: ttsForm.value.listener_x,
+                listener_y: ttsForm.value.listener_y,
+                timeout: 3.5
+              })
+            });
+            const data = await res.json();
+            if (data.room_map) {
+              roomMap.value = data.room_map;
+            }
+            if (data.udp_reflector) {
+              udpReflector.value = data.udp_reflector;
+            }
+            beamResult.value.logs = (data.logs || '') + (beamResult.value.logs ? '\n\n' + beamResult.value.logs : '');
+          } catch (err) {
+            beamResult.value.logs = 'UDP / Nmap scan error: ' + err;
+          } finally {
+            isUdpScanning.value = false;
+          }
+        }
+
+        async function toggleUdpReflector() {
+          const endpoint = udpReflector.value.running
+            ? '/api/udp/reflector/stop'
+            : '/api/udp/reflector/start';
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              listener_x: ttsForm.value.listener_x,
+              listener_y: ttsForm.value.listener_y
+            })
+          });
+          udpReflector.value = await res.json();
+        }
+
+        function playGeneratedFile(filename) {
+          const audio = new Audio(`/audio/${encodeURIComponent(filename)}?t=${Date.now()}`);
+          audio.play().catch(() => {});
+        }
+
+        async function toggleVoiceListener() {
+          const endpoint = voiceListener.value.running
+            ? '/api/tts/listener/stop'
+            : '/api/tts/listener/start';
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              reply_text: ttsForm.value.text,
+              voice: ttsForm.value.voice,
+              speed: ttsForm.value.speed,
+              pitch: ttsForm.value.pitch,
+              listener_y: ttsForm.value.listener_y
+            })
+          });
+          voiceListener.value = await res.json();
+        }
+
+        async function runFullCalibration() {
+          isCalibrating.value = true;
+          calibrationLog.value = 'Starting acoustic calibration... Please keep the room quiet.';
+          try {
+            const res = await fetch('/api/calibrate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(calConfig.value)
+            });
+            const data = await res.json();
+            roomMap.value = data.room_map || roomMap.value;
+            calibrationLog.value = data.logs || JSON.stringify(data.room_map, null, 2);
+          } catch (err) {
+            calibrationLog.value = 'Calibration error: ' + err;
+          } finally {
+            isCalibrating.value = false;
+          }
+        }
+
+        async function calibrateSingleDevice(dev) {
+          activeTab.value = 'calibration';
+          isCalibrating.value = true;
+          calibrationLog.value = `Calibrating [${dev.name}] (${dev.ip})... Please keep the room quiet.`;
+          try {
+            const res = await fetch('/api/calibrate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                ...calConfig.value,
+                target_ips: [dev.ip, dev.name]
+              })
+            });
+            const data = await res.json();
+            roomMap.value = data.room_map || roomMap.value;
+            calibrationLog.value = data.logs || JSON.stringify(data.room_map, null, 2);
+          } catch (err) {
+            calibrationLog.value = 'Calibration error: ' + err;
+          } finally {
+            isCalibrating.value = false;
+          }
+        }
+
+        function prefillSimulator(dev) {
+          simForm.value.speaker_name = dev.name || `Device-${dev.ip}`;
+          simForm.value.speaker_ip = dev.ip;
+          activeTab.value = 'calibration';
+        }
+
+        async function runSimulation() {
+          try {
+            const res = await fetch('/api/calibrate/simulate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                ...simForm.value,
+                mic_spacing: calConfig.value.mic_spacing,
+                speed_of_sound: calConfig.value.speed_of_sound,
+                room_radius: calConfig.value.room_radius
+              })
+            });
+            const data = await res.json();
+            roomMap.value = data.room_map || roomMap.value;
+            calibrationLog.value =
+              `TDOA Simulation for [${data.speaker}]:\n` +
+              JSON.stringify(data.result, null, 2) +
+              `\n\nUpdated room_map.json:\n` +
+              JSON.stringify(data.room_map, null, 2);
+          } catch (err) {
+            calibrationLog.value = 'Simulation failed: ' + err;
+          }
+        }
+
+        async function resetRoomMap() {
+          const res = await fetch('/api/room-map/reset', { method: 'POST' });
+          const data = await res.json();
+          roomMap.value = data.room_map || {};
+          calibrationLog.value = 'Reset room_map.json to anchor node.';
+        }
+
+        function playChirpPreview() {
+          const audio = new Audio(`/cal_chirp.wav?t=${Date.now()}`);
+          audio.play();
+        }
+
+        function downloadRoomMap() {
+          const blob = new Blob([JSON.stringify(roomMap.value, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'room_map.json';
+          a.click();
+        }
+
+        function copyText(txt) {
+          navigator.clipboard.writeText(txt || '');
+        }
+
+        function exportJson() {
+          const blob = new Blob([JSON.stringify(devices.value, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `discovery-devices-${Date.now()}.json`;
+          a.click();
+        }
+
+        function exportCsv() {
+          const rows = [['Name', 'IP', 'Model', 'Manufacturer', 'MAC', 'Protocols', 'Ports']];
+          for (const d of devices.value) {
+            rows.push([
+              d.name || '',
+              d.ip || '',
+              d.model || '',
+              d.manufacturer || '',
+              d.mac || '',
+              (d.protocols || []).join('; '),
+              (d.ports || []).join('; ')
+            ]);
+          }
+          const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+          const blob = new Blob([csv], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `discovery-devices-${Date.now()}.csv`;
+          a.click();
+        }
+
+        onMounted(async () => {
+          try {
+            const res = await fetch('/api/status');
+            const info = await res.json();
+            localIp.value = info.local_ip || localIp.value;
+            subnet.value = info.subnet || subnet.value;
+            roomMap.value = info.room_map || {};
+            audioDevices.value = info.audio_devices || [];
+            if (info.voices) voices.value = info.voices;
+            if (info.voice_listener) voiceListener.value = info.voice_listener;
+            if (info.udp_reflector) udpReflector.value = info.udp_reflector;
+            if (info.ollama) {
+              if (info.ollama.models && info.ollama.models.length) {
+                ollamaModels.value = info.ollama.models;
+              }
+              if (info.ollama.default_model) {
+                ollamaConfig.value.model = info.ollama.default_model;
+              }
+            }
+            if (info.calibration_defaults) {
+              Object.assign(calConfig.value, info.calibration_defaults);
+            }
+            if (info.last_scan) {
+              devices.value = info.last_scan.devices || [];
+              methodCounts.value = info.last_scan.counts_by_method || {};
+              lastScanTime.value = `${info.last_scan.timestamp} (${info.last_scan.elapsed_seconds}s)`;
+              consoleOutput.value = info.last_scan.console_output || '';
+            }
+          } catch (e) {}
+        });
+
+        return {
+          activeTab,
+          localIp,
+          subnet,
+          lastScanTime,
+          availableMethods,
+          selectedMethods,
+          scanTimeout,
+          isScanning,
+          isMappingAll,
+          isUdpScanning,
+          devices,
+          filteredDevices,
+          methodCounts,
+          consoleOutput,
+          searchQuery,
+          protoFilter,
+          protoFilters,
+          expandedIps,
+          roomMap,
+          audioDevices,
+          isCalibrating,
+          calibrationLog,
+          calConfig,
+          simForm,
+          voices,
+          presetPhrases,
+          ttsForm,
+          isBeaming,
+          isSpeakingPackets,
+          isRunningOllama,
+          ollamaModels,
+          ollamaConfig,
+          ollamaQuickPrompts,
+          beamResult,
+          voiceListener,
+          udpReflector,
+          beamSvg,
+          badgeClass,
+          formatVendorMac,
+          toggleExpand,
+          runScan,
+          mapAllDevicesInTdoa,
+          coordToSvgX,
+          coordToSvgY,
+          onRadarClick,
+          beamTextToRoom,
+          speakIotPacketWords,
+          runOllamaBeam,
+          runUdpMulticastScan,
+          toggleUdpReflector,
+          playGeneratedFile,
+          toggleVoiceListener,
+          runFullCalibration,
+          calibrateSingleDevice,
+          prefillSimulator,
+          runSimulation,
+          resetRoomMap,
+          playChirpPreview,
+          downloadRoomMap,
+          copyText,
+          exportJson,
+          exportCsv
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
+{% endraw %}

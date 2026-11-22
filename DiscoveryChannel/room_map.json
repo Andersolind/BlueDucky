@@ -1,0 +1,287 @@
+{
+    "laptop_builtin": {
+        "type": "local",
+        "ip": "192.168.5.24",
+        "x": 0.0,
+        "y": 0.0,
+        "angle_deg": 0.0,
+        "base_latency_sec": 0.015,
+        "mac": "",
+        "manufacturer": "",
+        "packet_words": [
+            "laptop builtin"
+        ],
+        "spoken_packet_text": "IoT device laptop builtin. IP ending 24. Digital packet words: laptop builtin."
+    },
+    "_gateway": {
+        "type": "lan",
+        "ip": "192.168.5.1",
+        "mac": "0C:AC:8A:B5:C6:9E",
+        "manufacturer": "",
+        "model": "Active UDP Host (UDP/7, UDP/137, UDP/161, UDP/1900)",
+        "protocols": [
+            "LAN / ARP",
+            "UDP / Nmap"
+        ],
+        "ports": [],
+        "udp_ports": [
+            7,
+            137,
+            161,
+            1900,
+            5005,
+            5353
+        ],
+        "confirmed_udp_ports": [],
+        "packet_words": [
+            "Gateway Router",
+            "UDP 7 UDP Echo",
+            "UDP 137 NetBIOS Name",
+            "UDP 161 SNMP",
+            "LAN"
+        ],
+        "spoken_packet_text": "IoT device Gateway Router. MAC ending C6 9E. Digital packet words: Gateway Router, UDP 7 UDP Echo, UDP 137 NetBIOS Name, UDP 161 SNMP, LAN.",
+        "short_spoken_packet_text": "Gateway Router, MAC ending C6 9E, packet words: Gateway Router, gateway, UDP 7 UDP Echo.",
+        "upnp_location": "",
+        "x": -1.76,
+        "y": 0.94,
+        "angle_deg": -61.8,
+        "base_latency_sec": 0.1851,
+        "peak_amplitude": 0.8,
+        "tdoa_lag_samples": -17,
+        "tdoa_ms": -0.3855
+    },
+    "Samsung-Washer": {
+        "type": "lan",
+        "ip": "192.168.5.10",
+        "mac": "40:CA:63:E9:27:8F",
+        "manufacturer": "Samsung",
+        "model": "Active UDP Host (UDP/7, UDP/1900, UDP/5004, UDP/5005)",
+        "protocols": [
+            "LAN / ARP",
+            "UDP / Nmap"
+        ],
+        "ports": [],
+        "udp_ports": [
+            1900,
+            5004,
+            5005,
+            5353,
+            5683,
+            6000,
+            6001
+        ],
+        "confirmed_udp_ports": [],
+        "packet_words": [
+            "Samsung Washer",
+            "Samsung",
+            "UDP 7 UDP Echo",
+            "UDP 1900 SSDP",
+            "UDP 5005 Beamformer",
+            "LAN"
+        ],
+        "spoken_packet_text": "IoT device Samsung Washer. Samsung MAC ending 27 8F. Digital packet words: Samsung Washer, Samsung, UDP 7 UDP Echo, UDP 1900 SSDP, UDP 5005 Beamformer, LAN.",
+        "short_spoken_packet_text": "Samsung Washer, MAC ending 27 8F, packet words: Samsung Washer, Samsung, UDP 7 UDP Echo.",
+        "upnp_location": "",
+        "x": -1.35,
+        "y": 1.48,
+        "angle_deg": -42.4,
+        "base_latency_sec": 0.1851,
+        "peak_amplitude": 0.8,
+        "tdoa_lag_samples": -13,
+        "tdoa_ms": -0.2948
+    },
+    "105871184": {
+        "type": "lan",
+        "ip": "192.168.5.11",
+        "mac": "F4:B1:9C:FB:DE:2B",
+        "manufacturer": "",
+        "model": "Active UDP Host (UDP/7, UDP/161, UDP/1900, UDP/3702)",
+        "protocols": [
+            "LAN / ARP",
+            "UDP / Nmap"
+        ],
+        "ports": [],
+        "udp_ports": [
+            161,
+            1900,
+            3702,
+            5004,
+            5005,
+            5353
+        ],
+        "confirmed_udp_ports": [],
+        "packet_words": [
+            "105871184",
+            "UDP 7 UDP Echo",
+            "UDP 137 NetBIOS Name",
+            "UDP 161 SNMP",
+            "LAN"
+        ],
+        "spoken_packet_text": "IoT device 105871184. MAC ending DE 2B. Digital packet words: 105871184, UDP 7 UDP Echo, UDP 137 NetBIOS Name, UDP 161 SNMP, LAN.",
+        "short_spoken_packet_text": "105871184, MAC ending DE 2B, packet words: 105871184, UDP 7 UDP Echo, UDP 161 SNMP.",
+        "upnp_location": "",
+        "x": -0.73,
+        "y": 1.86,
+        "angle_deg": -21.3,
+        "base_latency_sec": 0.1851,
+        "peak_amplitude": 0.8,
+        "tdoa_lag_samples": -7,
+        "tdoa_ms": -0.1587
+    },
+    "BOSCH-B36CL81ENG-68A40E885B06": {
+        "type": "lan",
+        "ip": "192.168.5.12",
+        "mac": "68:A4:0E:88:5B:06",
+        "manufacturer": "Bosch",
+        "model": "Active UDP Host (UDP/7, UDP/1900, UDP/5004, UDP/5005)",
+        "protocols": [
+            "LAN / ARP",
+            "UDP / Nmap"
+        ],
+        "ports": [],
+        "udp_ports": [
+            7,
+            1900,
+            5004,
+            5005,
+            5353
+        ],
+        "confirmed_udp_ports": [],
+        "packet_words": [
+            "BOSCH B36CL81ENG",
+            "Bosch",
+            "UDP 7 UDP Echo",
+            "UDP 137 NetBIOS Name",
+            "UDP 161 SNMP",
+            "LAN"
+        ],
+        "spoken_packet_text": "IoT device BOSCH B36CL81ENG. Bosch MAC ending 5B 06. Digital packet words: BOSCH B36CL81ENG, Bosch, UDP 7 UDP Echo, UDP 137 NetBIOS Name, UDP 161 SNMP, LAN.",
+        "short_spoken_packet_text": "BOSCH B36CL81ENG, MAC ending 5B 06, packet words: BOSCH B36CL81ENG, Bosch, BOSCH B36CL81ENG A40E885B06.",
+        "upnp_location": "",
+        "x": 0.0,
+        "y": 2.0,
+        "angle_deg": 0.0,
+        "base_latency_sec": 0.1851,
+        "peak_amplitude": 0.8,
+        "tdoa_lag_samples": 0,
+        "tdoa_ms": 0.0
+    },
+    "Nest-Doorbell-Wired": {
+        "type": "lan",
+        "ip": "192.168.5.13",
+        "mac": "90:CA:FA:CC:69:F0",
+        "manufacturer": "Nest",
+        "model": "Active UDP Host (UDP/137, UDP/161, UDP/1900, UDP/3702)",
+        "protocols": [
+            "LAN / ARP",
+            "UDP / Nmap"
+        ],
+        "ports": [],
+        "udp_ports": [
+            7,
+            1900,
+            5005,
+            5353
+        ],
+        "confirmed_udp_ports": [],
+        "packet_words": [
+            "Nest Doorbell Wired",
+            "Nest",
+            "UDP 7 UDP Echo",
+            "UDP 137 NetBIOS Name",
+            "UDP 161 SNMP",
+            "LAN"
+        ],
+        "spoken_packet_text": "IoT device Nest Doorbell Wired. Nest MAC ending 69 F0. Digital packet words: Nest Doorbell Wired, Nest, UDP 7 UDP Echo, UDP 137 NetBIOS Name, UDP 161 SNMP, LAN.",
+        "short_spoken_packet_text": "Nest Doorbell Wired, MAC ending 69 F0, packet words: Nest Doorbell Wired, Nest, UDP 137 NetBIOS Name.",
+        "upnp_location": "",
+        "x": 0.73,
+        "y": 1.86,
+        "angle_deg": 21.3,
+        "base_latency_sec": 0.1851,
+        "peak_amplitude": 0.8,
+        "tdoa_lag_samples": 7,
+        "tdoa_ms": 0.1587
+    },
+    "Nest-Wired-Indoor-Camera-third-gen": {
+        "type": "lan",
+        "ip": "192.168.5.15",
+        "mac": "FC:91:5D:FA:89:76",
+        "manufacturer": "Nest",
+        "model": "Active UDP Host (UDP/7, UDP/161, UDP/1900, UDP/3702)",
+        "protocols": [
+            "LAN / ARP",
+            "UDP / Nmap"
+        ],
+        "ports": [],
+        "udp_ports": [
+            161,
+            1900,
+            3702,
+            5000,
+            5005,
+            5353
+        ],
+        "confirmed_udp_ports": [],
+        "packet_words": [
+            "Nest Wired Indoor Camera third gen",
+            "Nest",
+            "UDP 7 UDP Echo",
+            "UDP 137 NetBIOS Name",
+            "UDP 161 SNMP",
+            "LAN"
+        ],
+        "spoken_packet_text": "IoT device Nest Wired Indoor Camera third gen. Nest MAC ending 89 76. Digital packet words: Nest Wired Indoor Camera third gen, Nest, UDP 7 UDP Echo, UDP 137 NetBIOS Name, UDP 161 SNMP, LAN.",
+        "short_spoken_packet_text": "Nest Wired Indoor Camera third gen, MAC ending 89 76, packet words: Nest Wired Indoor Camera third gen, Nest, Nest Wired Indoor Camera.",
+        "upnp_location": "",
+        "x": 1.35,
+        "y": 1.48,
+        "angle_deg": 42.4,
+        "base_latency_sec": 0.1851,
+        "peak_amplitude": 0.8,
+        "tdoa_lag_samples": 13,
+        "tdoa_ms": 0.2948
+    },
+    "863C48B6EC4904D5-000000002155EEAA": {
+        "type": "mdns",
+        "ip": "192.168.5.17",
+        "mac": "24:E5:0F:B7:F8:7A",
+        "manufacturer": "",
+        "model": "Matter Smart Home",
+        "protocols": [
+            "mDNS / Zeroconf",
+            "LAN / ARP",
+            "UDP / Nmap"
+        ],
+        "ports": [
+            5540
+        ],
+        "udp_ports": [
+            1900,
+            5005,
+            5353
+        ],
+        "confirmed_udp_ports": [
+            5353
+        ],
+        "packet_words": [
+            "863C48B6EC4904D5 000000002155EEAA",
+            "Matter Smart Home",
+            "services dns sd udp local matter",
+            "UDP 5353 mDNS",
+            "mDNS",
+            "LAN"
+        ],
+        "spoken_packet_text": "IoT device 863C48B6EC4904D5 000000002155EEAA. MAC ending F8 7A. Digital packet words: 863C48B6EC4904D5 000000002155EEAA, Matter Smart Home, services dns sd udp local matter, UDP 5353 mDNS, mDNS, LAN.",
+        "short_spoken_packet_text": "863C48B6EC4904D5 000000002155EEAA, MAC ending F8 7A, packet words: 863C48B6EC4904D5 000000002155EEAA, Matter Smart Home, E50FB7F87A local.",
+        "upnp_location": "",
+        "x": 1.76,
+        "y": 0.94,
+        "angle_deg": 61.8,
+        "base_latency_sec": 0.2151,
+        "peak_amplitude": 0.8,
+        "tdoa_lag_samples": 17,
+        "tdoa_ms": 0.3855
+    }
+}

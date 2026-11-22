@@ -9,6 +9,8 @@
         <span class="pill pill-violet">LO: {{ loFreq }} MHz</span>
         <span class="pill pill-amber">HRTF ITD: {{ itdUs }} us</span>
         <span class="pill pill-emerald">PLUTO ANN: {{ plutoState }}</span>
+        <span class="pill pill-cyan">TOF SECTOR: {{ tofZoneShort }}</span>
+        <span class="pill pill-rose">ENCLAVE: {{ enclaveBeat }} Hz ({{ enclaveSpl }} dB)</span>
       </div>
       <div class="hud-right">
         <button class="btn" :class="{ 'btn-active': showLOField }" @click="showLOField = !showLOField">LO Field</button>
@@ -43,10 +45,15 @@ const fDiff = computed(() => Math.round(telemetry.retro_intermod?.frequencies_hz
 const loFreq = computed(() => telemetry.lo_leakage?.frequencies_mhz?.lo_fundamental_mhz || 455.3)
 const itdUs = computed(() => telemetry.beamforming_hrtf?.binaural_hrtf?.itd_us || 0)
 const plutoState = computed(() => telemetry.pluto_bridge?.neural_net?.predicted_state || 'STANDING')
+const tofZoneShort = computed(() => (telemetry.spatial_tof?.current_overlay?.zone_descriptor || 'NORTHEAST_QUADRANT').split(' ')[0])
+const enclaveBeat = computed(() => Math.round(telemetry.audible_enclave?.frequencies_hz?.audible_enclave_beat_hz || 1000))
+const enclaveSpl = computed(() => telemetry.audible_enclave?.enclave_metrics?.peak_enclave_spl_db || 66.3)
 
 let renderer, scene, camera, controls, animId
 let observerGroup, mixSphere, loRings = [], sonarRings = [], pilotRings = []
 let steerCone, hrtfTargetMesh, hrtfLine, scannerProbe, csiLine, emfPulse, plutoBeacon
+let tofNodes = {}, tofTriangleLine, tofTargetMarker
+let enclaveBeam1Line, enclaveBeam2Line, enclaveSphere
 
 function resetCam() {
   if (!camera || !controls) return
@@ -201,6 +208,42 @@ onMounted(() => {
   csiLine = new THREE.Line(csiGeo, new THREE.LineBasicMaterial({ color: 0x38bdf8 }))
   scene.add(csiLine)
 
+  // Multi-Node Ultrasonic TOF Anchor Pylons (NODE_1, NODE_2, NODE_3 mapped onto 10m×10m floor [-5..+5])
+  ;['NODE_1', 'NODE_2', 'NODE_3'].forEach(k => {
+    const pylon = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.06, 0.09, 0.36, 12),
+      new THREE.MeshBasicMaterial({ color: 0x10b981, wireframe: true })
+    )
+    scene.add(pylon)
+    tofNodes[k] = pylon
+  })
+  tofTriangleLine = new THREE.LineLoop(
+    new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-5, 0.05, -5), new THREE.Vector3(-5, 0.05, 5), new THREE.Vector3(5, 0.05, 5)]),
+    new THREE.LineBasicMaterial({ color: 0x22d3ee })
+  )
+  scene.add(tofTriangleLine)
+  tofTargetMarker = new THREE.Mesh(
+    new THREE.RingGeometry(0.14, 0.22, 24),
+    new THREE.MeshBasicMaterial({ color: 0xf43f5e, side: THREE.DoubleSide })
+  )
+  tofTargetMarker.rotation.x = -Math.PI / 2
+  scene.add(tofTargetMarker)
+
+  // Self-Bending Ultrasonic Beams (f1 yellow, f2 emerald) & Audible Enclave Sphere
+  enclaveBeam1Line = new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-0.18, 1.15, 0), new THREE.Vector3(0, 1.15, 0.85)]),
+    new THREE.LineBasicMaterial({ color: 0xfacc15 })
+  )
+  enclaveBeam2Line = new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0.18, 1.15, 0), new THREE.Vector3(0, 1.15, 0.85)]),
+    new THREE.LineBasicMaterial({ color: 0x10b981 })
+  )
+  enclaveSphere = new THREE.Mesh(
+    new THREE.SphereGeometry(0.11, 18, 18),
+    new THREE.MeshBasicMaterial({ color: 0xf43f5e, wireframe: true })
+  )
+  scene.add(enclaveBeam1Line, enclaveBeam2Line, enclaveSphere)
+
   const onResize = () => {
     if (!el || !renderer) return
     camera.aspect = el.clientWidth / el.clientHeight
@@ -293,6 +336,41 @@ onMounted(() => {
         pos.setXYZ(i, (i - 32) * 0.075, 0.15 + (csi[i] - 0.7) * 0.75, -1.65)
       }
       pos.needsUpdate = true
+    }
+
+    // Update Calibrated Ultrasonic TOF Anchor Nodes & Trajectory Marker on 10m×10m floor
+    const ng = telemetry.spatial_tof?.node_geometry
+    if (ng && ng.NODE_1 && ng.NODE_2 && ng.NODE_3) {
+      const toFloor = c => new THREE.Vector3((c[0] - 5) * 0.85, 0.18, (5 - c[1]) * 0.85)
+      const p1 = toFloor(ng.NODE_1), p2 = toFloor(ng.NODE_2), p3 = toFloor(ng.NODE_3)
+      tofNodes.NODE_1.position.copy(p1)
+      tofNodes.NODE_2.position.copy(p2)
+      tofNodes.NODE_3.position.copy(p3)
+      tofTriangleLine.geometry.setFromPoints([
+        new THREE.Vector3(p1.x, 0.04, p1.z),
+        new THREE.Vector3(p2.x, 0.04, p2.z),
+        new THREE.Vector3(p3.x, 0.04, p3.z),
+      ])
+    }
+    const ov = telemetry.spatial_tof?.current_overlay
+    if (ov && tofTargetMarker) {
+      tofTargetMarker.position.set(((ov.x_coord_m ?? 6.8) - 5) * 0.85, 0.05, (5 - (ov.y_coord_m ?? 7.2)) * 0.85)
+      tofTargetMarker.scale.setScalar(0.9 + 0.2 * Math.sin(t * 7))
+    }
+
+    // Update Self-Bending Ultrasonic Beams & Audible Enclave Focal Sphere
+    const encTraj = telemetry.audible_enclave?.trajectories
+    const encTarget = telemetry.audible_enclave?.enclave_metrics?.target_coord_m
+    if (encTraj && encTraj.z_m && encTraj.beam1_x_m && encTraj.beam2_x_m) {
+      const yBeam = encTarget?.y || 1.18
+      const pts1 = encTraj.z_m.map((z, idx) => new THREE.Vector3(encTraj.beam1_x_m[idx] || 0, yBeam, z))
+      const pts2 = encTraj.z_m.map((z, idx) => new THREE.Vector3(encTraj.beam2_x_m[idx] || 0, yBeam, z))
+      enclaveBeam1Line.geometry.setFromPoints(pts1)
+      enclaveBeam2Line.geometry.setFromPoints(pts2)
+    }
+    if (encTarget && enclaveSphere) {
+      enclaveSphere.position.set(encTarget.x || 0, encTarget.y || 1.18, encTarget.z || 0.85)
+      enclaveSphere.scale.setScalar(0.95 + 0.25 * Math.sin(t * 11))
     }
 
     controls.update()

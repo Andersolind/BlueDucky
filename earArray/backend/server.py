@@ -43,6 +43,9 @@ from sensing_and_beamforming import (
     SpatialBeamformingCore,
 )
 from pluto_neural_bridge import PlutoBridgeConfig, PlutoNeuralAdaptiveBridge
+from spatial_tof_calibration import SpatialTofCalibrationEngine
+from midair_subvocal_pluto_learner import MidAirSubvocalConfig, MidAirSubvocalPlutoLearner
+from audible_enclave_prototype import AudibleEnclaveConfig, AudibleEnclaveEngine
 
 # Optional imports from existing workspace scripts
 try:
@@ -85,6 +88,9 @@ micro_engine = SpeakerMicrophonicsAnalyzer()
 pilot_engine = PilotTonePhaseDemodulator()
 beam_engine = SpatialBeamformingCore()
 pluto_engine = PlutoNeuralAdaptiveBridge(PlutoBridgeConfig(), connect_hw=False)
+tof_engine = SpatialTofCalibrationEngine()
+subvocal_engine = MidAirSubvocalPlutoLearner(MidAirSubvocalConfig())
+enclave_engine = AudibleEnclaveEngine(AudibleEnclaveConfig())
 
 sim_state: Dict[str, Any] = {
     "mode": "simulation",
@@ -165,6 +171,24 @@ MODULE_CATALOG = [
         "title": "PlutoSDR Neural Adaptive Bridge",
         "category": "SDR + JACK/REAPER OSC + Bio-Macro ANN",
         "summary": "ADALM-Pluto 144 MHz RX/TX bridge, JACK audio routing, REAPER OSC track arming, 10s Earworm WAV snapshot, online Softmax ANN & Breath-to-Morse engine.",
+    },
+    {
+        "file": "spatial_tof_calibration.py",
+        "title": "Multi-Node TOF Self-Calibration & Quadrant Map",
+        "category": "10m x 10m Ultrasonic Trilateration",
+        "summary": "execute_hardware_self_calibration(tof_12, tof_13) for NODE_1..NODE_3 anchor offsets + compute_spatial_trajectory_overlay(x, y) across NE/NW/SE/SW room quadrants.",
+    },
+    {
+        "file": "midair_subvocal_pluto_learner.py",
+        "title": "Zero-Equipment Mid-Air Subvocal & PlutoSDR Self-Learner",
+        "category": "andersolind/nightsweep-sigint Self-Supervised AI",
+        "summary": "Pure mid-air 20 kHz ultrasonic laryngeal phase recovery + 32-tap NLMS clutter nulling + Acoustic-PlutoSDR coherence teacher gate + online 6-class Softmax/EMA self-learning.",
+    },
+    {
+        "file": "audible_enclave_prototype.py",
+        "title": "Self-Bending Ultrasonic Audible Enclave & 7-Layer Tactical Stack",
+        "category": "Nonlinear Metasurfaces + FHSS + LMS + Alpha Binaural + Goertzel + SQLite",
+        "summary": "Dual metasurface self-bending ultrasonic beams (f1=40 kHz, f2=39 kHz) + 20 kHz Non-Contact Vocal Sonar, GPS-UTC 100m Grid FHSS, 32-tap LMS Echo Canceller, 250/261 Hz (11 Hz Alpha) Binaural Loop, Wall-Bounce TOF Targeting, 24 kHz Parallel Goertzel Decoder & Priority SQLite Journal.",
     },
 ]
 
@@ -432,6 +456,183 @@ def export_pluto_earworm():
     return pluto_engine.export_earworm_snapshots(LOGS_DIR)
 
 
+@app.get("/api/spatial-tof")
+def get_spatial_tof():
+    return tof_engine.step_telemetry()
+
+
+@app.post("/api/spatial-tof/calibrate")
+def calibrate_spatial_tof(payload: Dict[str, Any]):
+    tof_12 = float(payload.get("tof_12_sec", payload.get("tof_12", tof_engine.cfg.tof_12_sec)))
+    tof_13 = float(payload.get("tof_13_sec", payload.get("tof_13", tof_engine.cfg.tof_13_sec)))
+    return tof_engine.recalibrate(tof_12, tof_13)
+
+
+@app.post("/api/spatial-tof/trajectory")
+def update_spatial_trajectory(payload: Dict[str, Any]):
+    mapped = dict(payload)
+    if "x_coord" in mapped and "target_x_m" not in mapped:
+        mapped["target_x_m"] = float(mapped["x_coord"])
+    if "y_coord" in mapped and "target_y_m" not in mapped:
+        mapped["target_y_m"] = float(mapped["y_coord"])
+    _update_dataclass(tof_engine.cfg, mapped)
+    return tof_engine.step_telemetry()
+
+
+@app.get("/api/subvocal-learner")
+def get_subvocal_learner():
+    return subvocal_engine.step_telemetry()
+
+
+@app.post("/api/subvocal-learner/step")
+def step_subvocal_learner(payload: Dict[str, Any] = None):
+    payload = payload or {}
+    _update_dataclass(subvocal_engine.cfg, payload)
+    epochs = int(payload.get("epochs", 12))
+    return subvocal_engine.run_self_learning_epoch(steps=epochs)
+
+
+@app.post("/api/subvocal-learner/inject")
+def inject_subvocal_learner(payload: Dict[str, Any] = None):
+    payload = payload or {}
+    _update_dataclass(subvocal_engine.cfg, payload)
+    token = str(payload.get("token", payload.get("phrase", "SILENT_RELAY")))
+    return subvocal_engine.inject_subvocal_utterance(token)
+
+
+@app.post("/api/subvocal-learner/ollama-advise")
+def advise_subvocal_learner(payload: Dict[str, Any] = None):
+    payload = payload or {}
+    model = payload.get("model", "andersolind/nightsweep-sigint")
+    prompt = payload.get("prompt")
+    return subvocal_engine.query_ollama_advisor(custom_prompt=prompt, preferred_model=model)
+
+
+@app.get("/api/enclave")
+def get_audible_enclave():
+    return enclave_engine.compute_telemetry()
+
+
+@app.post("/api/enclave/config")
+def update_audible_enclave(payload: Dict[str, Any] = None):
+    payload = payload or {}
+    _update_dataclass(enclave_engine.cfg, payload)
+    return enclave_engine.compute_telemetry()
+
+
+@app.post("/api/enclave/export-wav")
+def export_audible_enclave_wav(payload: Dict[str, Any] = None):
+    payload = payload or {}
+    _update_dataclass(enclave_engine.cfg, payload)
+    duration_s = float(payload.get("duration_s", 2.5))
+    return enclave_engine.export_prototype_wavs(LOGS_DIR, duration_s=duration_s)
+
+
+@app.post("/api/enclave/intercept")
+def intercept_wideband_goertzel(payload: Dict[str, Any] = None):
+    payload = payload or {}
+    preset = str(payload.get("preset", payload.get("active_intercept_preset", "KEYPAD_BURST"))).upper()
+    enclave_engine.cfg.active_intercept_preset = preset
+    _update_dataclass(enclave_engine.cfg, payload)
+    return enclave_engine.compute_telemetry(force_journal_write=True)
+
+
+@app.get("/api/enclave/journal")
+def get_enclave_sqlite_journal(limit: int = 12):
+    snap = enclave_engine.compute_telemetry()
+    j_info = snap["tactical_stack"]["sqlite_spatial_journal"]
+    j_info["recent_events"] = enclave_engine.get_recent_journal_entries(limit=limit)
+    return j_info
+
+
+@app.get("/api/modelfile")
+def get_modelfile():
+    mf = ROOT_DIR / "Modelfile"
+    return {
+        "exists": mf.exists(),
+        "path": str(mf),
+        "primary_model": "andersolind/nightsweep-sigint",
+        "cli_command": "ollama run andersolind/nightsweep-sigint",
+        "content": mf.read_text(errors="replace") if mf.exists() else "",
+    }
+
+
+@app.get("/api/ollama/status")
+def get_ollama_status():
+    import urllib.request
+    ollama_host = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
+    try:
+        with urllib.request.urlopen(f"{ollama_host}/api/tags", timeout=2.5) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            models = [m.get("name", "") for m in data.get("models", []) if m.get("name")]
+            return {
+                "online": True,
+                "host": ollama_host,
+                "models": models,
+                "primary_model": "andersolind/nightsweep-sigint",
+                "nightsweep_registered": any(
+                    "nightsweep-sigint" in m or m.startswith("eararray-sigint") for m in models
+                ),
+                "eararray_registered": any(
+                    "nightsweep-sigint" in m or m.startswith("eararray-sigint") for m in models
+                ),
+            }
+    except Exception as e:
+        return {
+            "online": False,
+            "host": ollama_host,
+            "models": [],
+            "primary_model": "andersolind/nightsweep-sigint",
+            "nightsweep_registered": False,
+            "eararray_registered": False,
+            "error": str(e),
+        }
+
+
+@app.post("/api/ollama/build")
+def build_ollama_model(payload: Dict[str, Any] = None):
+    import subprocess
+    payload = payload or {}
+    model_name = str(payload.get("model_name", "andersolind/nightsweep-sigint"))
+    mf = ROOT_DIR / "Modelfile"
+    if not mf.exists():
+        return {"ok": False, "error": f"Modelfile not found at {mf}"}
+    try:
+        res = subprocess.run(
+            ["ollama", "create", model_name, "-f", str(mf)],
+            capture_output=True,
+            text=True,
+            timeout=60,
+            check=False,
+        )
+        ok = res.returncode == 0
+        return {
+            "ok": ok,
+            "model_name": model_name,
+            "stdout": (res.stdout or "").strip(),
+            "stderr": (res.stderr or "").strip(),
+        }
+    except Exception as e:
+        return {"ok": False, "model_name": model_name, "error": str(e)}
+
+
+@app.post("/api/ollama/advise")
+def advise_ollama_telemetry(payload: Dict[str, Any] = None):
+    payload = payload or {}
+    model_name = str(payload.get("model", "andersolind/nightsweep-sigint"))
+    custom_prompt = str(payload.get("prompt", "")).strip() or None
+    adv = subvocal_engine.query_ollama_advisor(custom_prompt=custom_prompt, preferred_model=model_name)
+    return {
+        "ok": adv["ok"],
+        "source": adv["source"],
+        "model": adv["model_used"],
+        "requested_model": adv["requested_model"],
+        "cli_command": adv["cli_command"],
+        "response": adv["response"],
+        "subvocal_learner": adv["telemetry"],
+    }
+
+
 @app.websocket("/ws/telemetry")
 async def telemetry_ws(ws: WebSocket):
     await ws.accept()
@@ -447,6 +648,9 @@ async def telemetry_ws(ws: WebSocket):
                 pilot_snap=pilot_engine.compute_telemetry(pilot_params),
                 beam_snap=beam_engine.compute_telemetry(beam_params),
                 pluto_snap=pluto_engine.step_telemetry(),
+                tof_snap=tof_engine.step_telemetry(),
+                subvocal_snap=subvocal_engine.step_telemetry(),
+                enclave_snap=enclave_engine.compute_telemetry(),
             )
             await ws.send_json(frame)
             await asyncio.sleep(0.18)

@@ -5,9 +5,9 @@
       <div class="brand">
         <div class="pulse-dot" :class="{ online: wsConnected }"></div>
         <div>
-          <h1>EARARRAY // SPATIAL SONAR, RF & HRTF TELEMETRY SUITE</h1>
+          <h1>EARARRAY // SPATIAL SONAR, RF, TOF CALIBRATION & HRTF TELEMETRY SUITE</h1>
           <div class="sub mono">
-            Vue 3 + Three.js • Ultrasonic Defense • Mid-Air Heterodyne • LO Leakage • Coil Microphonics • Pilot IQ • HRTF Beamforming
+            Vue 3 + Three.js • Ultrasonic TOF Self-Calibration • 10m×10m Quadrant Trajectory • PlutoSDR ANN • Mid-Air Heterodyne • LO Leakage • HRTF
           </div>
         </div>
       </div>
@@ -23,6 +23,9 @@
     <!-- Main 3D Arena + Modular Control Deck -->
     <main class="deck-grid">
       <SpatialArena3D />
+      <AudibleEnclavePanel />
+      <MidAirSubvocalLearnerPanel />
+      <SpatialTofCalibrationPanel />
       <PlutoNeuralPanel />
       <ReversePhysicsPanel />
       <SensingBeamformingPanel />
@@ -36,6 +39,9 @@
 import { onMounted, onBeforeUnmount } from 'vue'
 import { useTelemetry } from './composables/useTelemetry'
 import SpatialArena3D from './components/SpatialArena3D.vue'
+import AudibleEnclavePanel from './components/AudibleEnclavePanel.vue'
+import MidAirSubvocalLearnerPanel from './components/MidAirSubvocalLearnerPanel.vue'
+import SpatialTofCalibrationPanel from './components/SpatialTofCalibrationPanel.vue'
 import PlutoNeuralPanel from './components/PlutoNeuralPanel.vue'
 import ReversePhysicsPanel from './components/ReversePhysicsPanel.vue'
 import SensingBeamformingPanel from './components/SensingBeamformingPanel.vue'

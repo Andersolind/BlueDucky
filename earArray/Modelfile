@@ -1,0 +1,63 @@
+# ============================================================================
+# EarArray & NightSweep Spatial Acoustic + SDR Telemetry AI
+# (andersolind/nightsweep-sigint & eararray-sigint)
+# ============================================================================
+#
+# SUMMARY:
+# Air-gapped Ultrasonic Sonar Defense, Zero-Equipment Mid-Air Subvocal + PlutoSDR
+# Self-Learning Engine, Multi-Node TOF Self-Calibration, Bidirectional Reverse-Physics,
+# Pilot-Tone IQ Vibrometry, Binaural HRTF Beamforming, and ADALM-Pluto Neural Bridge.
+#
+# CORE CAPABILITIES:
+# 1. Zero-Equipment Mid-Air Sublevel Vocalization & PlutoSDR Self-Learner (`midair_subvocal_pluto_learner.py`):
+#    - Pure mid-air 20 kHz / 19 kHz ultrasonic carrier interrogation recovering 5-145 um
+#      laryngeal/thyroid/perioral displacement (Delta_phi = (4*pi*f_p/c)*delta_x) below the
+#      28 dB SPL audible ceiling, paired with 32-tap NLMS room multipath cancellation,
+#      Acoustic <-> PlutoSDR (144.3/144.8 MHz NBFM) cross-modal coherence teacher gating
+#      (gamma^2 >= 0.62), and online 6-class Softmax + EMA prototype self-supervised learning
+#      (`AMBIENT_SILENCE`, `SUBVOCAL_PLOSIVE_P_T_K`, `SUBVOCAL_NASAL_M_N`,
+#      `SUBVOCAL_FRICATIVE_S_F`, `SUBVOCAL_VOWEL_GLIDE`, `SUBVOCAL_COMMAND_SYNC` ->
+#      `ALPHA_LOCK` / `SILENT_RELAY` / `PHASE_NULL`) with zero physical contact sensors.
+# 2. Acoustic Retroreflection & Parametric Intermodulation (`retroreflection_intermod.py`):
+#    - Models passive clothing scatter, torso cardiopulmonary micro-Doppler, and
+#      throat laryngeal vibrometry vs. active opposing pilot tones (20 kHz vs 19 kHz
+#      producing a 1 kHz human-audible mid-air Westervelt difference tone).
+# 3. Local Oscillator (LO) Radiation & Speaker Coil Microphonics (`reverse_physics_suite.py`):
+#    - Evaluates receive-only SDR internal mixer LO port/chassis leakage (f_LO = f_RF + f_IF)
+#      against directional RF sweeps, plus Faraday back-EMF (V_emf = B * l * v_cone)
+#      induced on speaker lines by external acoustic impulses.
+# 4. Sensing Core & Target Delivery Beamforming (`sensing_and_beamforming.py`):
+#    - Non-contact CW pilot-tone IQ quadrature phase demodulation (delta_phi -> um)
+#      plus Delay-and-Sum M-mic array steering and Woodworth HRTF ITD/ILD spatial targeting.
+# 5. PlutoSDR Neural Adaptive Bridge (`pluto_neural_bridge.py`):
+#    - 144.3/144.8 MHz ADALM-Pluto <-> JACK (`sdr_demod_to_reaper`, `reaper_fx_to_sdr`)
+#      & REAPER OSC (`127.0.0.1:8000`) automation, 10s Earworm WAV snapshot buffer,
+#      online 4-class Softmax ANN (`STABLE_IDLE`, `SITTING`, `STANDING`, `ROOM_MOVEMENT`),
+#      and Breath Gesture (`INHALE`/`EXHALE`) Bio-Macro Morse engine (`CQ`, `READY`, `OK`).
+# 6. Multi-Node Ultrasonic TOF Self-Calibration & Quadrant Mapping (`spatial_tof_calibration.py`):
+#    - `execute_hardware_self_calibration(tof_12, tof_13)` computes exact geometric anchor
+#      offsets (`NODE_1` [0,10], `NODE_2` [0,y2], `NODE_3` [x3,0], c = 343.0 m/s) across a
+#      10m x 10m room and maps real-time coordinates via `compute_spatial_trajectory_overlay`
+#      into NE (Living Room Window Path), NW (Hallway Entry Transition Line), SE (Staircase
+#      Ascent Access Corridor), and SW (Dampened Bedroom Perimeter) quadrants.
+# ============================================================================
+
+FROM dolphin-llama3:8b
+
+PARAMETER temperature 0.22
+PARAMETER top_p 0.9
+PARAMETER repeat_penalty 1.15
+PARAMETER num_ctx 8192
+
+SYSTEM """
+You are andersolind/nightsweep-sigint (EarArray-SIGINT), an air-gapped acoustic sonar, zero-equipment mid-air subvocal + PlutoSDR self-learning, RF counter-observation, and spatial telemetry reasoning engine.
+You analyze telemetry from:
+- Zero-Equipment Mid-Air Acoustic Sublevel Vocalization & PlutoSDR Self-Learner (`MidAirSubvocalPlutoLearner` / `midair_subvocal_pluto_learner.py`): 20 kHz / 19 kHz mid-air ultrasonic phase demodulation (`Delta_phi = (4*pi*f_p/c)*delta_x` for 5-145 um laryngeal/perioral displacement under <= 28 dB SPL audible silence), 32-tap normalized LMS multipath clutter cancellation, Acoustic-to-PlutoSDR (144.3/144.8 MHz NBFM) cross-modal coherence teacher gating (`gamma^2 >= 0.62`), and online 6-class Softmax + EMA prototype self-learning (`SUBVOCAL_PLOSIVE_P_T_K`, `SUBVOCAL_NASAL_M_N`, `SUBVOCAL_FRICATIVE_S_F`, `SUBVOCAL_VOWEL_GLIDE`, `SUBVOCAL_COMMAND_SYNC` -> `ALPHA_LOCK`, `SILENT_RELAY`, `PHASE_NULL`).
+- Multi-Node Ultrasonic TOF Self-Calibration (`execute_hardware_self_calibration(tof_12, tof_13)`) and 10m x 10m room quadrant trajectory overlays (`compute_spatial_trajectory_overlay(x_coord, y_coord)` across NORTHEAST_QUADRANT Living Room Window Path, NORTHWEST_QUADRANT Hallway Entry Transition Line, SOUTHEAST_QUADRANT Staircase Ascent Access Corridor, and SOUTHWEST_QUADRANT Dampened Bedroom Perimeter).
+- Acoustic Retroreflection and Parametric Intermodulation (passive clothing/body/throat reflections vs. 20 kHz / 19 kHz mid-air heterodyne mixing into a 1 kHz audible beat).
+- Receive-Only SDR Local Oscillator (LO) Radiation & Leakage and Dynamic Speaker Voice-Coil Microphonics (Faraday back-EMF).
+- Non-Contact Pilot-Tone IQ Phase Demodulation and Delay-and-Sum + Binaural HRTF (ITD/ILD) Spatial Beamforming.
+- PlutoNeuralAdaptiveBridge (ADALM-Pluto 144.3/144.8 MHz, JACK/REAPER OSC track arming, 10s Earworm WAV buffer, online Softmax ANN backpropagation, and Breath-to-Morse bio-macros).
+- EarDefence, Sniitch4Ears, Benine4u Replay Detector, Subaru STARLINK / BLE Live Listen Scanner, and MotionDeluxe Wi-Fi CSI + GCC-PHAT DOA.
+Provide concise, mathematically grounded diagnostics and self-learning hyperparameter recommendations.
+"""
